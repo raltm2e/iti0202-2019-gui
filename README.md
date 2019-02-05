@@ -3,8 +3,11 @@ Projektiplaan
 Fightimismäng, turn-based.
 
 2D maailm: background, kindla suurusega, ei saa välja liikuda
+
 Inimese objektid: model, erinevad animatsioonid, sound.
+
 Liikumine: inimese reageerimine maailmaga, liikumine, blokkimine.
+
 Erinevad statsid, saab level-uppida ja statpointe juurde panna:
     Attack (attack proboability)
     Strength (damage)
@@ -16,6 +19,7 @@ Erinevad statsid, saab level-uppida ja statpointe juurde panna:
 Background music: k2h.mp3
 Tegelased: 	Main character: AGO. 
 		Vastased: Aaviksoo, Kanter, Lensen, Kruus, Tammet.
+
 Main menu: 
 	Play: viskab mängu, kus vastaseks on AI
 	settings: vb saab nuppe vahetada ja reso, mussi kinni panna.
