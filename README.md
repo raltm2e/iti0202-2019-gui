@@ -47,12 +47,7 @@ Soovime saada 75 punkti funktsonaalsuse eest.
 
 ## Ekraanivaated
 
-Main menu: 
-	Play
-	settings
-	tutorial ja scoreboard
-	extra: mingi info ja laulu info
-	exit: paneb mängu kinni
+*Main menu*
 
 Igaüks viib erinevasse vaatesse, vt järgmisi punkte.
 
