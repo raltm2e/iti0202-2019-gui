@@ -29,11 +29,9 @@ Inspiratsioon: http://swordandsandals.top/swords-and-sandals-2-full-version/
 
 ## AI
 
-- teine uss, mida juhib arvuti
-- kehtivad kõik samad reeglid mis mängijast ussile
+- teine character, mida juhib arvuti
+- kehtivad kõik samad reeglid mis mängijale
 - erinevad raskustasemed (lihtne, raske)
-- kui AI uss sureb, saab mängija boonuspunkte ning jätkab mängutaseme mängimist
-- AI võiks proovida mängijat elimineerida (teatud raskusastme puhul)
 
 ## Tehniline info
 
