@@ -49,8 +49,6 @@ Soovime saada 75 punkti funktsonaalsuse eest.
 
 *Main menu*
 
-Igaüks viib erinevasse vaatesse, vt järgmisi punkte.
-
 **Play**
 
 Mäng on 2D, esialgu toimub võitlus nt Tammetiga ning iga võidu korral saab edasi võidelda järgmise vastasega.
