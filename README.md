@@ -47,12 +47,6 @@ Soovime saada 75 punkti funktsonaalsuse eest.
 
 ## Ekraanivaated
 
-*Kirjeldada erinevad ekraanivaated. Väga abiks on ekraanipildid, kasvõi pastakaga visandatud ja pildistatud kujul (eriti lahe).*
-
-**Esileht**
-
-**Nupud:** 
-
 Main menu: 
 	Play
 	settings
