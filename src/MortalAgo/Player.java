@@ -3,10 +3,7 @@ package MortalAgo;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -14,6 +11,7 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Player extends main{
@@ -31,21 +29,17 @@ public class Player extends main{
         this.hp = 10;
     }
 
-    public void drawPlayer(GraphicsContext gc, Canvas canvas, Group root, Double x, Double y) {
-        Image stickman = null;
+    public void drawPlayer( Group root, Double x, Double y, Rectangle stickmangif) {
         Image right = null;
+        Image stickf = null;
         try {
             right = new Image( new FileInputStream("src\\MortalAgo\\right.png") );
+
+            stickf = new Image( new FileInputStream("src\\MortalAgo\\stickman.gif") );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        try {
-            stickman = new Image( new FileInputStream("src\\MortalAgo\\Agojump.gif") );
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Rectangle stickmangif = new Rectangle(x, y, 100, 80);
-        stickmangif.setFill(new ImagePattern(stickman));
+        stickmangif.setFill(new ImagePattern(stickf));
         Circle moveRight = new Circle(x + 33, y - 20, 10);
         Circle moveLeft = new Circle(x + 5, y - 20, 10);
         moveRight.setFill(new ImagePattern(right));
@@ -55,12 +49,18 @@ public class Player extends main{
 
 
         moveRight.setOnMouseClicked(mouseEvent -> {
+            Image stickman = null;
+            try {
+                stickman = new Image( new FileInputStream("src\\MortalAgo\\Agojump.gif") );
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            stickmangif.setFill(new ImagePattern(stickman));
             Timeline animation = new Timeline();
             animation.setCycleCount(20);
-
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        stickmangif.setX(moveRight.getCenterX() - 7);
+                        stickmangif.setX(stickmangif.getX() + 2);
                         moveRight.setCenterX(moveRight.getCenterX() + 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() + 2);
                     }));
@@ -72,7 +72,7 @@ public class Player extends main{
 
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        stickmangif.setX(moveRight.getCenterX() - 35);
+                        stickmangif.setX(stickmangif.getX() - 2);
                         moveRight.setCenterX(moveRight.getCenterX() - 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() - 2);
                     }));

@@ -11,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -30,11 +31,13 @@ public class main extends Application {
         stage.setScene(scene);
         stage.show();
         Player ago = new Player();
-        ago.drawPlayer(gc, canvas, root, 50.0, 500.0);
+        Rectangle stickmangif = new Rectangle(50.0, 100.0, 300, 400);
+        ago.drawPlayer(root, 50.0, 100.0, stickmangif);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/K2h.mp3";     // For example
 
+        Image stick = new Image( new FileInputStream("src\\MortalAgo\\stickman.gif") );
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         new AnimationTimer() {
@@ -42,7 +45,7 @@ public class main extends Application {
             public void handle(long currentNanoTime) {
                 double delta = (currentNanoTime - startNanoTime) / 1_000_000_000;
                 double control = 100 + 20 * delta;
-
+                stickmangif.setFill(new ImagePattern(stick));
                 if ( control == 100) {
                     mediaPlayer.play();
                 }
