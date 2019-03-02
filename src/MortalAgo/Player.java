@@ -51,7 +51,7 @@ public class Player extends main{
 
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        gc.clearRect(moveLeft.getCenterX() - 10, moveLeft.getCenterY() + 20, 50, 50);
                         gc.fillRect( moveRight.getCenterX() - 30, y, 40, 50);
                         moveRight.setCenterX(moveRight.getCenterX() + 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() + 2);
@@ -64,7 +64,7 @@ public class Player extends main{
 
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        gc.clearRect(moveRight.getCenterX() - 35, moveLeft.getCenterY() + 20, 50, 50);
                         gc.fillRect( moveLeft.getCenterX() - 5, y, 40, 50);
                         moveRight.setCenterX(moveRight.getCenterX() - 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() - 2);
