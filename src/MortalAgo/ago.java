@@ -1,6 +1,6 @@
 package MortalAgo;
 
-public final class ago extends player {
+public final class ago extends Player {
     private String name;
 
     ago() {
