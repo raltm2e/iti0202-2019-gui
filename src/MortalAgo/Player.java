@@ -6,8 +6,10 @@ import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
@@ -30,19 +32,26 @@ public class Player extends main{
     }
 
     public void drawPlayer(GraphicsContext gc, Canvas canvas, Group root, Double x, Double y) {
-        gc.fillRect(x, y, 40, 50);
+        Image stickman = null;
         Image right = null;
         try {
-            right = new Image( new FileInputStream("src\\MortalAgo\\Right.png") );
+            right = new Image( new FileInputStream("src\\MortalAgo\\right.png") );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        try {
+            stickman = new Image( new FileInputStream("src\\MortalAgo\\Agojump.gif") );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Rectangle stickmangif = new Rectangle(x, y, 100, 80);
+        stickmangif.setFill(new ImagePattern(stickman));
         Circle moveRight = new Circle(x + 33, y - 20, 10);
         Circle moveLeft = new Circle(x + 5, y - 20, 10);
         moveRight.setFill(new ImagePattern(right));
+        root.getChildren().add(stickmangif);
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
-
 
 
         moveRight.setOnMouseClicked(mouseEvent -> {
@@ -51,8 +60,7 @@ public class Player extends main{
 
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        gc.clearRect(moveLeft.getCenterX() - 10, moveLeft.getCenterY() + 20, 50, 50);
-                        gc.fillRect( moveRight.getCenterX() - 30, y, 40, 50);
+                        stickmangif.setX(moveRight.getCenterX() - 7);
                         moveRight.setCenterX(moveRight.getCenterX() + 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() + 2);
                     }));
@@ -64,8 +72,7 @@ public class Player extends main{
 
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        gc.clearRect(moveRight.getCenterX() - 35, moveLeft.getCenterY() + 20, 50, 50);
-                        gc.fillRect( moveLeft.getCenterX() - 5, y, 40, 50);
+                        stickmangif.setX(moveRight.getCenterX() - 35);
                         moveRight.setCenterX(moveRight.getCenterX() - 2);
                         moveLeft.setCenterX(moveLeft.getCenterX() - 2);
                     }));

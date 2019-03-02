@@ -31,7 +31,6 @@ public class main extends Application {
         stage.show();
         Player ago = new Player();
         ago.drawPlayer(gc, canvas, root, 50.0, 500.0);
-        ago.drawPlayer(gc, canvas, root, 300.0, 500.0);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/K2h.mp3";     // For example
