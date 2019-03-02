@@ -19,7 +19,8 @@ public class main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Group root = new Group();
-        Scene scene = new Scene(root, 700, 700);
+        Scene scene = new Scene(root, 600, 600);
+        double playerXPosition = 10, playerYPosition = 500;
         stage.setScene(scene);
         stage.show();
 
@@ -27,13 +28,39 @@ public class main extends Application {
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        gc.fillRect(100, 0, 40, 50);
+        gc.fillRect(playerXPosition, playerYPosition, 40, 50);
 
         Rectangle player = new Rectangle(100 , 100 , 200, 300);
-        Circle moveRight = new Circle(50, 100, 20);
+        Circle moveRight = new Circle(44, 470, 10);
+        Circle moveLeft = new Circle(16, 470, 10);
+        root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
-        moveRight.setOnMouseClicked(mouseEvent ->
-                moveRight.setCenterX(moveRight.getCenterX() + 5));
+        moveRight.setOnMouseClicked(mouseEvent -> {
+            Timeline animation = new Timeline();
+            animation.setCycleCount(20);
+
+            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                    actionEvent1 -> {
+                        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        gc.fillRect( moveRight.getCenterX() - 32 , playerYPosition, 40, 50);
+                        moveRight.setCenterX(moveRight.getCenterX() + 2);
+                        moveLeft.setCenterX(moveLeft.getCenterX() + 2);
+                    }));
+            animation.play();
+        });
+        moveLeft.setOnMouseClicked(mouseEvent -> {
+            Timeline animation = new Timeline();
+            animation.setCycleCount(20);
+
+            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                    actionEvent1 -> {
+                        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        gc.fillRect( moveLeft.getCenterX() - 7 , playerYPosition, 40, 50);
+                        moveRight.setCenterX(moveRight.getCenterX() - 2);
+                        moveLeft.setCenterX(moveLeft.getCenterX() - 2);
+                    }));
+            animation.play();
+        });
         //root.getChildren().add(player);
 
         player.setOnMouseClicked(mouseEvent -> {
