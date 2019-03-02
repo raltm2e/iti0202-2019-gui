@@ -3,6 +3,7 @@ package MortalAgo;
 import javafx.application.Application;
 
 public abstract class player {
+
     private int hp;
     private int attack;
     private int defence;
