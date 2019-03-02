@@ -38,7 +38,7 @@ public class main extends Application {
         Rectangle player = new Rectangle(100 , 100 , 200, 300);
         Circle moveRight = new Circle(44, 470, 10);
         Circle moveLeft = new Circle(16, 470, 10);
-        Image right = new Image( new FileInputStream("C:\\Users\\Raul\\IdeaProjects\\iti0202-2019-gui\\src\\sample\\Right.png") );
+        Image right = new Image( new FileInputStream("src\\sample\\Right.png") );
         moveRight.setFill(new ImagePattern(right));
         scene.setFill(new ImagePattern(right));
         root.getChildren().add(moveLeft);
