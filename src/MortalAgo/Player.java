@@ -16,68 +16,65 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Player extends main{
 
-    private int hp;
-    private int attack;
-    private int defence;
+    private int hp, attack, defence;
+    private Rectangle player;
+    private Image logo;
+    private Button moveLeft, moveRight, punch, kick, special;
 
-    public void Player(String name) {
-        if (name.equals("Ago")) {
-            Player newPlayer = new ago();
-        }
+    public Player(String name, Rectangle player, Image logo) {
+        this.player = player;
         this.attack = 1;
         this.defence = 1;
         this.hp = 10;
+        this.logo = logo;
+    }
+    void moveLeft(){
+        player.setX(player.getX() - 2);
+        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() - 2);
+        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() - 2); //TODO add attacking buttons too
+    }
+    void moveRight(){
+        player.setX(player.getX() + 2);
+        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + 2);
+        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + 2); //TODO add attacking buttons too
     }
 
-    public void drawPlayer( Group root, Double x, Double y, Rectangle stickmangif) {
-        Image right = null;
-        Image stickf = null;
-        try {
-            right = new Image( new FileInputStream("src\\MortalAgo\\right.png") );
+    public void setMoveLeft(Button left){
+        this.moveLeft = left;
+    }
+    public Button getMoveLeft(){
+        return this.moveLeft;
+    }
+    public void setMoveRight(Button right){
+        this.moveRight = right;
+    }
+    public Button getMoveRight(){
+        return this.moveRight;
+    }
+    public void setPunch(Button punch){
+        this.punch = punch;
+    }
+    public Button getPunch(){
+        return this.punch;
+    }
+    public void setKick(Button kick){
+        this.kick = kick;
+    }
+    public Button getKick(){
+        return this.kick;
+    }
+    public void setSpecial(Button special){
+        this.special = special;
+    }
+    public Button getSpecial(){
+        return this.special;
+    }
 
-            stickf = new Image( new FileInputStream("src\\MortalAgo\\stickman.gif") );
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        stickmangif.setFill(new ImagePattern(stickf));
-        Circle moveRight = new Circle(x + 33, y - 20, 10);
-        Circle moveLeft = new Circle(x + 5, y - 20, 10);
-        moveRight.setFill(new ImagePattern(right));
-        root.getChildren().add(stickmangif);
-        root.getChildren().add(moveLeft);
-        root.getChildren().add(moveRight);
-
-
-        moveRight.setOnMouseClicked(mouseEvent -> {
-            Image stickman = null;
-            try {
-                stickman = new Image( new FileInputStream("src\\MortalAgo\\Agojump.gif") );
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            stickmangif.setFill(new ImagePattern(stickman));
-            Timeline animation = new Timeline();
-            animation.setCycleCount(20);
-            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                    actionEvent1 -> {
-                        stickmangif.setX(stickmangif.getX() + 2);
-                        moveRight.setCenterX(moveRight.getCenterX() + 2);
-                        moveLeft.setCenterX(moveLeft.getCenterX() + 2);
-                    }));
-            animation.play();
-        });
-        moveLeft.setOnMouseClicked(mouseEvent -> {
-            Timeline animation = new Timeline();
-            animation.setCycleCount(20);
-
-            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                    actionEvent1 -> {
-                        stickmangif.setX(stickmangif.getX() - 2);
-                        moveRight.setCenterX(moveRight.getCenterX() - 2);
-                        moveLeft.setCenterX(moveLeft.getCenterX() - 2);
-                    }));
-            animation.play();
-        });
+    public Rectangle getRetangle(){
+        return this.player;
+    }
+    public Image getLogo(){
+        return this.logo;
     }
 
     public int getAttack() {
@@ -91,5 +88,9 @@ public class Player extends main{
     public int getHp() {
         return this.hp;
     }
+
+    public double getX() { return this.player.getX(); }
+
+    public double getY() { return this.player.getY(); }
 
 }
