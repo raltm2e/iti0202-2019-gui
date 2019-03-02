@@ -8,16 +8,19 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileInputStream;
+
 
 public class main extends Application {
     @Override
@@ -90,20 +93,15 @@ public class main extends Application {
         root.setFocusTraversable(true);
         root.requestFocus();
 
-        Button play = new Button("Play");
-        root.getChildren().add(play);
 
-        play.setOnAction(actionEvent -> {
-            Timeline timeline = new Timeline();
-            timeline.setCycleCount(10);
-            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100),
-                    actionEvent1 -> {
-                        player.setY(player.getY() + 10);
-                    }));
-            timeline.play();
-        });
         long startNanoTime = System.nanoTime();
-        new AnimationTimer() {
+        String musicFile = "src/MortalAgo/K2h.mp3";     // For example
+
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+
+       /** new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
                 double delta = (currentNanoTime - startNanoTime) / 1_000_000_000;
@@ -114,7 +112,7 @@ public class main extends Application {
                     gc.fillRect(100, control, 40, 50);
                 }
             }
-        }.start();
+        }.start(); */
     }
 
     public static void main(String[] args) {

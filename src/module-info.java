@@ -1,5 +1,6 @@
 module javagui {
     requires javafx.controls;
     requires javafx.fxml;
-    opens sample;
+    requires javafx.media;
+    opens MortalAgo;
 }
