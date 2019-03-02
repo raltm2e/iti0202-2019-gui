@@ -9,11 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.FileInputStream;
 
 public class main extends Application {
     @Override
@@ -24,6 +28,7 @@ public class main extends Application {
         stage.setScene(scene);
         stage.show();
 
+
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -33,8 +38,12 @@ public class main extends Application {
         Rectangle player = new Rectangle(100 , 100 , 200, 300);
         Circle moveRight = new Circle(44, 470, 10);
         Circle moveLeft = new Circle(16, 470, 10);
+        Image right = new Image( new FileInputStream("C:\\Users\\Raul\\IdeaProjects\\iti0202-2019-gui\\src\\sample\\Right.png") );
+        moveRight.setFill(new ImagePattern(right));
+        scene.setFill(new ImagePattern(right));
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
+
         moveRight.setOnMouseClicked(mouseEvent -> {
             Timeline animation = new Timeline();
             animation.setCycleCount(20);
