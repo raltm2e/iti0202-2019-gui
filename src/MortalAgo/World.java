@@ -20,15 +20,19 @@ public class World {
         this.background = background;
         this.root = root;
     }
+
     public World(String name, Group root){
         this.name = name;
         this.background = null;
         this.root = root;
     }
+
     public void drawPlayer(Player player, double x, double y){
         Image right = null;
+        Image left = null;
         try {
-            right = new Image( new FileInputStream("src\\MortalAgo\\Media\\right.png") );
+            right = new Image( new FileInputStream("src\\MortalAgo\\Media\\right.png"));
+            left = new Image(new FileInputStream("src\\MortalAgo\\Media\\left.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -38,6 +42,7 @@ public class World {
         Button rightMove = new Button("left", moveRight, player);
         Button leftMove = new Button("left", moveLeft, player);
         moveRight.setFill(new ImagePattern(right));
+        moveLeft.setFill(new ImagePattern(left));
         root.getChildren().add(player.getRetangle());
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
@@ -53,15 +58,19 @@ public class World {
     public void gameAnimation(){
 
     }
+
     public Image getBackground(){
         return this.background;
     }
+
     public void setBackground(Image background){
         this.background = background;
     }
+
     public String getName(){
         return this.name;
     }
+
     public Group getRoot(){
         return this.root;
     }
