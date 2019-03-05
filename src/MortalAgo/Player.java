@@ -18,20 +18,29 @@ public class Player extends main{
 
     private int hp, attack, defence;
     private Rectangle player;
-    private Image logo;
+    private Image logo, leftjump;
     private Button moveLeft, moveRight, punch, kick, special;
+    private int counter = 0;
 
-    public Player(String name, Rectangle player, Image logo) {
+    public Player(String name, Rectangle player, Image logo, Image leftjump) {
         this.player = player;
         this.attack = 1;
         this.defence = 1;
         this.hp = 10;
         this.logo = logo;
+        this.leftjump = leftjump;
     }
     void moveLeft(){
+        this.getRetangle().setFill(new ImagePattern(getJumpLeft()));
         player.setX(player.getX() - 2);
         moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() - 2);
-        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() - 2); //TODO add attacking buttons too
+        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() - 2);//TODO add attacking buttons too
+        counter++;
+        System.out.println(counter);
+        if (counter == 20) {
+            this.getRetangle().setFill(new ImagePattern(this.getLogo()));
+            counter = 0;
+        }
     }
     void moveRight(){
         player.setX(player.getX() + 2);
@@ -75,6 +84,9 @@ public class Player extends main{
     }
     public Image getLogo(){
         return this.logo;
+    }
+    public Image getJumpLeft(){
+        return this.leftjump;
     }
 
     public int getAttack() {

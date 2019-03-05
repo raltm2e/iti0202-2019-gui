@@ -31,8 +31,9 @@ public class main extends Application {
         stage.setScene(scene);
         stage.show();
         Rectangle player = new Rectangle(50.0, 100.0, 300, 400);
-        Image playerLogo = new Image( new FileInputStream("src\\MortalAgo\\Media\\stickman.gif") );
-        Player ago = new Player("test", player, playerLogo);
+        Image playerLogo = new Image( new FileInputStream("src\\MortalAgo\\Media\\breathing.gif") );
+        Image playerleft = new Image( new FileInputStream("src\\MortalAgo\\Media\\Jump left on spot.gif") );
+        Player ago = new Player("test", player, playerLogo, playerleft);
         World test = new World("test",root);
         test.drawPlayer(ago, 100.0,200.0);
 
