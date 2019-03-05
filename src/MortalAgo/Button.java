@@ -12,17 +12,20 @@ public class Button {
     private Image logo;
     private Circle button;
     private Player player;
+
     public Button(String name, Image logo, Circle button, Player player){
         this.name = name;
         this.logo = logo;
         this.button = button;
         this.player = player;
     }
+
     public Button(String name, Circle button, Player player){
         this.name = name;
         this.button = button;
         this.player = player;
     }
+
     public void leftButton(){
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRetangle().setFill(new ImagePattern(player.getLogo()));
@@ -36,6 +39,7 @@ public class Button {
         });
 
     }
+
     public void rightButton(){
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRetangle().setFill(new ImagePattern(player.getLogo()));
@@ -49,16 +53,21 @@ public class Button {
         });
 
     }
+
     public void setLogo(Image logo){
         this.logo = logo;
     }
+
     public Image getLogo(){
         return this.logo;
     }
+
     public String getName(){
         return this.name;
     }
+
     public Circle getButton(){
         return this.button;
     }
+
 }
