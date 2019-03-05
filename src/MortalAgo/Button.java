@@ -2,6 +2,7 @@ package MortalAgo;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -30,10 +31,10 @@ public class Button {
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRetangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
-            animation.setCycleCount(20);
+            animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.moveLeft();
+                        player.move(-4 ,"file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-left-once.gif");
                     }));
             animation.play();
         });
@@ -44,10 +45,10 @@ public class Button {
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRetangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
-            animation.setCycleCount(20);
+            animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.moveRight();
+                        player.move( 4, "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-right-once.gif");
                     }));
             animation.play();
         });
@@ -68,6 +69,14 @@ public class Button {
 
     public Circle getButton(){
         return this.button;
+    }
+    public Circle createButton(int x, int y) {
+        Circle button = new Circle(x, y, 10);
+        button.setFill(new ImagePattern(logo));
+        return button;
+    }
+    public void removeButton(Circle button, Group root) {
+        root.getChildren().remove(button);
     }
 
 }

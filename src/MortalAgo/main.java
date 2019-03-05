@@ -24,23 +24,25 @@ public class main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Group root = new Group();
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 800, 600);
         Canvas canvas = new Canvas(600, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\testback.jpg" );
         root.getChildren().add(canvas);
+        scene.setFill(new ImagePattern(background));
         stage.setScene(scene);
         stage.show();
-        Rectangle player = new Rectangle(50.0, 100.0, 300, 400);
-        Image playerLogo = new Image( new FileInputStream("src\\MortalAgo\\Media\\breathing.gif") );
-        Image playerleft = new Image( new FileInputStream("src\\MortalAgo\\Media\\Jump left on spot.gif") );
-        Player ago = new Player("test", player, playerLogo, playerleft);
+        stage.setResizable(false);
+        Rectangle player = new Rectangle(50.0, 100.0, 130, 280);
+        Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
+        Player ago = new Player("ago", player, playerLogo);
         World test = new World("test",root);
-        test.drawPlayer(ago, 100.0,200.0);
+        test.drawPlayer(ago, 100.0,320.0);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/Media/K2h.mp3";     // For example
 
-        Image stick = new Image( new FileInputStream("src\\MortalAgo\\Media\\stickman.gif") );
+        Image stick = new Image( "file:src\\MortalAgo\\Media\\stickman.gif" );
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         new AnimationTimer() {

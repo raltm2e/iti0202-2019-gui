@@ -22,30 +22,35 @@ public class Player extends main{
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
 
-    public Player(String name, Rectangle player, Image logo, Image leftjump) {
+    public Player(String name, Rectangle player, Image logo) {
         this.player = player;
         this.attack = 1;
         this.defence = 1;
         this.hp = 10;
         this.logo = logo;
-        this.leftjump = leftjump;
     }
-    void moveLeft(){
-        this.getRetangle().setFill(new ImagePattern(getJumpLeft()));
-        player.setX(player.getX() - 2);
-        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() - 2);
-        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() - 2);//TODO add attacking buttons too
+    void move(int ammount, String url){
+        if (counter == 0) {
+            this.getRetangle().setFill(new ImagePattern(animate(url)));
+            moveLeft.getButton().setVisible(false);
+            moveRight.getButton().setVisible(false);
+        }
+        if ( counter < 50 && counter > 15) {
+            player.setX(player.getX() + ammount);
+            moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
+            moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
+        }
         counter++;
         System.out.println(counter);
-        if (counter == 20) {
+        if (counter == 62) {
+            moveLeft.getButton().setVisible(true);
+            moveRight.getButton().setVisible(true);
             this.getRetangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
         }
     }
-    void moveRight(){
-        player.setX(player.getX() + 2);
-        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + 2);
-        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + 2); //TODO add attacking buttons too
+    Image animate(String url) {
+        return new Image( url );
     }
 
     public void setMoveLeft(Button left){
@@ -84,9 +89,6 @@ public class Player extends main{
     }
     public Image getLogo(){
         return this.logo;
-    }
-    public Image getJumpLeft(){
-        return this.leftjump;
     }
 
     public int getAttack() {

@@ -37,10 +37,12 @@ public class World {
             e.printStackTrace();
         }
         player.getRetangle().setFill(new ImagePattern(player.getLogo()));
-        Circle moveRight = new Circle(x + 33, y - 20, 10);
-        Circle moveLeft = new Circle(x + 5, y - 20, 10);
-        Button rightMove = new Button("left", moveRight, player);
-        Button leftMove = new Button("left", moveLeft, player);
+        player.getRetangle().setX(x);
+        player.getRetangle().setY(y);
+        Circle moveRight = new Circle(x + 33 + 50, y + 30, 10);
+        Circle moveLeft = new Circle(x + 5 + 50, y + 30, 10);
+        Button rightMove = new Button("left", right, moveRight, player);
+        Button leftMove = new Button("left", left, moveLeft, player);
         moveRight.setFill(new ImagePattern(right));
         moveLeft.setFill(new ImagePattern(left));
         root.getChildren().add(player.getRetangle());
