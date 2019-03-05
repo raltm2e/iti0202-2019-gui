@@ -84,3 +84,9 @@ Paneb mängu kinni.
 - 12\. nädal: JAR-komplekteerimine
 - 13\. nädal: parandused/täiendused
 - 14\. nädal: lõplik esitamine
+
+Story
+
+https://www.youtube.com/watch?v=ZCpi493P1L0
+
+Ago interviu peale naerab aaviksoo, ja ago vihastab ning otsustab kõigile kätte maksta
