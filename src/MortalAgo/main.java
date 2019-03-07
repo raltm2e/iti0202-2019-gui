@@ -33,11 +33,11 @@ public class main extends Application {
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
-        Rectangle player = new Rectangle(50.0, 100.0, 130, 280);
+        Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
         Player ago = new Player("ago", player, playerLogo);
         World test = new World("test",root);
-        test.drawPlayer(ago, 100.0,320.0);
+        test.drawPlayer(ago, 100.0,310.0);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/Media/K2h.mp3";     // For example

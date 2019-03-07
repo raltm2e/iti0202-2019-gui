@@ -10,8 +10,10 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 public class World {
+    public static final int BUTTON_SIZE = 15;
+    public static final int BUTTON_Y_CORRECTION = 30;
+    public static final int BUTTON_X_CORRECTION = 50;
     private String name;
     private Image background;
     private Group root;
@@ -39,8 +41,8 @@ public class World {
         player.getRetangle().setFill(new ImagePattern(player.getLogo()));
         player.getRetangle().setX(x);
         player.getRetangle().setY(y);
-        Circle moveRight = new Circle(x + 33 + 50, y + 30, 10);
-        Circle moveLeft = new Circle(x + 5 + 50, y + 30, 10);
+        Circle moveRight = new Circle(x + 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
+        Circle moveLeft = new Circle(x + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Button rightMove = new Button("left", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         moveRight.setFill(new ImagePattern(right));
@@ -50,8 +52,8 @@ public class World {
         root.getChildren().add(moveRight);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
-        rightMove.rightButton();
-        leftMove.leftButton();
+        rightMove.moveButton(4);
+        leftMove.moveButton(-4);
 
     }
     public void drawEnemy(Player enemy, double x, double y){

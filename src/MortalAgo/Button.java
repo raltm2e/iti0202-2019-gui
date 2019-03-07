@@ -27,28 +27,20 @@ public class Button {
         this.player = player;
     }
 
-    public void leftButton(){
+    public void moveButton(int ammount){
+        String url;
+        if (ammount < 0) {
+            url = player.getLeftUrl();
+        } else {
+            url = player.getRightUrl();
+        }
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRetangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
             animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.move(-4 ,"file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-left-once.gif");
-                    }));
-            animation.play();
-        });
-
-    }
-
-    public void rightButton(){
-        this.button.setOnMouseClicked(mouseEvent -> {
-            player.getRetangle().setFill(new ImagePattern(player.getLogo()));
-            Timeline animation = new Timeline();
-            animation.setCycleCount(62);
-            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                    actionEvent1 -> {
-                        player.move( 4, "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-right-once.gif");
+                        player.move(ammount , url);
                     }));
             animation.play();
         });

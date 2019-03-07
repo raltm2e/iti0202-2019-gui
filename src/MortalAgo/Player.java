@@ -18,7 +18,9 @@ public class Player extends main{
 
     private int hp, attack, defence;
     private Rectangle player;
-    private Image logo, leftjump;
+    private Image logo;
+    private String left = "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-left.gif",
+            right = "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-right.gif";
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
 
@@ -31,7 +33,7 @@ public class Player extends main{
     }
     void move(int ammount, String url){
         if (counter == 0) {
-            this.getRetangle().setFill(new ImagePattern(animate(url)));
+            this.getRetangle().setFill(new ImagePattern(new Image(url)));
             moveLeft.getButton().setVisible(false);
             moveRight.getButton().setVisible(false);
         }
@@ -48,9 +50,6 @@ public class Player extends main{
             this.getRetangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
         }
-    }
-    Image animate(String url) {
-        return new Image( url );
     }
 
     public void setMoveLeft(Button left){
@@ -90,6 +89,8 @@ public class Player extends main{
     public Image getLogo(){
         return this.logo;
     }
+    public String getLeftUrl() { return this.left; }
+    public String getRightUrl() { return this.right; }
 
     public int getAttack() {
         return this.attack;
