@@ -1,8 +1,8 @@
 package MortalAgo;
 
+import MortalAgo.Characters.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -35,7 +35,7 @@ public class Button {
             url = player.getRightUrl();
         }
         this.button.setOnMouseClicked(mouseEvent -> {
-            player.getRetangle().setFill(new ImagePattern(player.getLogo()));
+            player.getRectangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
             animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -44,7 +44,19 @@ public class Button {
                     }));
             animation.play();
         });
+    }
 
+    public void attackButton(){
+        this.button.setOnMouseClicked(mouseEvent -> {
+            player.getRectangle().setFill(new ImagePattern(player.getLogo()));
+            Timeline animation = new Timeline();
+            animation.setCycleCount(40);
+            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                    actionEvent1 -> {
+                        player.attack();
+                    }));
+            animation.play();
+        });
     }
 
     public void setLogo(Image logo){
@@ -61,14 +73,6 @@ public class Button {
 
     public Circle getButton(){
         return this.button;
-    }
-    public Circle createButton(int x, int y) {
-        Circle button = new Circle(x, y, 10);
-        button.setFill(new ImagePattern(logo));
-        return button;
-    }
-    public void removeButton(Circle button, Group root) {
-        root.getChildren().remove(button);
     }
 
 }
