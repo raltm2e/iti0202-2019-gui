@@ -1,5 +1,6 @@
 package MortalAgo;
 
+import MortalAgo.Characters.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -26,32 +27,36 @@ public class Button {
         this.player = player;
     }
 
-    public void leftButton(){
+    public void moveButton(int ammount){
+        String url;
+        if (ammount < 0) {
+            url = player.getLeftUrl();
+        } else {
+            url = player.getRightUrl();
+        }
         this.button.setOnMouseClicked(mouseEvent -> {
-            player.getRetangle().setFill(new ImagePattern(player.getLogo()));
+            player.getRectangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
-            animation.setCycleCount(20);
+            animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.moveLeft();
+                        player.move(ammount , url);
                     }));
             animation.play();
         });
-
     }
 
-    public void rightButton(){
+    public void attackButton(){
         this.button.setOnMouseClicked(mouseEvent -> {
-            player.getRetangle().setFill(new ImagePattern(player.getLogo()));
+            player.getRectangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
-            animation.setCycleCount(20);
+            animation.setCycleCount(40);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.moveRight();
+                        player.attack();
                     }));
             animation.play();
         });
-
     }
 
     public void setLogo(Image logo){
