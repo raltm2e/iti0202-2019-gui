@@ -18,7 +18,7 @@ public class Player {
     private String left, right, hit, leftHit, rightHit;
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
-    private boolean outOfBounds = false, otherPlayer = false;
+    private boolean outOfBounds = false, punchPlayer = false;
     private World world;
 
     public Player(Rectangle player, Image logo, World world) {
@@ -34,26 +34,26 @@ public class Player {
             this.getRectangle().setFill(new ImagePattern(new Image(url)));
             setButtonVisible(false);
         }
-        if ( counter < 50 && counter > 15 && !outOfBounds && !otherPlayer) {
+        if ( counter < 50 && counter > 15 && !outOfBounds && !punchPlayer) {
             if (world.getWith() <= (player.getX() + 130) || 0 > player.getX()) {
                 outOfBounds = true;
-            } else if (world.distanceBetween() < 60) {
-                otherPlayer = true;
+            } else if (world.distanceBetween() < 60) { // distance between players
+                punchPlayer = true;
             } else {
                movePlayer(ammount);
             }
         } else if (outOfBounds) {
             movePlayer(- (ammount / 2));
-        } else if (otherPlayer) {
+        } else if (punchPlayer) {
             movePlayer(- (ammount / 4));
             this.world.moveOtherPlayer(this, (ammount / 4));
         }
         counter++;
         if (counter == 62) {
-            setButtonVisible(true);
+            world.turnOver(this);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             outOfBounds = false;
-            otherPlayer = false;
+            punchPlayer = false;
             counter = 0;
         }
     }
@@ -61,19 +61,23 @@ public class Player {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getPunchUrl())));
-
+            if (world.getEnemy().equals(this)) {
+                player.setX(player.getX() - 50);
+            }
             setButtonVisible(false);
         }
-        if(counter == 19) {
+        if(counter == 21) {
             world.attack(this);
         }
         counter++;
         if (counter == 40) {
             this.getRectangle().setWidth(130.00);
-            setButtonVisible(true);
+            world.turnOver(this);
+            if (world.getEnemy().equals(this)) {
+                player.setX(player.getX() + 50);
+            }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            System.out.println(world.distanceBetween());
         }
     }
 
@@ -90,7 +94,6 @@ public class Player {
         if (counter == 0) {
             if (left) {
                 this.getRectangle().setFill(new ImagePattern(new Image(leftHit)));
-                System.out.println("ouch !!!");
             } else {
                 this.getRectangle().setFill(new ImagePattern(new Image(rightHit)));
             }
@@ -98,6 +101,8 @@ public class Player {
         if (counter > 13 && counter < 24) {
             if (left) {
                 movePlayer(2);
+            } else {
+                movePlayer(-2);
             }
         }
         counter++;
@@ -107,7 +112,7 @@ public class Player {
         }
     }
 
-    private void setButtonVisible(Boolean value){ //TODO add attacking buttons too
+    public void setButtonVisible(Boolean value){ //TODO add attacking buttons too
         moveLeft.getButton().setVisible(value);
         moveRight.getButton().setVisible(value);
         punch.getButton().setVisible(value);
