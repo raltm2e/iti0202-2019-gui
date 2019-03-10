@@ -11,7 +11,7 @@ public final class Kruus extends Player {
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\jump-left-once.gif");
         setRightUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\jump-right-once.gif");
         setLefthitUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\got-hit.gif");
-        setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\got-hit.gif");
+        setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\hit-left.gif");
     }
 
 }
