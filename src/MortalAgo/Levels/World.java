@@ -74,6 +74,7 @@ public class World {
     }
     public void drawEnemy(Player enemy, double x, double y){
         drawPlayer(enemy, x, y);
+        enemy.setButtonVisible(false);
         this.enemy = enemy;
     }
     public void drawAgo(Player ago, double x, double y) {
@@ -82,13 +83,19 @@ public class World {
     }
     public boolean isAttacked(Player attacker) {
         if (attacker.equals(this.player)) {
-            return (abs(attacker.getX() - enemy.getX()) < 139);
+            return (abs(attacker.getX() - enemy.getX()) < 135);
         } else {
-            return (abs(attacker.getX() - player.getX()) < 139);
+            return (abs(attacker.getX() - player.getX()) < 85);
         }
     }
     public double distanceBetween(){
         return abs(player.getX()- enemy.getX());
+    }
+
+    public void turnOver(Player player) {
+        player.setButtonVisible(false);
+        getOtherPlayer(player).setButtonVisible(true);
+
     }
 
     public void moveOtherPlayer(Player player, int ammount){
@@ -103,6 +110,8 @@ public class World {
         if (isAttacked(attacker)) {
             if (attacker.equals(player)) {
                 enemy.gotHit(true);
+            } else {
+                player.gotHit( false);
             }
         }
     }
@@ -133,6 +142,19 @@ public class World {
 
     public double getHeight() {
         return this.scene.getHeight();
+    }
+    public Player getEnemy(){
+        return this.enemy;
+    }
+    public Player getPlayer(){
+        return this.player;
+    }
+    public Player getOtherPlayer(Player player) {
+        if (player.equals(this.player)) {
+            return enemy;
+        } else {
+            return this.player;
+        }
     }
 
 }
