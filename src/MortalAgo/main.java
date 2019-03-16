@@ -30,6 +30,7 @@ public class main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
+        test.drawStatsRectangle();
         System.out.println(test.getWith());
         root.getChildren().add(canvas);
         stage.setScene(scene);
@@ -38,11 +39,13 @@ public class main extends Application {
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
         Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
-        Image enemyLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\breathing.gif");
+        Image enemyLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_breathing.gif");
         Player ago = new Ago(player, playerLogo, test);
         Player kruus = new Kruus(enemy, enemyLogo, test);
         test.drawEnemy(kruus, 400.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
+        test.drawHpRectangle(ago);
+        test.drawHpRectangle(kruus);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/Media/K2h.mp3";     // For example

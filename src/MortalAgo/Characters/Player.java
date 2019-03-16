@@ -9,7 +9,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-
 public class Player {
 
     private int hp, attack, defence;
@@ -90,6 +89,8 @@ public class Player {
                     animateHit(left);
                 }));
         animation.play();
+        this.hp -= 1;
+        world.drawHpRectangle(this);
     }
 
     private void animateHit(boolean left) {

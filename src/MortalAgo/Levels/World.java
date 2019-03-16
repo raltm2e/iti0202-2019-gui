@@ -1,12 +1,15 @@
 package MortalAgo.Levels;
 
 import MortalAgo.Button;
+import MortalAgo.Characters.Ago;
 import MortalAgo.Characters.Player;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +20,9 @@ public class World {
     public static final int BUTTON_SIZE = 15;
     public static final int BUTTON_Y_CORRECTION = 20;
     public static final int BUTTON_X_CORRECTION = 80;
+    private Rectangle playerHp;
+    private Rectangle enemyHp;
+    private boolean created1rect = false;
     private String name;
     private Image background;
     private Group root;
@@ -119,6 +125,35 @@ public class World {
             }
         }
     }
+
+    public void drawStatsRectangle() {
+        Rectangle statRect = new Rectangle(0, 0, 800, 100);
+        statRect.setFill(Color.CORNFLOWERBLUE);
+        root.getChildren().add(statRect);
+    }
+
+    public void drawHpRectangle(Player player) {
+        if (player instanceof Ago) {
+            Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
+            playerHpOutline.setFill(Color.BLACK);
+            root.getChildren().add(playerHpOutline);
+            this.playerHp = new Rectangle(35, 50, 20 * player.getHp(), 20);
+            playerHp.setFill(Color.RED);
+            root.getChildren().add(playerHp);
+        } else {
+            Rectangle playerHpOutline = new Rectangle(560 - 5, 50 - 5 , 210, 30);
+            playerHpOutline.setFill(Color.BLACK);
+            root.getChildren().add(playerHpOutline);
+            this.enemyHp = new Rectangle(560, 50, 20 * player.getHp(), 20);
+            enemyHp.setFill(Color.RED);
+            root.getChildren().add(enemyHp);
+        }
+    }
+
+    public void setHpRectangle(Player player) {
+        this.enemyHp.setWidth(20 * player.getHp());
+    }
+
     public void gameAnimation(){
 
     }
