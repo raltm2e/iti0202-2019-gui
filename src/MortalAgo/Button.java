@@ -27,9 +27,9 @@ public class Button {
         this.player = player;
     }
 
-    public void moveButton(int ammount){
+    public void moveButton(int amount){
         String url;
-        if (ammount < 0) {
+        if (amount < 0) {
             url = player.getLeftUrl();
         } else {
             url = player.getRightUrl();
@@ -40,7 +40,7 @@ public class Button {
             animation.setCycleCount(62);
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
-                        player.move(ammount , url);
+                        player.move(amount , url);
                     }));
             animation.play();
         });

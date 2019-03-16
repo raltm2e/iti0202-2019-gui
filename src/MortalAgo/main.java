@@ -28,7 +28,7 @@ public class main extends Application {
         Scene scene = new Scene(root, 800, 600);
         Canvas canvas = new Canvas(600, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\testback.jpg" );
+        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
         System.out.println(test.getWith());
         root.getChildren().add(canvas);

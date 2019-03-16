@@ -72,15 +72,18 @@ public class World {
         leftMove.moveButton(-4);
         hit.attackButton();
     }
+
     public void drawEnemy(Player enemy, double x, double y){
         drawPlayer(enemy, x, y);
         enemy.setButtonVisible(false);
         this.enemy = enemy;
     }
+
     public void drawAgo(Player ago, double x, double y) {
         drawPlayer(ago, x, y);
         this.player = ago;
     }
+
     public boolean isAttacked(Player attacker) {
         if (attacker.equals(this.player)) {
             return (abs(attacker.getX() - enemy.getX()) < 135);
@@ -88,6 +91,7 @@ public class World {
             return (abs(attacker.getX() - player.getX()) < 85);
         }
     }
+
     public double distanceBetween(){
         return abs(player.getX()- enemy.getX());
     }
@@ -143,12 +147,15 @@ public class World {
     public double getHeight() {
         return this.scene.getHeight();
     }
+
     public Player getEnemy(){
         return this.enemy;
     }
+
     public Player getPlayer(){
         return this.player;
     }
+
     public Player getOtherPlayer(Player player) {
         if (player.equals(this.player)) {
             return enemy;

@@ -57,6 +57,7 @@ public class Player {
             counter = 0;
         }
     }
+
     public void attack() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
@@ -90,6 +91,7 @@ public class Player {
                 }));
         animation.play();
     }
+
     private void animateHit(boolean left) {
         if (counter == 0) {
             if (left) {
@@ -128,48 +130,68 @@ public class Player {
     public void setMoveLeft(Button left){
         this.moveLeft = left;
     }
+
     public Button getMoveLeft(){
         return this.moveLeft;
     }
+
     public void setMoveRight(Button right){
         this.moveRight = right;
     }
+
     public Button getMoveRight(){
         return this.moveRight;
     }
+
     public void setPunch(Button punch){
         this.punch = punch;
     }
+
     public Button getPunch(){
         return this.punch;
     }
+
     public void setKick(Button kick){
         this.kick = kick;
     }
+
     public Button getKick(){
         return this.kick;
     }
+
     public void setSpecial(Button special){
         this.special = special;
     }
+
     public Button getSpecial(){
         return this.special;
     }
 
+
     public Rectangle getRectangle(){
         return this.player;
     }
+
     public Image getLogo(){
         return this.logo;
     }
+
     public String getLeftUrl() { return this.left; }
+
     public String getRightUrl() { return this.right; }
+
     public String getPunchUrl() { return this.hit; }
+
     public void setLeftUrl(String url) { this.left = url; }
+
     public void setRightUrl(String url) { this.right = url; }
+
     public void setPunchUrl(String url) { this.hit = url; }
+
     public void setRighthitUrl(String url) { this.rightHit = url; }
+
     public void setLefthitUrl(String url) { this.leftHit = url; }
+
 
     public int getAttack() {
         return this.attack;
