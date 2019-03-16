@@ -89,8 +89,16 @@ public class Player {
                     animateHit(left);
                 }));
         animation.play();
-        this.hp -= 1;
+        this.loseHp(1);
+    }
+
+    private void loseHp(int amount) {
+        this.hp -= amount;
         world.drawHpRectangle(this);
+    }
+
+    private void gainHp(int amount) {
+        this.loseHp(-amount);
     }
 
     private void animateHit(boolean left) {

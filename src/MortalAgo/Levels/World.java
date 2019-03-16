@@ -150,12 +150,7 @@ public class World {
         }
     }
 
-    public void setHpRectangle(Player player) {
-        this.enemyHp.setWidth(20 * player.getHp());
-    }
-
     public void gameAnimation(){
-
     }
 
     public Image getBackground(){
