@@ -86,7 +86,6 @@ public class Player {
     }
 
     public void gotHit(boolean left) {
-        damageMediaPlayer.play();
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -101,6 +100,9 @@ public class Player {
     }
 
     private void loseHp(int amount) {
+        Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
+        MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
+        damageMediaPlayer.play();
         this.hp -= amount;
         world.drawHpRectangle(this);
     }
@@ -212,10 +214,6 @@ public class Player {
     public void setDamageSound(String url) {
         this.damageSoundurl = url;
     }
-
-    Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
-    MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
-
 
     public int getAttack() {
         return this.attack;
