@@ -5,19 +5,23 @@ import MortalAgo.Levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
+import java.io.File;
 
 public class Player {
 
     private int hp, attack, defence;
     private Rectangle player;
     private Image logo;
-    private String left, right, hit, leftHit, rightHit;
+    private String left, right, hit, leftHit, rightHit, damageSoundurl;
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
-    private boolean outOfBounds = false, punchPlayer = false;
+    private boolean outOfBounds = false, punchPlayer = false, isDead = false;
     private World world;
 
     public Player(Rectangle player, Image logo, World world) {
@@ -82,6 +86,7 @@ public class Player {
     }
 
     public void gotHit(boolean left) {
+        damageMediaPlayer.play();
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -90,6 +95,9 @@ public class Player {
                 }));
         animation.play();
         this.loseHp(1);
+        if (this.hp <= 0) {
+            this.isDead = true;
+        }
     }
 
     private void loseHp(int amount) {
@@ -200,6 +208,13 @@ public class Player {
     public void setRighthitUrl(String url) { this.rightHit = url; }
 
     public void setLefthitUrl(String url) { this.leftHit = url; }
+
+    public void setDamageSound(String url) {
+        this.damageSoundurl = url;
+    }
+
+    Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
+    MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
 
 
     public int getAttack() {

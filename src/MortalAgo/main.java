@@ -30,7 +30,6 @@ public class main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
-        test.drawStatsRectangle();
         System.out.println(test.getWith());
         root.getChildren().add(canvas);
         stage.setScene(scene);

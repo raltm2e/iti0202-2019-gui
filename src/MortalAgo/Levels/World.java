@@ -126,12 +126,6 @@ public class World {
         }
     }
 
-    public void drawStatsRectangle() {
-        Rectangle statRect = new Rectangle(0, 0, 800, 100);
-        statRect.setFill(Color.CORNFLOWERBLUE);
-        root.getChildren().add(statRect);
-    }
-
     public void drawHpRectangle(Player player) {
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
