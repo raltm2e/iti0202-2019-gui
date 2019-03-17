@@ -99,8 +99,9 @@ public class Player {
         }
     }
 
+    private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
+
     private void loseHp(int amount) {
-        Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
         MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
         damageMediaPlayer.play();
         this.hp -= amount;
