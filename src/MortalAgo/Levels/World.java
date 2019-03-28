@@ -129,17 +129,17 @@ public class World {
     public void drawHpRectangle(Player player) {
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
-            playerHpOutline.setFill(Color.BLACK);
-            root.getChildren().add(playerHpOutline);
             this.playerHp = new Rectangle(35, 50, 20 * player.getHp(), 20);
+            playerHpOutline.setFill(Color.BLACK);
             playerHp.setFill(Color.RED);
+            root.getChildren().add(playerHpOutline);
             root.getChildren().add(playerHp);
         } else {
             Rectangle playerHpOutline = new Rectangle(560 - 5, 50 - 5 , 210, 30);
-            playerHpOutline.setFill(Color.BLACK);
-            root.getChildren().add(playerHpOutline);
             this.enemyHp = new Rectangle(560, 50, 20 * player.getHp(), 20);
+            playerHpOutline.setFill(Color.BLACK);
             enemyHp.setFill(Color.RED);
+            root.getChildren().add(playerHpOutline);
             root.getChildren().add(enemyHp);
         }
     }
@@ -187,5 +187,4 @@ public class World {
             return this.player;
         }
     }
-
 }
