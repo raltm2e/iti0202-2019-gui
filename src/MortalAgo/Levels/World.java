@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import static java.lang.Math.abs;
 
 public class World {
+    public enum AttackChoice {HIT, KICK}
     public static final int BUTTON_SIZE = 15;
     public static final int BUTTON_Y_CORRECTION = 20;
     public static final int BUTTON_X_CORRECTION = 80;
@@ -61,9 +62,11 @@ public class World {
         Circle moveRight = new Circle(x + 45 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 40, BUTTON_SIZE);
         Circle moveLeft = new Circle(x + 17 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 13, BUTTON_SIZE);
         Circle punch = new Circle(x - 20 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
+        Circle leg = new Circle(x + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Button rightMove = new Button("left", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         Button hit = new Button("hit", punch, player);
+        Button kick = new Button("kick", leg, player);
         moveRight.setFill(new ImagePattern(right));
         moveLeft.setFill(new ImagePattern(left));
         punch.setFill(new ImagePattern(punche));
@@ -71,12 +74,15 @@ public class World {
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
         root.getChildren().add(punch);
+        root.getChildren().add(leg);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
+        player.setKick(kick);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
+        kick.kickButton();
     }
 
     public void drawEnemy(Player enemy, double x, double y){
@@ -98,6 +104,14 @@ public class World {
         }
     }
 
+    public boolean isKicked(Player attacker) {
+        if (attacker.equals(this.player)) {
+            return (abs(attacker.getX() - enemy.getX()) < 120);
+        } else {
+            return (abs(attacker.getX() - player.getX()) < 85);
+        }
+    }
+
     public double distanceBetween(){
         return abs(player.getX()- enemy.getX());
     }
@@ -112,20 +126,36 @@ public class World {
         if (this.player.equals(player)) {
             enemy.movePlayer(ammount);
         } else {
-            player.movePlayer(-ammount);
+            this.player.movePlayer(ammount);
         }
     }
 
-    public void attack(Player attacker) {
-        if (isAttacked(attacker)) {
-            if (attacker.equals(player)) {
-                enemy.gotHit(true);
-            } else {
-                player.gotHit( false);
-            }
+    public boolean attack(Player attacker, AttackChoice choice) {
+        switch (choice) {
+            case HIT:
+                if (isAttacked(attacker)) {
+                if (attacker.equals(player)) {
+                    enemy.gotHit(true);
+                } else {
+                    player.gotHit( false);
+                }
+                return true;
+                }
+                break;
+            case KICK:
+                if (isKicked(attacker)) {
+                    if (attacker.equals(player)) {
+                        enemy.gotKicked(true);
+                    } else {
+                        player.gotKicked( false);
+                    }
+                    return true;
+                }
+                break;
+             default: return false;
         }
+        return false;
     }
-
     public void drawHpRectangle(Player player) {
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);

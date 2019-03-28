@@ -18,7 +18,7 @@ public class Player {
     private int hp, attack, defence;
     private Rectangle player;
     private Image logo;
-    private String left, right, hit, leftHit, rightHit, damageSoundurl;
+    private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise;
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
@@ -47,7 +47,7 @@ public class Player {
             }
         } else if (outOfBounds) {
             movePlayer(- (ammount / 2));
-        } else if (punchPlayer) {
+        } else if (punchPlayer && world.distanceBetween() < 105) {
             movePlayer(- (ammount / 4));
             this.world.moveOtherPlayer(this, (ammount / 4));
         }
@@ -71,7 +71,7 @@ public class Player {
             setButtonVisible(false);
         }
         if(counter == 21) {
-            world.attack(this);
+            world.attack(this, World.AttackChoice.HIT);
         }
         counter++;
         if (counter == 40) {
@@ -85,6 +85,35 @@ public class Player {
         }
     }
 
+    public void kick() {
+        if (counter == 0) {
+            this.getRectangle().setWidth(160.00);
+            this.getRectangle().setFill(new ImagePattern(new Image(getLegUrl())));
+            if (world.getEnemy().equals(this)) {
+                player.setX(player.getX() - 30); // teistipidi playeri paika liigutamine
+            }
+            setButtonVisible(false);
+        }
+        if(counter == 21) {
+            if (world.attack(this, World.AttackChoice.KICK)) {
+                punchPlayer = true;
+            }
+        }
+        counter++;
+        if (counter == 45) {
+            this.getRectangle().setWidth(130.00);
+            if (!punchPlayer) {
+                world.turnOver(this);
+            }
+            if (world.getEnemy().equals(this)) {
+                player.setX(player.getX() + 30);
+            }
+            this.getRectangle().setFill(new ImagePattern(this.getLogo()));
+            counter = 0;
+            punchPlayer = false;
+        }
+    }
+
     public void gotHit(boolean left) {
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
@@ -94,6 +123,20 @@ public class Player {
                 }));
         animation.play();
         this.loseHp(1);
+        if (this.hp <= 0) {
+            this.isDead = true;
+        }
+    }
+
+    public void gotKicked(boolean left) {
+        Timeline animation = new Timeline();
+        animation.setCycleCount(66);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    animateKick(left);
+                }));
+        animation.play();
+        this.loseHp(2);
         if (this.hp <= 0) {
             this.isDead = true;
         }
@@ -134,10 +177,52 @@ public class Player {
         }
     }
 
+    private void animateKick(boolean left) {
+        if (counter == 0) {
+            this.getRectangle().setWidth(260.00);
+            if (left) {
+                this.getRectangle().setFill(new ImagePattern(new Image(leftFall)));
+            } else {
+                player.setX(player.getX() - 130);
+                this.getRectangle().setFill(new ImagePattern(new Image(rightFall)));
+            }
+        }
+        if (counter > 13 && counter < 24) {
+            if (left) {
+                movePlayer(3);
+            } else {
+                movePlayer(-3);
+            }
+        }
+        if (counter == 40){
+            if (left) {
+                this.getRectangle().setFill(new ImagePattern(new Image(leftRise)));
+            } else {
+                this.getRectangle().setFill(new ImagePattern(new Image(rightRise)));
+            }
+        }
+        counter++;
+        if (counter == 66) {
+            if(!left) {
+                player.setX(player.getX() + 130);
+            }
+            this.getRectangle().setWidth(130.00);
+            this.getRectangle().setFill(new ImagePattern(logo));
+            world.turnOver(world.getOtherPlayer(this));
+            counter = 0;
+        }
+    }
+    public void turnOver(Player player) {
+        if (counter == 0) {
+            world.turnOver(player);
+        }
+    }
+
     public void setButtonVisible(Boolean value){ //TODO add attacking buttons too
         moveLeft.getButton().setVisible(value);
         moveRight.getButton().setVisible(value);
         punch.getButton().setVisible(value);
+        kick.getButton().setVisible(value);
     }
 
     public void movePlayer(int ammount) {
@@ -145,6 +230,7 @@ public class Player {
         moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
         moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
         punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
+        kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
     }
 
     public void setMoveLeft(Button left){
@@ -212,6 +298,10 @@ public class Player {
 
     public void setLefthitUrl(String url) { this.leftHit = url; }
 
+    public void setLegUrl(String url) { this.leg = url;}
+
+    public String getLegUrl() { return leg; }
+
     public void setDamageSound(String url) {
         this.damageSoundurl = url;
     }
@@ -240,4 +330,35 @@ public class Player {
         return world;
     }
 
+    public String getLeftFall() {
+        return leftFall;
+    }
+
+    public void setLeftFall(String leftFall) {
+        this.leftFall = leftFall;
+    }
+
+    public String getRightFall() {
+        return rightFall;
+    }
+
+    public void setRightFall(String rightFall) {
+        this.rightFall = rightFall;
+    }
+
+    public String getLeftRise() {
+        return leftRise;
+    }
+
+    public void setLeftRise(String leftRise) {
+        this.leftRise = leftRise;
+    }
+
+    public String getRightRise() {
+        return rightRise;
+    }
+
+    public void setRightRise(String rightRise) {
+        this.rightRise = rightRise;
+    }
 }
