@@ -10,9 +10,8 @@ public final class Ago extends Player {
         super(player, logo, world);
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-left.gif");
         setRightUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-right.gif");
-        setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\hit.gif");
+        setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\punch.gif");
         setRighthitUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\got-hit.gif");
-        setLefthitUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\hit-left.gif");
     }
 
 }

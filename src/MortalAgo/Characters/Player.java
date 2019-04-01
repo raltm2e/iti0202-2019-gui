@@ -5,20 +5,23 @@ import MortalAgo.Levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.io.File;
 
 public class Player {
 
     private int hp, attack, defence;
     private Rectangle player;
     private Image logo;
-    private String left, right, hit, leftHit, rightHit;
+    private String left, right, hit, leftHit, rightHit, damageSoundurl;
     private Button moveLeft, moveRight, punch, kick, special;
     private int counter = 0;
-    private boolean outOfBounds = false, punchPlayer = false;
+    private boolean outOfBounds = false, punchPlayer = false, isDead = false;
     private World world;
 
     public Player(Rectangle player, Image logo, World world) {
@@ -57,6 +60,7 @@ public class Player {
             counter = 0;
         }
     }
+
     public void attack() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
@@ -89,7 +93,25 @@ public class Player {
                     animateHit(left);
                 }));
         animation.play();
+        this.loseHp(1);
+        if (this.hp <= 0) {
+            this.isDead = true;
+        }
     }
+
+    private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
+
+    private void loseHp(int amount) {
+        MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
+        damageMediaPlayer.play();
+        this.hp -= amount;
+        world.drawHpRectangle(this);
+    }
+
+    private void gainHp(int amount) {
+        this.loseHp(-amount);
+    }
+
     private void animateHit(boolean left) {
         if (counter == 0) {
             if (left) {
@@ -128,48 +150,71 @@ public class Player {
     public void setMoveLeft(Button left){
         this.moveLeft = left;
     }
+
     public Button getMoveLeft(){
         return this.moveLeft;
     }
+
     public void setMoveRight(Button right){
         this.moveRight = right;
     }
+
     public Button getMoveRight(){
         return this.moveRight;
     }
+
     public void setPunch(Button punch){
         this.punch = punch;
     }
+
     public Button getPunch(){
         return this.punch;
     }
+
     public void setKick(Button kick){
         this.kick = kick;
     }
+
     public Button getKick(){
         return this.kick;
     }
+
     public void setSpecial(Button special){
         this.special = special;
     }
+
     public Button getSpecial(){
         return this.special;
     }
 
+
     public Rectangle getRectangle(){
         return this.player;
     }
+
     public Image getLogo(){
         return this.logo;
     }
+
     public String getLeftUrl() { return this.left; }
+
     public String getRightUrl() { return this.right; }
+
     public String getPunchUrl() { return this.hit; }
+
     public void setLeftUrl(String url) { this.left = url; }
+
     public void setRightUrl(String url) { this.right = url; }
+
     public void setPunchUrl(String url) { this.hit = url; }
+
     public void setRighthitUrl(String url) { this.rightHit = url; }
+
     public void setLefthitUrl(String url) { this.leftHit = url; }
+
+    public void setDamageSound(String url) {
+        this.damageSoundurl = url;
+    }
 
     public int getAttack() {
         return this.attack;
