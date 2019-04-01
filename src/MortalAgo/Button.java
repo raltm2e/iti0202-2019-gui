@@ -46,7 +46,7 @@ public class Button {
         });
     }
 
-    public void attackButton(){
+    public void attackButton() {
         this.button.setOnMouseClicked(mouseEvent -> {
             player.getRectangle().setFill(new ImagePattern(player.getLogo()));
             Timeline animation = new Timeline();
@@ -54,6 +54,19 @@ public class Button {
             animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                     actionEvent1 -> {
                         player.attack();
+                    }));
+            animation.play();
+        });
+    }
+
+    public void kickButton() {
+        this.button.setOnMouseClicked(mouseEvent -> {
+            player.getRectangle().setFill(new ImagePattern(player.getLogo()));
+            Timeline animation = new Timeline();
+            animation.setCycleCount(45);
+            animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                    actionEvent1 -> {
+                        player.kick();
                     }));
             animation.play();
         });
