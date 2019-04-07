@@ -136,7 +136,7 @@ public class main extends Application {
                 double delta = (currentNanoTime - startNanoTime) / 1_000_000_000;
                 double control = 100 + 20 * delta;
                 if ( control == 100) {
-                    mediaPlayer.play();
+                    //mediaPlayer.play();
                 }
             }
         }.start();

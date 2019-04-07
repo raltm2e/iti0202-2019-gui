@@ -5,7 +5,9 @@ import MortalAgo.Characters.Ago;
 import MortalAgo.Characters.Player;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -18,9 +20,9 @@ import static java.lang.Math.abs;
 
 public class World {
     public enum AttackChoice {HIT, KICK}
-    public static final int BUTTON_SIZE = 15;
-    public static final int BUTTON_Y_CORRECTION = 20;
-    public static final int BUTTON_X_CORRECTION = 80;
+    public static final int BUTTON_SIZE = 21;
+    public static final int BUTTON_Y_CORRECTION = 10;
+    public static final int BUTTON_X_CORRECTION = 65;
     private Rectangle playerHp;
     private Rectangle enemyHp;
     private boolean created1rect = false;
@@ -56,33 +58,42 @@ public class World {
         Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
         Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
         Image punche = new Image("file:src\\MortalAgo\\Media\\punch.png");
+        Image kicke = new Image("file:src\\MortalAgo\\Media\\kick.png");
+        Image sleepe = new Image("file:src\\MortalAgo\\Media\\sleep.png");
         player.getRectangle().setFill(new ImagePattern(player.getLogo()));
         player.getRectangle().setX(x);
         player.getRectangle().setY(y);
-        Circle moveRight = new Circle(x + 45 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 40, BUTTON_SIZE);
-        Circle moveLeft = new Circle(x + 17 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 13, BUTTON_SIZE);
-        Circle punch = new Circle(x - 20 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
-        Circle leg = new Circle(x + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
-        Button rightMove = new Button("left", right, moveRight, player);
+        Circle moveRight = new Circle(x - 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
+        Circle moveLeft = new Circle(x - 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 55, BUTTON_SIZE);
+        Circle punch = new Circle(x + 5 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
+        Circle leg = new Circle(x + 50 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
+        Circle sleep = new Circle( x + 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 50, BUTTON_SIZE);
+        Button rightMove = new Button("right", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         Button hit = new Button("hit", punch, player);
         Button kick = new Button("kick", leg, player);
+        Button sleeping = new Button("sleep", sleep, player);
         moveRight.setFill(new ImagePattern(right));
         moveLeft.setFill(new ImagePattern(left));
         punch.setFill(new ImagePattern(punche));
+        leg.setFill(new ImagePattern(kicke));
+        sleep.setFill(new ImagePattern(sleepe));
         root.getChildren().add(player.getRectangle());
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
         root.getChildren().add(punch);
         root.getChildren().add(leg);
+        root.getChildren().add(sleep);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
         player.setKick(kick);
+        player.setSleeping(sleeping);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
         kick.kickButton();
+        sleeping.sleepButton();
     }
 
     public void drawEnemy(Player enemy, double x, double y){
@@ -119,7 +130,18 @@ public class World {
     public void turnOver(Player player) {
         player.setButtonVisible(false);
         getOtherPlayer(player).setButtonVisible(true);
-
+        if (getOtherPlayer(player).getStamina() == 0) {
+            skipTurn(getOtherPlayer(player));
+        } else {
+            getOtherPlayer(player).addStamina(2);
+            System.out.println("Ago stamina = " + this.player.getStamina());
+            System.out.println("Marguse stamine = " + enemy.getStamina());
+        }
+    }
+    public void skipTurn(Player player) {
+        System.out.println("Ago stamina = " + this.player.getStamina());
+        System.out.println("Marguse stamina = " + enemy.getStamina());
+        player.animateSleep();
     }
 
     public void moveOtherPlayer(Player player, int ammount){
