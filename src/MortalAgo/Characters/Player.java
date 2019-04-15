@@ -131,7 +131,7 @@ public class Player {
         if (counter == 72 ) {
             counter = 0;
             addStamina(5);
-            gainHp(2);
+            gainHp(1);
             world.turnOver(this);
         }
     }
