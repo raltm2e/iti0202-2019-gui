@@ -5,17 +5,11 @@ import MortalAgo.Characters.Ago;
 import MortalAgo.Characters.Player;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import static java.lang.Math.abs;
 
 public class World {
