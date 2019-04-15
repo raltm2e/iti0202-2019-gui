@@ -8,31 +8,20 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.*;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,8 +69,6 @@ public class main extends Application {
             System.out.println("GG EZ");
             stage.close();
         });
-
-
     }
 
     private List<MenuItem> makeMenuButtons() {
@@ -124,6 +111,8 @@ public class main extends Application {
         test.drawAgo(ago, 100.0,310.0);
         test.drawHpRectangle(ago);
         test.drawHpRectangle(kruus);
+        test.drawStaminaRectangle(ago);
+        test.drawStaminaRectangle(kruus);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/Media/K2h.mp3";     // For example

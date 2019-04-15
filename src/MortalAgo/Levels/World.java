@@ -23,14 +23,13 @@ public class World {
     public static final int BUTTON_SIZE = 21;
     public static final int BUTTON_Y_CORRECTION = 10;
     public static final int BUTTON_X_CORRECTION = 65;
-    private Rectangle playerHp;
-    private Rectangle enemyHp;
-    private boolean created1rect = false;
+    private Rectangle playerHp, enemyHp, playerStamina, enemyStamina;
     private String name;
     private Image background;
     private Group root;
     private Scene scene;
     private Player player, enemy;
+
     public World(String name, Image background, Group root, Scene scene){
         this.name = name;
         this.background = background;
@@ -131,17 +130,8 @@ public class World {
         player.setButtonVisible(false);
         getOtherPlayer(player).setButtonVisible(true);
         if (getOtherPlayer(player).getStamina() == 0) {
-            skipTurn(getOtherPlayer(player));
-        } else {
-            getOtherPlayer(player).addStamina(2);
-            System.out.println("Ago stamina = " + this.player.getStamina());
-            System.out.println("Marguse stamine = " + enemy.getStamina());
+            player.animateSleep();
         }
-    }
-    public void skipTurn(Player player) {
-        System.out.println("Ago stamina = " + this.player.getStamina());
-        System.out.println("Marguse stamina = " + enemy.getStamina());
-        player.animateSleep();
     }
 
     public void moveOtherPlayer(Player player, int ammount){
@@ -157,9 +147,9 @@ public class World {
             case HIT:
                 if (isAttacked(attacker)) {
                     if (attacker.equals(player)) {
-                        enemy.gotHit(true);
+                        enemy.gotHit(true, enemy.getAttack());
                     } else {
-                        player.gotHit( false);
+                        player.gotHit( false, enemy.getAttack());
                     }
                     return true;
                 }
@@ -167,9 +157,9 @@ public class World {
             case KICK:
                 if (isKicked(attacker)) {
                     if (attacker.equals(player)) {
-                        enemy.gotKicked(true);
+                        enemy.gotKicked(true, player.getAttack());
                     } else {
-                        player.gotKicked( false);
+                        player.gotKicked( false, enemy.getAttack());
                     }
                     return true;
                 }
@@ -178,38 +168,44 @@ public class World {
         }
         return false;
     }
+
     public void drawHpRectangle(Player player) {
+        if (player.getHp() <= 0) {
+            player.die();
+        }
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.playerHp = new Rectangle(35, 50, 20 * player.getHp(), 20);
+            this.playerHp = new Rectangle(35, 50, 2 * player.getHp(), 20);
             playerHp.setFill(Color.RED);
             root.getChildren().add(playerHp);
         } else {
             Rectangle playerHpOutline = new Rectangle(560 - 5, 50 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.enemyHp = new Rectangle(560, 50, 20 * player.getHp(), 20);
+            this.enemyHp = new Rectangle(560, 50, 2 * player.getHp(), 20);
             enemyHp.setFill(Color.RED);
             root.getChildren().add(enemyHp);
         }
     }
 
-    public void gameAnimation(){
-    }
-
-    public Image getBackground(){
-        return this.background;
-    }
-
-    public void setBackground(Image background){
-        this.background = background;
-        this.scene.setFill(new ImagePattern(background));
-    }
-
-    public String getName(){
-        return this.name;
+    public void drawStaminaRectangle(Player player) {
+        if (player instanceof Ago) {
+            Rectangle playerHpOutline = new Rectangle(35 - 5, 120 - 5 , 210, 30);
+            playerHpOutline.setFill(Color.BLACK);
+            root.getChildren().add(playerHpOutline);
+            this.playerStamina = new Rectangle(35, 120, 2 * player.getStamina(), 20);
+            playerStamina.setFill(Color.GREEN);
+            root.getChildren().add(playerStamina);
+        } else {
+            Rectangle playerHpOutline = new Rectangle(560 - 5, 120 - 5 , 210, 30);
+            playerHpOutline.setFill(Color.BLACK);
+            root.getChildren().add(playerHpOutline);
+            this.enemyStamina = new Rectangle(560, 120, 2 * player.getStamina(), 20);
+            enemyStamina.setFill(Color.GREEN);
+            root.getChildren().add(enemyStamina);
+        }
     }
 
     public Group getRoot(){
@@ -239,5 +235,4 @@ public class World {
             return this.player;
         }
     }
-
 }
