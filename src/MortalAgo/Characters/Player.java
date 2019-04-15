@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import java.io.File;
 
+
 public class Player {
 
     private int hp, attack, defence, stamina;
