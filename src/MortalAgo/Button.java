@@ -36,13 +36,37 @@ public class Button {
         glow.setLevel(1);
         button.setOnMouseEntered(mouseEvent ->  {
             button.setEffect(glow);
+            player.setText(getText());
+            player.getButtonText().setVisible(true);
         });
         button.setOnMouseExited(mouseEvent -> {
             button.setEffect(null);
+            player.getButtonText().setVisible(false);
+            player.getButtonText().setX(player.getButtonText().getX() + ((player.getButtonText().getText().length() - 5) * 6));
         });
     }
 
+    private String getText() {
+        switch (name) {
+            case "left":
+                return "Jump Left";
+            case "right":
+                return "Jump Right";
+            case "hit":
+                return "Punch(" + player.getWorld().getHitTextPercentage() + "%)";
+            case "kick":
+                return "Kick(" + player.getWorld().getKickTextPercentage() + "%)";
+            case "sleep":
+                return "Sleep";
+                default:
+                    return "";
+        }
+    }
+
     private void clickAnimation(int ammount) {
+        this.button.setOnMouseClicked(mouseEvent -> {
+
+        });
         Timeline animation = new Timeline();
         animation.setCycleCount(10);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(15),
@@ -80,6 +104,7 @@ public class Button {
                             player.move(amount, url);
                         }));
                 animation.play();
+                moveButton(amount);
                 break;
             case "hit":
                 Timeline animation1 = new Timeline();
@@ -89,6 +114,7 @@ public class Button {
                             player.attack();
                         }));
                 animation1.play();
+                attackButton();
                 break;
             case "kick":
                 Timeline animation2 = new Timeline();
@@ -98,6 +124,7 @@ public class Button {
                             player.kick();
                         }));
                 animation2.play();
+                kickButton();
                 break;
             case "sleep":
                 player.animateSleep();

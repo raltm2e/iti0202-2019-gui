@@ -10,6 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
+import java.util.Random;
+
 import static java.lang.Math.abs;
 
 public class World {
@@ -66,6 +72,13 @@ public class World {
         Button hit = new Button("hit", punch, player);
         Button kick = new Button("kick", leg, player);
         Button sleeping = new Button("sleep", sleep, player);
+        Text buttonText = new Text();
+        buttonText.setX(x + BUTTON_X_CORRECTION - 40);
+        buttonText.setY(y - 60);
+        buttonText.setFont(new Font("Comic Sans MS", 30));
+        buttonText.setFill(Color.WHITE);
+        buttonText.setStrokeWidth(1);
+        buttonText.setStroke(Color.BLACK);
         moveRight.setFill(new ImagePattern(right));
         moveLeft.setFill(new ImagePattern(left));
         punch.setFill(new ImagePattern(punche));
@@ -77,11 +90,13 @@ public class World {
         root.getChildren().add(punch);
         root.getChildren().add(leg);
         root.getChildren().add(sleep);
+        root.getChildren().add(buttonText);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
         player.setKick(kick);
         player.setSleeping(sleeping);
+        player.setButtonText(buttonText);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
@@ -100,19 +115,54 @@ public class World {
         this.player = ago;
     }
 
-    public boolean isAttacked(Player attacker) {
-        if (attacker.equals(this.player)) {
-            return (abs(attacker.getX() - enemy.getX()) < 135);
-        } else {
-            return (abs(attacker.getX() - player.getX()) < 85);
+    private double getPrecentage(int distance, int required) {
+        if (distance > required) {
+            return 0;
+        } else if (distance < 11) {
+            return 100.00;
         }
+        double percentage = 100.00 - (((double) (distance - 101) / (required - 101)) * 100);
+        return Math.round(percentage * 100.0) / 100.0;
+    }
+
+    public boolean getProbabilityBoolean(double probability) {
+        Random random = new Random();
+        int check = random.nextInt(10000);
+        return (((int) probability * 100) >= check);
+    }
+
+    private double getHitPercentage(Player attacker) {
+        if (attacker instanceof Ago) {
+            return getPrecentage((int) distanceBetween(), 135);
+        } else {
+            return getPrecentage((int) distanceBetween() + 50, 135);
+        }
+    }
+
+    public double getHitTextPercentage() {
+        if (getPrecentage((int) distanceBetween(), 135) > 100) {
+            return 100.00;
+        }
+        return getPrecentage((int) distanceBetween(), 135);
+    }
+
+    public double getKickTextPercentage() {
+        if (getPrecentage((int) distanceBetween(), 120) > 100) {
+            return 100.00;
+        }
+        return getPrecentage((int) distanceBetween(), 120);
+    }
+
+
+    public boolean isAttacked(Player attacker) {
+        return getProbabilityBoolean(getHitPercentage(attacker));
     }
 
     public boolean isKicked(Player attacker) {
         if (attacker.equals(this.player)) {
-            return (abs(attacker.getX() - enemy.getX()) < 120);
+            return getProbabilityBoolean(getPrecentage((int) distanceBetween(), 120));
         } else {
-            return (abs(attacker.getX() - player.getX()) < 85);
+            return getProbabilityBoolean(getPrecentage((int) distanceBetween() + 30, 120));
         }
     }
 

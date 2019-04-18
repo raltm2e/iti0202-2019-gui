@@ -4,12 +4,16 @@ import MortalAgo.Button;
 import MortalAgo.Levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.io.File;
 
 
@@ -25,6 +29,7 @@ public class Player {
     private int counter = 0;
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
     private World world;
+    private Text buttonText;
 
     public Player(Rectangle player, Image logo, World world) {
         this.player = player;
@@ -146,6 +151,7 @@ public class Player {
             counter = 0;
             gainStamina(25);
             gainHp(4);
+            sleeping.sleepButton();
             world.turnOver(this);
         }
     }
@@ -158,6 +164,7 @@ public class Player {
                     this.sleep();
                 }));
         animation.play();
+
     }
 
     public void gotHit(boolean left, int enemyAttack) {
@@ -300,6 +307,7 @@ public class Player {
         punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
         kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
         sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
+        buttonText.setX(buttonText.getX() + ammount);
     }
 
     public void setMoveLeft(Button left){
@@ -449,5 +457,18 @@ public class Player {
 
     public String getDie() {
         return die;
+    }
+
+    public Text getButtonText() {
+        return buttonText;
+    }
+    public void setButtonText(Text text) {
+        this.buttonText = text;
+    }
+    public void setText(String text) {
+        if (text.length() > 5) {
+            buttonText.setX(buttonText.getX() - ((text.length() - 5) * 6));
+        }
+        buttonText.setText(text);
     }
 }
