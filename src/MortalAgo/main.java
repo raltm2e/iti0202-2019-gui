@@ -1,6 +1,7 @@
 package MortalAgo;
 
 import MortalAgo.Characters.Ago;
+import MortalAgo.Characters.Gert;
 import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
 import MortalAgo.Levels.World;
@@ -103,16 +104,19 @@ public class main extends Application {
         root.getChildren().add(canvas);
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
+        Rectangle enemy2 = new Rectangle(50.0, 100.0, 130, 290);
         Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
         Image enemyLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_breathing.gif");
+        Image enemy2Logo = new Image("file:src\\MortalAgo\\Media\\Characters\\Gert\\breathing.gif");
         Player ago = new Ago(player, playerLogo, test);
         Player kruus = new Kruus(enemy, enemyLogo, test);
-        test.drawEnemy(kruus, 400.0, 310.0);
+        Player gert = new Gert(enemy2, enemy2Logo, test);
+        test.drawEnemy(gert, 400.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
         test.drawHpRectangle(ago);
-        test.drawHpRectangle(kruus);
+        test.drawHpRectangle(gert);
         test.drawStaminaRectangle(ago);
-        test.drawStaminaRectangle(kruus);
+        test.drawStaminaRectangle(gert);
 
         long startNanoTime = System.nanoTime();
         String musicFile = "src/MortalAgo/Media/K2h.mp3";     // For example
