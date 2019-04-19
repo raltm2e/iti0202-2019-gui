@@ -1,6 +1,7 @@
 package MortalAgo;
 
 import MortalAgo.Characters.Player;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.effect.Glow;
@@ -58,6 +59,8 @@ public class Button {
                 return "Kick(" + player.getWorld().getKickTextPercentage() + "%)";
             case "sleep":
                 return "Sleep";
+            case "special":
+                return "Special";
                 default:
                     return "";
         }
@@ -129,6 +132,20 @@ public class Button {
             case "sleep":
                 player.animateSleep();
                 break;
+            case "special":
+                Timeline animation3 = new Timeline();
+                int count = 32;
+                if ((player.getWorld().distanceBetween() - 120)/ 4 > 32 ) {
+                    count =  (int) (player.getWorld().distanceBetween() - 120)/ 4;
+                    System.out.println(count);
+                }
+                animation3.setCycleCount(count);
+                animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                        actionEvent1 -> {
+                            player.special();
+                        }));
+                animation3.play();
+                attackButton();
         }
     }
 

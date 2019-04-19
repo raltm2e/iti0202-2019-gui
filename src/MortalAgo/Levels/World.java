@@ -67,11 +67,15 @@ public class World {
         Circle punch = new Circle(x + 5 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Circle leg = new Circle(x + 50 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle sleep = new Circle( x + 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 50, BUTTON_SIZE);
+        Circle specialAttack = new Circle( x + 130 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 75, BUTTON_SIZE);
+        Rectangle projectile = new Rectangle(player.getX() + 180, player.getY() + 140, 70, 40);
+        projectile.setVisible(false);
         Button rightMove = new Button("right", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         Button hit = new Button("hit", punch, player);
         Button kick = new Button("kick", leg, player);
         Button sleeping = new Button("sleep", sleep, player);
+        Button special = new Button("special", specialAttack, player);
         Text buttonText = new Text();
         buttonText.setX(x + BUTTON_X_CORRECTION - 40);
         buttonText.setY(y - 60);
@@ -91,17 +95,22 @@ public class World {
         root.getChildren().add(leg);
         root.getChildren().add(sleep);
         root.getChildren().add(buttonText);
+        root.getChildren().add(specialAttack);
+        root.getChildren().add(projectile);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
         player.setKick(kick);
         player.setSleeping(sleeping);
         player.setButtonText(buttonText);
+        player.setSpecial(special);
+        player.setProjectile(projectile);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
         kick.kickButton();
         sleeping.sleepButton();
+        special.attackButton();
     }
 
     public void drawEnemy(Player enemy, double x, double y){
@@ -169,6 +178,8 @@ public class World {
     public double distanceBetween(){
         return abs(player.getX()- enemy.getX());
     }
+
+    public double distanceProjectile(Player player, Rectangle projectile) { return abs(getOtherPlayer(player).getX() - projectile.getX()); }
 
     public void turnOver(Player player) {
         player.setButtonVisible(false);

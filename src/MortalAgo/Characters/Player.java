@@ -2,6 +2,7 @@ package MortalAgo.Characters;
 
 import MortalAgo.Button;
 import MortalAgo.Levels.World;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
@@ -22,9 +23,9 @@ public class Player {
     private int hp, attack, defence, stamina;
     private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
     private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
-    private Rectangle player;
+    private Rectangle player, projectile;
     private Image logo;
-    private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die;
+    private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack;
     private Button moveLeft, moveRight, punch, kick, special, sleeping;
     private int counter = 0;
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
@@ -138,6 +139,83 @@ public class Player {
                 player.setX(player.getX() + 30);
             }
         }
+    }
+
+    public void special() {
+        if (counter == 0) {
+            this.getRectangle().setWidth(180.00);
+            this.getRectangle().setFill(new ImagePattern(new Image(specialAttack)));
+            if (world.getPlayer().equals(this)) {
+                player.setX(player.getX() - 37); // teistpidi playeri paika liigutamine
+            }
+            setButtonVisible(false);
+        }
+        counter++;
+        if (counter >= 15) {
+            projectile();
+        }
+        if (counter == 32) {
+            if (world.getPlayer().equals(this)) {
+                player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
+            }
+            this.getRectangle().setWidth(130.00);
+            this.getRectangle().setFill(new ImagePattern(this.getLogo()));
+        }
+    }
+
+    private void projectile() {
+        if (counter == 15) {
+            projectile.setX(player.getX() + 180);
+            projectile.setVisible(true);
+        }
+        projectile.setX(projectile.getX() + 4);
+        if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
+            if (counter == (int)(world.distanceBetween() - 120)/ 4) {
+                projectile.setVisible(false);
+                world.turnOver(this);
+                if (this instanceof Ago) {
+                    world.getOtherPlayer(this).gotKicked(true, 35);
+                } else {
+                    world.getOtherPlayer(this).gotKicked(false, 35);
+                }
+
+                loseStamina(20);
+                counter = 0;
+            }
+        } else {
+            if (world.distanceProjectile(this, projectile) <= 4 && world.distanceProjectile(this, projectile) >= 0) {
+                projectile.setVisible(false);
+                world.turnOver(this);
+                if (this instanceof Ago) {
+                    world.getOtherPlayer(this).gotKicked(true, 35);
+                } else {
+                    world.getOtherPlayer(this).gotKicked(false, 35);
+                }
+
+                loseStamina(20);
+                counter = 0;
+            } else if (world.distanceBetween() < 160) {
+                if (counter == 16) {
+                    projectile.setVisible(false);
+                    if (this instanceof Ago) {
+                        world.getOtherPlayer(this).gotKicked(true, 35);
+                    } else {
+                        world.getOtherPlayer(this).gotKicked(false, 35);
+                    }
+                }
+                if (counter == 32) {
+                    loseStamina(20);
+                    counter = 0;
+                    if (world.getPlayer().equals(this)) {
+                        player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
+                    }
+                    this.getRectangle().setWidth(130.00);
+                    this.getRectangle().setFill(new ImagePattern(this.getLogo()));
+                    world.turnOver(this);
+                }
+            }
+        }
+
     }
 
     public void sleep() {
@@ -298,6 +376,7 @@ public class Player {
         punch.getButton().setVisible(value);
         kick.getButton().setVisible(value);
         sleeping.getButton().setVisible(value);
+        special.getButton().setVisible(value);
     }
 
     public void movePlayer(int ammount) {
@@ -307,6 +386,7 @@ public class Player {
         punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
         kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
         sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
+        special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
         buttonText.setX(buttonText.getX() + ammount);
     }
 
@@ -470,5 +550,17 @@ public class Player {
             buttonText.setX(buttonText.getX() - ((text.length() - 5) * 6));
         }
         buttonText.setText(text);
+    }
+
+    public void setSpecialAttack(String specialAttack) {
+        this.specialAttack = specialAttack;
+    }
+
+    public Rectangle getProjectile() {
+        return projectile;
+    }
+
+    public void setProjectile(Rectangle projectile) {
+        this.projectile = projectile;
     }
 }
