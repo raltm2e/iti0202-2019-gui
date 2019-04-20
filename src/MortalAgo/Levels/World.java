@@ -43,11 +43,6 @@ public class World {
         this.scene = scene;
     }
 
-    public void removeAll(Player player, Player enemy) {
-        this.root.getChildren().clear();
-
-    }
-
     /**
      *  It draws player into given world with all buttons
      *
@@ -265,10 +260,10 @@ public class World {
             playerStamina.setFill(Color.GREEN);
             root.getChildren().add(playerStamina);
         } else {
-            Rectangle playerHpOutline = new Rectangle(560 - 5, 120 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(520 - 5, 120 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.enemyStamina = new Rectangle(560, 120, 2 * player.getStamina(), 20);
+            this.enemyStamina = new Rectangle(520, 120, 2 * player.getStamina(), 20);
             enemyStamina.setFill(Color.GREEN);
             root.getChildren().add(enemyStamina);
         }
@@ -288,6 +283,10 @@ public class World {
 
     public Player getEnemy(){
         return this.enemy;
+    }
+
+    public void setEnemy(Player enemy) {
+        this.enemy = enemy;
     }
 
     public Player getPlayer(){

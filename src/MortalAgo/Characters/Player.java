@@ -294,7 +294,10 @@ public class Player {
         } else {
             this.stamina -= amount;
         }
-        world.drawStaminaRectangle(this);
+        if (this.isDead || world.getEnemy().isDead) {
+        } else {
+            world.drawStaminaRectangle(this);
+        }
     }
 
     public void gainStamina(int amount) {
