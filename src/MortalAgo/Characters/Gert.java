@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public class Gert extends Player {
-    public Gert(Rectangle player, Image logo, World world) {
-        super(player, logo, world);
+    public Gert(Rectangle player, Image logo, World world, int attack, int maxHp) {
+        super(player, logo, world, attack, maxHp);
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Gert\\jump-left.gif");
         setRightUrl("file:src\\MortalAgo\\Media\\Characters\\Gert\\jump-right.gif");
         setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Gert\\hit-left.gif");

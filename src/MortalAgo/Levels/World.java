@@ -240,17 +240,17 @@ public class World {
             player.setDead(true);
         }
         if (player instanceof Ago) {
-            Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
             this.playerHp = new Rectangle(35, 50, 2 * player.getHp(), 20);
             playerHp.setFill(Color.RED);
             root.getChildren().add(playerHp);
         } else {
-            Rectangle playerHpOutline = new Rectangle(560 - 5, 50 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(520 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.enemyHp = new Rectangle(560, 50, 2 * player.getHp(), 20);
+            this.enemyHp = new Rectangle(520, 50, 2 * player.getHp(), 20);
             enemyHp.setFill(Color.RED);
             root.getChildren().add(enemyHp);
         }
