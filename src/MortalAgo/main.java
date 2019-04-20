@@ -5,7 +5,6 @@ import MortalAgo.Characters.Gert;
 import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
 import MortalAgo.Levels.World;
-import MortalAgo.statbutton.StatButton;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -31,6 +30,8 @@ import java.util.List;
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 4;
+    private double volumeMultiplier = 1.0;
+    private MediaPlayer mediaPlayerMenu, mediaPlayerGame;
 
     private void startGame(Stage stage) {
         int roundcounter = 0;
@@ -52,8 +53,16 @@ public class main extends Application {
         List<MenuItem> menuItems = makeMenuButtons();
         root.getChildren().addAll(menuItems);
 
+        String musicFile = "src/MortalAgo/Media/K2h.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        mediaPlayerMenu = new MediaPlayer(sound);
+        mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayerMenu.setVolume(volumeMultiplier);
+        mediaPlayerMenu.play();
+
         MenuItem play = menuItems.get(0);
         play.setOnMouseClicked(event -> {
+            mediaPlayerMenu.stop();
             root.getChildren().remove(img);
             root.getChildren().removeAll(menuItems);
             doPlayAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
@@ -61,6 +70,7 @@ public class main extends Application {
 
         MenuItem settings = menuItems.get(1);
         settings.setOnMouseClicked(event -> {
+            doSettingsAction(root, scene, stage);
             System.out.println("Settings");
         });
 
@@ -82,7 +92,7 @@ public class main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) throws Exception {
         startGame(stage);
     }
 
@@ -130,35 +140,64 @@ public class main extends Application {
             vastane = new Gert(enemy2, enemy2Logo, test, 10, 105);
         }
         test.drawEnemy(vastane, 400.0, 310.0);
+        System.out.println(test.getEnemy());
         test.drawAgo(ago, 100.0,310.0);
         test.drawHpRectangle(ago);
         test.drawHpRectangle(vastane);
         test.drawStaminaRectangle(ago);
         test.drawStaminaRectangle(vastane);
 
-        long startNanoTime = System.nanoTime();
-        String musicFile = "src/MortalAgo/Media/K2h.mp3";
-
+        String musicFile = "src/MortalAgo/Media/mission_impossible.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayerGame = new MediaPlayer(sound);
+        mediaPlayerGame.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayerGame.play();
+        mediaPlayerGame.setVolume(0.3 * volumeMultiplier);
         new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
-                boolean endGame = false;
-                double delta = (currentNanoTime - startNanoTime) / 1_000_000_000;
-                double control = 100 + 20 * delta;
                 if (test.getPlayer().isDead()) {
                     makeLoseWindow(root, scene, stage, test);
+                    mediaPlayerGame.stop();
                     this.stop();
                 } else if (test.getEnemy().isDead()) {
                     makeStatsWindow(root, scene, stage, test, roundcounter);
+                    mediaPlayerGame.stop();
                     this.stop();
-                }
-                if ( control == 100) {
-                    //mediaPlayer.play();
                 }
             }
         }.start();
+    }
+
+    private void doSettingsAction(Group root, Scene scene, Stage stage) {
+        root.getChildren().clear();
+        Text volumeText = new Text(startButtonX - 20, startButtonY, "Volume: " + (this.volumeMultiplier * 100));
+        volumeText.setFont(new Font("Comic Sans", 24));
+        root.getChildren().add(volumeText);
+
+        Button volumeIncreaseButton = makeStatButton(startButtonX, startButtonY, "Increase");
+        root.getChildren().add(volumeIncreaseButton);
+        volumeIncreaseButton.setOnMouseClicked(mouseEvent -> {
+            if (volumeMultiplier >= 1) {
+                System.out.println("Volume is at max");
+            } else {
+                this.volumeMultiplier += 0.1;
+                mediaPlayerMenu.setVolume(this.volumeMultiplier);
+                volumeText.setText("Volume: " + (this.volumeMultiplier * 100));
+            }
+        });
+
+        Button volumeDecreaseButton = makeStatButton(startButtonX, startButtonY + 50, "Decrease");
+        root.getChildren().add(volumeDecreaseButton);
+        volumeDecreaseButton.setOnMouseClicked(mouseEvent -> {
+            if (volumeMultiplier <= 0) {
+                System.out.println("Volume is at min");
+            } else {
+                this.volumeMultiplier -= 0.1;
+                mediaPlayerMenu.setVolume(this.volumeMultiplier);
+                volumeText.setText("Volume: " + (this.volumeMultiplier * 100));
+            }
+        });
     }
 
     private void makeStatsWindow(Group root, Scene scene, Stage stage, World world, int roundcounter) {
@@ -177,7 +216,7 @@ public class main extends Application {
         hitPoints.setFont(new Font("Comic Sans", 24));
         root.getChildren().add(hitPoints);
 
-        Button AttackButton = makeStatButton(world, 450, 200, "+1 Attack");
+        Button AttackButton = makeStatButton(450, 200, "+1 Attack");
         root.getChildren().add(AttackButton);
         AttackButton.setOnMouseClicked(mouseEvent -> {
             if (statpoints <= 0) {
@@ -188,7 +227,7 @@ public class main extends Application {
             }
         });
 
-        Button hitPointsButton = makeStatButton(world, 450, 250, "+5 Hitpoints");
+        Button hitPointsButton = makeStatButton(450, 250, "+5 Hitpoints");
         root.getChildren().add(hitPointsButton);
         hitPointsButton.setOnMouseClicked(mouseEvent -> {
             if (statpoints <= 0) {
@@ -201,10 +240,18 @@ public class main extends Application {
 
         MenuItem continueGame = new MenuItem("Continue");
         continueGame.setTranslateX(250);
-        continueGame.setTranslateY(500);
+        continueGame.setTranslateY(400);
         root.getChildren().add(continueGame);
         continueGame.setOnMouseClicked(mouseEvent -> {
             makeNewWorld(root, scene, stage, world, roundcounter, world.getPlayer().getAttack(), world.getPlayer().getMaxHp());
+        });
+
+        MenuItem quitGame = new MenuItem("Quit");
+        quitGame.setTranslateX(250);
+        quitGame.setTranslateY(450);
+        root.getChildren().add(quitGame);
+        quitGame.setOnMouseClicked(mouseEvent -> {
+            stage.close();
         });
     }
 
@@ -246,7 +293,7 @@ public class main extends Application {
         hitPoints.setText("Hitpoints: " + world.getPlayer().getMaxHp());
     }
 
-    private Button makeStatButton(World world, int x, int y, String text) {
+    private Button makeStatButton(int x, int y, String text) {
         Button AttackButton = new Button();
         AttackButton.setLayoutX(x);
         AttackButton.setLayoutY(y);
