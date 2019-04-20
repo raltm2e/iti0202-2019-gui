@@ -12,8 +12,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -45,6 +43,11 @@ public class World {
         this.scene = scene;
     }
 
+    public void removeAll(Player player, Player enemy) {
+        this.root.getChildren().clear();
+
+    }
+
     /**
      *  It draws player into given world with all buttons
      *
@@ -52,7 +55,6 @@ public class World {
      * @param x double
      * @param y double
      */
-
     private void drawPlayer(Player player, double x, double y){
         Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
         Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
@@ -162,7 +164,6 @@ public class World {
         return getPrecentage((int) distanceBetween(), 120);
     }
 
-
     public boolean isAttacked(Player attacker) {
         return getProbabilityBoolean(getHitPercentage(attacker));
     }
@@ -202,7 +203,7 @@ public class World {
             case HIT:
                 if (isAttacked(attacker)) {
                     if (attacker.equals(player)) {
-                        enemy.gotHit(true, enemy.getAttack());
+                        enemy.gotHit(true, player.getAttack());
                     } else {
                         player.gotHit( false, enemy.getAttack());
                     }
@@ -227,6 +228,7 @@ public class World {
     public void drawHpRectangle(Player player) {
         if (player.getHp() <= 0) {
             player.die();
+            player.setDead(true);
         }
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);

@@ -40,6 +40,7 @@ public class Player {
         this.hp = 100;
         this.logo = logo;
         this.world = world;
+        this.isDead = false;
     }
 
     public void die() {
@@ -106,8 +107,9 @@ public class Player {
             }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            world.turnOver(this);
-
+            if (!this.isDead) {
+                world.turnOver(this);
+            }
         }
     }
 
@@ -131,7 +133,7 @@ public class Player {
             loseStamina(20);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!punchPlayer) {
+            if (!punchPlayer && !this.isDead) {
                 world.turnOver(this);
             }
             punchPlayer = false;
@@ -215,7 +217,6 @@ public class Player {
                 }
             }
         }
-
     }
 
     public void sleep() {
@@ -304,6 +305,15 @@ public class Player {
             this.getRectangle().setFill(new ImagePattern(new Image(die)));
         }
         counter++;
+        this.setButtonVisible(false);
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     private void animateHit(boolean left) {
@@ -467,6 +477,10 @@ public class Player {
         return this.attack;
     }
 
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
     public int getDefence() {
         return this.defence;
     }
@@ -533,10 +547,6 @@ public class Player {
 
     public void setDie(String die) {
         this.die = die;
-    }
-
-    public String getDie() {
-        return die;
     }
 
     public Text getButtonText() {
