@@ -43,7 +43,9 @@ public class Button {
         button.setOnMouseExited(mouseEvent -> {
             button.setEffect(null);
             player.getButtonText().setVisible(false);
-            player.getButtonText().setX(player.getButtonText().getX() + ((player.getButtonText().getText().length() - 5) * 6));
+            if (player.getButtonText().getText().length() > 5) {
+                player.getButtonText().setX(player.getButtonText().getX() + ((player.getButtonText().getText().length() - 5) * 6));
+            }
         });
     }
 
@@ -60,6 +62,9 @@ public class Button {
             case "sleep":
                 return "Sleep";
             case "special":
+                if (player.getStamina() < 60) {
+                    return "No!";
+                }
                 return "Special";
                 default:
                     return "";
@@ -110,19 +115,22 @@ public class Button {
                 sleepButton();
                 break;
             case "special":
-                Timeline animation3 = new Timeline();
-                int count = 32;
-                if ((player.getWorld().distanceBetween() - 120)/ 4 > 32 ) {
-                    count =  (int) (player.getWorld().distanceBetween() - 120)/ 4;
-                    System.out.println(count);
+                if (player.getStamina() >= 70) {
+                    Timeline animation3 = new Timeline();
+                    int count = 32;
+                    if ((player.getWorld().distanceBetween() - 120) / 4 > 32) {
+                        count = (int) (player.getWorld().distanceBetween() - 120) / 4;
+                    }
+                    animation3.setCycleCount(count);
+                    animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                            actionEvent1 -> {
+                                player.special();
+                            }));
+                    animation3.play();
+                    attackButton();
+                } else {
+                    attackButton();
                 }
-                animation3.setCycleCount(count);
-                animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.special();
-                        }));
-                animation3.play();
-                attackButton();
         }
     }
 

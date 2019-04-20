@@ -211,6 +211,29 @@ public class World {
         }
     }
 
+    public double simulateMoving(Player player, double ammount) {
+        double playerX = player.getX();
+        double enemyX = getOtherPlayer(player).getX();
+        boolean punchPlayer = false;
+        boolean outOfBounds = false;
+        for (int i = 0; i < 46 ; i++) {
+            if (i < 34 && !outOfBounds && !punchPlayer) {
+                if (getWith() <= (playerX + 130) || 0 > playerX) {
+                    outOfBounds = true;
+                } else if (abs(playerX - enemyX) < 60) { // distance between players
+                    punchPlayer = true;
+                } else {
+                    playerX += ammount;
+                }
+            } else if (outOfBounds) {
+                playerX -= ammount / 2;
+            } else if (punchPlayer && abs(playerX - enemyX) < 105) {
+                playerX -= ammount / 4;
+                enemyX += ammount / 4;
+            }
+        }
+        return playerX;
+    }
     public boolean attack(Player attacker, AttackChoice choice) {
         switch (choice) {
             case HIT:

@@ -79,6 +79,7 @@ public class Player {
             punchPlayer = false;
             counter = 0;
             world.turnOver(this);
+            System.out.println(player.getX() + " Real");
         }
     }
 
@@ -195,6 +196,7 @@ public class Player {
             if (world.getPlayer().equals(this)) {
                 player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
             }
+            loseStamina(70);
             this.getRectangle().setWidth(130.00);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
         }
@@ -217,8 +219,6 @@ public class Player {
                 } else {
                     world.getOtherPlayer(this).gotKicked(false, 35);
                 }
-
-                loseStamina(20);
                 counter = 0;
             }
         } else {
@@ -229,8 +229,6 @@ public class Player {
                 } else {
                     world.getOtherPlayer(this).gotKicked(false, 35);
                 }
-
-                loseStamina(20);
                 counter = 0;
             } else if (world.distanceBetween() < 160) {
                 if (counter == 16) {
@@ -242,7 +240,6 @@ public class Player {
                     }
                 }
                 if (counter == 32) {
-                    loseStamina(20);
                     counter = 0;
                     if (world.getPlayer().equals(this)) {
                         player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine

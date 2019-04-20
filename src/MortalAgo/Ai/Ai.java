@@ -12,12 +12,12 @@ import java.util.List;
 public class Ai {
     private Player player;
     private World world;
-    public enum ActionType { MOVELEFT, MOVERIGHT, SLEEP, PUNCH, KICK }
+    public enum ActionType { MOVELEFT, MOVERIGHT, SLEEP, PUNCH, KICK, SPECIAL }
     public Ai(Player player, World world) {
         this.player = player;
         this.world = world;
     }
-    private int getValue(ActionType action) {
+    private int getValue(ActionType action, Player player) {
         switch (action) {
             case PUNCH:
                 if (world.getHitTextPercentage() > 50) {
@@ -42,33 +42,64 @@ public class Ai {
                     return 10;
                 }
             case MOVERIGHT:
-                if (player.getStamina() < 20) {
-                    return 150;
+                if (player.getStamina() < 30) {
+                    return 110;
                 } else {
                     return 5;
                 }
             case SLEEP:
+                if (player.getHp() < (player.getHp() / 4)) {
+                    return 210;
+                } else if (world.getHitTextPercentage() < 1 && player.getHp() == player.getMaxHp()) {
+
+                }
                 if (player.getStamina() < 20) {
                     return 120;
                 } else {
                     return 20;
                 }
+            case SPECIAL:
+                System.out.println(player.getStamina());
+                if (player.getStamina() > 70) {
+                    return 300;
+                } else {
+                    return 0;
+                }
                 default: return 0;
         }
 
     }
-    public void turn() {
-        if (player instanceof Kruus) {
-            List<Action> values = new ArrayList<>();
-            values.add(new Action(ActionType.PUNCH, getValue(ActionType.PUNCH)));
-            values.add(new Action(ActionType.KICK, getValue(ActionType.KICK)));
-            values.add(new Action(ActionType.MOVELEFT, getValue(ActionType.MOVELEFT)));
-            values.add(new Action(ActionType.MOVERIGHT, getValue(ActionType.MOVERIGHT)));
-            values.add(new Action(ActionType.SLEEP, getValue(ActionType.SLEEP)));
-            values.sort(Comparator.comparing(Action::getValue).reversed());
-            values.get(0).turnAction(player);
-        } else if (player instanceof Gert) {
+    private List<Action> getBests(Player player) {
+        List<Action> values = new ArrayList<>();
+        values.add(new Action(ActionType.PUNCH, getValue(ActionType.PUNCH, player)));
+        values.add(new Action(ActionType.KICK, getValue(ActionType.KICK, player)));
+        values.add(new Action(ActionType.MOVELEFT, getValue(ActionType.MOVELEFT, player)));
+        values.add(new Action(ActionType.MOVERIGHT, getValue(ActionType.MOVERIGHT, player)));
+        values.add(new Action(ActionType.SLEEP, getValue(ActionType.SLEEP, player)));
+        values.sort(Comparator.comparing(Action::getValue).reversed());
+        return values;
+    }
 
+    private List<Action> getEnemyBests() {
+        List<Action> values = getBests(world.getOtherPlayer(player));
+        values.add(new Action(ActionType.SPECIAL, getValue(ActionType.SPECIAL, world.getOtherPlayer(player))));
+        values.sort(Comparator.comparing(Action::getValue).reversed());
+        return values;
+    }
+    public void turn() {
+        if (player instanceof Gert) {
+            List<Action> actions = getBests(player);
+            Action enemyAction = getEnemyBests().get(0);
+            List<Prediction> predictions = new ArrayList<>();
+            for (Action action: actions) {
+                predictions.add(new Prediction(action, enemyAction));
+            }
+            predictions.sort(Comparator.comparing(Prediction::getPoints).reversed());
+            System.out.println(predictions);
+            System.out.println(predictions.get(0).getPoints());
+            predictions.get(0).getFirst().turnAction(player);
+        } else if (player instanceof Kruus) {
+            getBests(player).get(0).turnAction(player);
         }
     }
 }
