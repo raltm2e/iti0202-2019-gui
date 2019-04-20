@@ -17,7 +17,7 @@ import java.io.File;
 
 public class Player {
 
-    private int hp, attack, defence, stamina;
+    private int hp, attack, defence, stamina, maxHp;
     private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
     private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
     private Rectangle player, projectile;
@@ -29,14 +29,16 @@ public class Player {
     private World world;
     private Text buttonText;
 
-    public Player(Rectangle player, Image logo, World world) {
+    public Player(Rectangle player, Image logo, World world, int attack, int maxHp) {
         this.player = player;
-        this.attack = 8;
+        this.attack = attack;
+        this.maxHp = maxHp;
         this.defence = 1;
         this.stamina = 100;
-        this.hp = 100;
+        this.hp = maxHp;
         this.logo = logo;
         this.world = world;
+        this.isDead = false;
     }
 
     public void die() {
@@ -79,7 +81,24 @@ public class Player {
             punchPlayer = false;
             counter = 0;
             world.turnOver(this);
+            System.out.println(player.getX() + " Real");
         }
+    }
+
+    public void animateMove(int amount) {
+        String url;
+        if (amount < 0) {
+            url = getLeftUrl();
+        } else {
+            url = getRightUrl();
+        }
+        Timeline animation = new Timeline();
+        animation.setCycleCount(62);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    move(amount, url);
+                }));
+        animation.play();
     }
 
     public void attack() {
@@ -92,7 +111,9 @@ public class Player {
             setButtonVisible(false);
         }
         if(counter == 21) {
-            world.attack(this, World.AttackChoice.HIT);
+            if (world.attack(this, World.AttackChoice.HIT)) {
+                punchPlayer = true;
+            }
         }
         counter++;
         if (counter == 40) {
@@ -103,9 +124,24 @@ public class Player {
             }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            world.turnOver(this);
-
+            if (!this.isDead) {
+                world.turnOver(this);
+            }
+            if (!punchPlayer) {
+                world.turnOver(this);
+            }
+            punchPlayer = false;
         }
+    }
+
+    public void animateAttack() {
+        Timeline animation = new Timeline();
+        animation.setCycleCount(40);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    attack();
+                }));
+        animation.play();
     }
 
     public void kick() {
@@ -128,7 +164,7 @@ public class Player {
             loseStamina(40);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!punchPlayer) {
+            if (!punchPlayer && !this.isDead) {
                 world.turnOver(this);
             }
             punchPlayer = false;
@@ -136,6 +172,16 @@ public class Player {
                 player.setX(player.getX() + 30);
             }
         }
+    }
+
+    public void animateKick() {
+        Timeline animation = new Timeline();
+        animation.setCycleCount(45);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    kick();
+                }));
+        animation.play();
     }
 
     public void special() {
@@ -155,6 +201,7 @@ public class Player {
             if (world.getPlayer().equals(this)) {
                 player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
             }
+            loseStamina(70);
             this.getRectangle().setWidth(130.00);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
         }
@@ -172,27 +219,21 @@ public class Player {
         if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
-                world.turnOver(this);
                 if (this instanceof Ago) {
                     world.getOtherPlayer(this).gotKicked(true, 35);
                 } else {
                     world.getOtherPlayer(this).gotKicked(false, 35);
                 }
-
-                loseStamina(20);
                 counter = 0;
             }
         } else {
             if (world.distanceProjectile(this, projectile) <= 4 && world.distanceProjectile(this, projectile) >= 0) {
                 projectile.setVisible(false);
-                world.turnOver(this);
                 if (this instanceof Ago) {
                     world.getOtherPlayer(this).gotKicked(true, 35);
                 } else {
                     world.getOtherPlayer(this).gotKicked(false, 35);
                 }
-
-                loseStamina(20);
                 counter = 0;
             } else if (world.distanceBetween() < 160) {
                 if (counter == 16) {
@@ -204,18 +245,15 @@ public class Player {
                     }
                 }
                 if (counter == 32) {
-                    loseStamina(20);
                     counter = 0;
                     if (world.getPlayer().equals(this)) {
                         player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
                     }
                     this.getRectangle().setWidth(130.00);
                     this.getRectangle().setFill(new ImagePattern(this.getLogo()));
-                    world.turnOver(this);
                 }
             }
         }
-
     }
 
     public void sleep() {
@@ -229,7 +267,6 @@ public class Player {
             counter = 0;
             gainStamina(25);
             gainHp(4);
-            sleeping.sleepButton();
             world.turnOver(this);
         }
     }
@@ -277,8 +314,8 @@ public class Player {
     }
 
     private void gainHp(int amount) {
-        if (this.hp + amount > 100) {
-            this.hp = 100;
+        if (this.hp + amount > this.maxHp) {
+            this.hp = this.maxHp;
         } else {
             this.hp += amount;
         }
@@ -292,7 +329,10 @@ public class Player {
         } else {
             this.stamina -= amount;
         }
-        world.drawStaminaRectangle(this);
+        if (this.isDead || world.getEnemy().isDead) {
+        } else {
+            world.drawStaminaRectangle(this);
+        }
     }
 
     public void gainStamina(int amount) {
@@ -301,7 +341,10 @@ public class Player {
         } else {
             this.stamina += amount;
         }
-        world.drawStaminaRectangle(this);
+        if (this.isDead || world.getEnemy().isDead) {
+        } else {
+            world.drawStaminaRectangle(this);
+        }
     }
 
     private void animateDeath() {
@@ -309,6 +352,15 @@ public class Player {
             this.getRectangle().setFill(new ImagePattern(new Image(die)));
         }
         counter++;
+        this.setButtonVisible(false);
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     private void animateHit(boolean left) {
@@ -330,6 +382,7 @@ public class Player {
         if (counter == 29) {
             this.getRectangle().setFill(new ImagePattern(logo));
             counter = 0;
+            world.turnOver(world.getOtherPlayer(this));
         }
     }
 
@@ -376,27 +429,27 @@ public class Player {
     }
 
     public void setButtonVisible(Boolean value){ //TODO add attacking buttons too
-        moveLeft.getButton().setVisible(value);
-        moveRight.getButton().setVisible(value);
-        punch.getButton().setVisible(value);
-        kick.getButton().setVisible(value);
-        sleeping.getButton().setVisible(value);
         if (this instanceof Ago) {
+            moveLeft.getButton().setVisible(value);
+            moveRight.getButton().setVisible(value);
+            punch.getButton().setVisible(value);
+            kick.getButton().setVisible(value);
+            sleeping.getButton().setVisible(value);
             special.getButton().setVisible(value);
         }
     }
 
     public void movePlayer(int ammount) {
         player.setX(player.getX() + ammount);
-        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
-        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
-        punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
-        kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
-        sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
         if (this instanceof Ago) {
             special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
+            moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
+            moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
+            punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
+            kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
+            sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
+            buttonText.setX(buttonText.getX() + ammount);
         }
-        buttonText.setX(buttonText.getX() + ammount);
     }
 
     public void setMoveLeft(Button left){
@@ -429,6 +482,14 @@ public class Player {
 
     public Button getKick(){
         return this.kick;
+    }
+
+    public int getMaxHp() {
+        return this.maxHp;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
     }
 
     public void setSpecial(Button special){
@@ -476,12 +537,20 @@ public class Player {
         return this.attack;
     }
 
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
     public int getDefence() {
         return this.defence;
     }
 
     public int getHp() {
         return this.hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     public double getX() { return this.player.getX(); }
@@ -542,10 +611,6 @@ public class Player {
 
     public void setDie(String die) {
         this.die = die;
-    }
-
-    public String getDie() {
-        return die;
     }
 
     public Text getButtonText() {
