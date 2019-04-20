@@ -1,5 +1,6 @@
 package MortalAgo.Levels;
 
+import MortalAgo.Ai.Ai;
 import MortalAgo.Button;
 import MortalAgo.Characters.Ago;
 import MortalAgo.Characters.Player;
@@ -27,6 +28,7 @@ public class World {
     private Group root;
     private Scene scene;
     private Player player, enemy;
+    private Ai enemyAi;
 
     public World(String name, Image background, Group root, Scene scene){
         this.name = name;
@@ -51,28 +53,30 @@ public class World {
      * @param y double
      */
     private void drawPlayer(Player player, double x, double y){
+        player.getRectangle().setFill(new ImagePattern(player.getLogo()));
+        player.getRectangle().setX(x);
+        player.getRectangle().setY(y);
+        root.getChildren().add(player.getRectangle());
+    }
+
+    private void drawButtons(Player player, double x, double y) {
         Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
         Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
         Image punche = new Image("file:src\\MortalAgo\\Media\\punch.png");
         Image kicke = new Image("file:src\\MortalAgo\\Media\\kick.png");
         Image sleepe = new Image("file:src\\MortalAgo\\Media\\sleep.png");
         Image specialPic = new Image("file:src\\MortalAgo\\Media\\Special.png");
-        player.getRectangle().setFill(new ImagePattern(player.getLogo()));
-        player.getRectangle().setX(x);
-        player.getRectangle().setY(y);
         Circle moveRight = new Circle(x - 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle moveLeft = new Circle(x - 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 55, BUTTON_SIZE);
         Circle punch = new Circle(x + 5 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Circle leg = new Circle(x + 50 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle sleep = new Circle( x + 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 50, BUTTON_SIZE);
-        if (player instanceof Ago) {
-            Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
-            Button special = new Button("special", specialAttack, player);
-            specialAttack.setFill(new ImagePattern(specialPic));
-            root.getChildren().add(specialAttack);
-            player.setSpecial(special);
-            special.attackButton();
-        }
+        Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
+        Button special = new Button("special", specialAttack, player);
+        specialAttack.setFill(new ImagePattern(specialPic));
+        root.getChildren().add(specialAttack);
+        player.setSpecial(special);
+        special.attackButton();
         Rectangle projectile = new Rectangle(player.getX() + 180, player.getY() + 140, 70, 40);
         projectile.setVisible(false);
         Button rightMove = new Button("right", right, moveRight, player);
@@ -92,7 +96,6 @@ public class World {
         punch.setFill(new ImagePattern(punche));
         leg.setFill(new ImagePattern(kicke));
         sleep.setFill(new ImagePattern(sleepe));
-        root.getChildren().add(player.getRectangle());
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
         root.getChildren().add(punch);
@@ -116,12 +119,13 @@ public class World {
 
     public void drawEnemy(Player enemy, double x, double y){
         drawPlayer(enemy, x, y);
-        enemy.setButtonVisible(false);
         this.enemy = enemy;
+        enemyAi = new Ai(enemy, this);
     }
 
     public void drawAgo(Player ago, double x, double y) {
         drawPlayer(ago, x, y);
+        drawButtons(ago, x, y);
         this.player = ago;
     }
 
@@ -182,12 +186,13 @@ public class World {
     public double distanceProjectile(Player player, Rectangle projectile) { return abs(getOtherPlayer(player).getX() - projectile.getX()); }
 
     public void turnOver(Player player) {
-        player.setButtonVisible(false);
-        getOtherPlayer(player).setButtonVisible(true);
-        System.out.println("Ago stamina = " + this.player.getStamina());
-        System.out.println("Marguse stamine = " + enemy.getStamina());
+        if (player instanceof Ago) {
+            player.setButtonVisible(false);
+            enemyAi.turn();
+        } else {
+            getOtherPlayer(player).setButtonVisible(true);
+        }
         if (getOtherPlayer(player).getStamina() == 0) {
-            System.out.println("robert haiseb");
             getOtherPlayer(player).animateSleep();
         } else {
             getOtherPlayer(player).gainStamina(10);
@@ -202,6 +207,29 @@ public class World {
         }
     }
 
+    public double simulateMoving(Player player, double ammount) {
+        double playerX = player.getX();
+        double enemyX = getOtherPlayer(player).getX();
+        boolean punchPlayer = false;
+        boolean outOfBounds = false;
+        for (int i = 0; i < 46 ; i++) {
+            if (i < 34 && !outOfBounds && !punchPlayer) {
+                if (getWith() <= (playerX + 130) || 0 > playerX) {
+                    outOfBounds = true;
+                } else if (abs(playerX - enemyX) < 60) { // distance between players
+                    punchPlayer = true;
+                } else {
+                    playerX += ammount;
+                }
+            } else if (outOfBounds) {
+                playerX -= ammount / 2;
+            } else if (punchPlayer && abs(playerX - enemyX) < 105) {
+                playerX -= ammount / 4;
+                enemyX += ammount / 4;
+            }
+        }
+        return playerX;
+    }
     public boolean attack(Player attacker, AttackChoice choice) {
         switch (choice) {
             case HIT:

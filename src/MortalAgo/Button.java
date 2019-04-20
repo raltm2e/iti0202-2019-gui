@@ -43,7 +43,9 @@ public class Button {
         button.setOnMouseExited(mouseEvent -> {
             button.setEffect(null);
             player.getButtonText().setVisible(false);
-            player.getButtonText().setX(player.getButtonText().getX() + ((player.getButtonText().getText().length() - 5) * 6));
+            if (player.getButtonText().getText().length() > 5) {
+                player.getButtonText().setX(player.getButtonText().getX() + ((player.getButtonText().getText().length() - 5) * 6));
+            }
         });
     }
 
@@ -60,6 +62,9 @@ public class Button {
             case "sleep":
                 return "Sleep";
             case "special":
+                if (player.getStamina() < 60) {
+                    return "No!";
+                }
                 return "Special";
                 default:
                     return "";
@@ -92,60 +97,40 @@ public class Button {
         }
     }
     private void animateButton(String name, int amount) {
-        String url;
-        if (amount < 0) {
-            url = player.getLeftUrl();
-        } else {
-            url = player.getRightUrl();
-        }
         switch (name) {
             case "left": case "right":
-                Timeline animation = new Timeline();
-                animation.setCycleCount(62);
-                animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.move(amount, url);
-                        }));
-                animation.play();
+                player.animateMove(amount);
                 moveButton(amount);
                 break;
             case "hit":
-                Timeline animation1 = new Timeline();
-                animation1.setCycleCount(40);
-                animation1.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.attack();
-                        }));
-                animation1.play();
+                player.animateAttack();
                 attackButton();
                 break;
             case "kick":
-                Timeline animation2 = new Timeline();
-                animation2.setCycleCount(45);
-                animation2.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.kick();
-                        }));
-                animation2.play();
+                player.animateKick();
                 kickButton();
                 break;
             case "sleep":
                 player.animateSleep();
+                sleepButton();
                 break;
             case "special":
-                Timeline animation3 = new Timeline();
-                int count = 32;
-                if ((player.getWorld().distanceBetween() - 120)/ 4 > 32 ) {
-                    count =  (int) (player.getWorld().distanceBetween() - 120)/ 4;
-                    System.out.println(count);
+                if (player.getStamina() >= 70) {
+                    Timeline animation3 = new Timeline();
+                    int count = 32;
+                    if ((player.getWorld().distanceBetween() - 120) / 4 > 32) {
+                        count = (int) (player.getWorld().distanceBetween() - 120) / 4;
+                    }
+                    animation3.setCycleCount(count);
+                    animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                            actionEvent1 -> {
+                                player.special();
+                            }));
+                    animation3.play();
+                    attackButton();
+                } else {
+                    attackButton();
                 }
-                animation3.setCycleCount(count);
-                animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.special();
-                        }));
-                animation3.play();
-                attackButton();
         }
     }
 

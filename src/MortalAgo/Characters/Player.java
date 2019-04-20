@@ -17,7 +17,7 @@ import java.io.File;
 
 public class Player {
 
-    private int hp, attack, defence, stamina, maxHp;
+    private int hp, attack, defence, stamina;
     private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
     private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
     private Rectangle player, projectile;
@@ -29,16 +29,14 @@ public class Player {
     private World world;
     private Text buttonText;
 
-    public Player(Rectangle player, Image logo, World world, int attack, int maxHp) {
+    public Player(Rectangle player, Image logo, World world) {
         this.player = player;
-        this.attack = attack;
-        this.maxHp = maxHp;
+        this.attack = 8;
         this.defence = 1;
         this.stamina = 100;
-        this.hp = maxHp;
+        this.hp = 100;
         this.logo = logo;
         this.world = world;
-        this.isDead = false;
     }
 
     public void die() {
@@ -105,9 +103,8 @@ public class Player {
             }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!this.isDead) {
-                world.turnOver(this);
-            }
+            world.turnOver(this);
+
         }
     }
 
@@ -131,7 +128,7 @@ public class Player {
             loseStamina(40);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!punchPlayer && !this.isDead) {
+            if (!punchPlayer) {
                 world.turnOver(this);
             }
             punchPlayer = false;
@@ -218,6 +215,7 @@ public class Player {
                 }
             }
         }
+
     }
 
     public void sleep() {
@@ -279,8 +277,8 @@ public class Player {
     }
 
     private void gainHp(int amount) {
-        if (this.hp + amount > this.maxHp) {
-            this.hp = this.maxHp;
+        if (this.hp + amount > 100) {
+            this.hp = 100;
         } else {
             this.hp += amount;
         }
@@ -294,10 +292,7 @@ public class Player {
         } else {
             this.stamina -= amount;
         }
-        if (this.isDead || world.getEnemy().isDead) {
-        } else {
-            world.drawStaminaRectangle(this);
-        }
+        world.drawStaminaRectangle(this);
     }
 
     public void gainStamina(int amount) {
@@ -306,10 +301,7 @@ public class Player {
         } else {
             this.stamina += amount;
         }
-        if (this.isDead || world.getEnemy().isDead) {
-        } else {
-            world.drawStaminaRectangle(this);
-        }
+        world.drawStaminaRectangle(this);
     }
 
     private void animateDeath() {
@@ -317,15 +309,6 @@ public class Player {
             this.getRectangle().setFill(new ImagePattern(new Image(die)));
         }
         counter++;
-        this.setButtonVisible(false);
-    }
-
-    public void setDead(boolean dead) {
-        isDead = dead;
-    }
-
-    public boolean isDead() {
-        return isDead;
     }
 
     private void animateHit(boolean left) {
@@ -448,14 +431,6 @@ public class Player {
         return this.kick;
     }
 
-    public int getMaxHp() {
-        return this.maxHp;
-    }
-
-    public void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
-    }
-
     public void setSpecial(Button special){
         this.special = special;
     }
@@ -501,20 +476,12 @@ public class Player {
         return this.attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     public int getDefence() {
         return this.defence;
     }
 
     public int getHp() {
         return this.hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
     }
 
     public double getX() { return this.player.getX(); }
@@ -575,6 +542,10 @@ public class Player {
 
     public void setDie(String die) {
         this.die = die;
+    }
+
+    public String getDie() {
+        return die;
     }
 
     public Text getButtonText() {
