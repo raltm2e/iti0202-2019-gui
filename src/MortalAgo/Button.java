@@ -107,6 +107,7 @@ public class Button {
                 break;
             case "sleep":
                 player.animateSleep();
+                sleepButton();
                 break;
             case "special":
                 Timeline animation3 = new Timeline();

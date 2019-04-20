@@ -108,7 +108,9 @@ public class Player {
             setButtonVisible(false);
         }
         if(counter == 21) {
-            world.attack(this, World.AttackChoice.HIT);
+            if (world.attack(this, World.AttackChoice.HIT)) {
+                punchPlayer = true;
+            }
         }
         counter++;
         if (counter == 40) {
@@ -119,8 +121,10 @@ public class Player {
             }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            world.turnOver(this);
-
+            if (!punchPlayer) {
+                world.turnOver(this);
+            }
+            punchPlayer = false;
         }
     }
 
@@ -208,7 +212,6 @@ public class Player {
         if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
-                world.turnOver(this);
                 if (this instanceof Ago) {
                     world.getOtherPlayer(this).gotKicked(true, 35);
                 } else {
@@ -221,7 +224,6 @@ public class Player {
         } else {
             if (world.distanceProjectile(this, projectile) <= 4 && world.distanceProjectile(this, projectile) >= 0) {
                 projectile.setVisible(false);
-                world.turnOver(this);
                 if (this instanceof Ago) {
                     world.getOtherPlayer(this).gotKicked(true, 35);
                 } else {
@@ -247,7 +249,6 @@ public class Player {
                     }
                     this.getRectangle().setWidth(130.00);
                     this.getRectangle().setFill(new ImagePattern(this.getLogo()));
-                    world.turnOver(this);
                 }
             }
         }
@@ -265,7 +266,6 @@ public class Player {
             counter = 0;
             gainStamina(25);
             gainHp(4);
-            sleeping.sleepButton();
             world.turnOver(this);
         }
     }
@@ -366,6 +366,7 @@ public class Player {
         if (counter == 29) {
             this.getRectangle().setFill(new ImagePattern(logo));
             counter = 0;
+            world.turnOver(world.getOtherPlayer(this));
         }
     }
 

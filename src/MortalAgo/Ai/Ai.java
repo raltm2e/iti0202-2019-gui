@@ -1,5 +1,7 @@
 package MortalAgo.Ai;
 
+import MortalAgo.Characters.Gert;
+import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
 import MortalAgo.Levels.World;
 
@@ -20,7 +22,7 @@ public class Ai {
             case PUNCH:
                 if (world.getHitTextPercentage() > 50) {
                     return 100;
-                } else if (world.getHitTextPercentage() > 0) {
+                } else if (world.getHitTextPercentage() > 10) {
                     return 50;
                 } else {
                     return 0;
@@ -28,7 +30,7 @@ public class Ai {
             case KICK:
                 if (world.getKickTextPercentage() > 50) {
                     return 200;
-                } else if (world.getKickTextPercentage() > 0) {
+                } else if (world.getKickTextPercentage() > 10) {
                     return 100;
                 } else {
                     return 0;
@@ -56,13 +58,17 @@ public class Ai {
 
     }
     public void turn() {
-        List<Action> values = new ArrayList<>();
-        values.add(new Action(ActionType.PUNCH, getValue(ActionType.PUNCH)));
-        values.add(new Action(ActionType.KICK, getValue(ActionType.KICK)));
-        values.add(new Action(ActionType.MOVELEFT, getValue(ActionType.MOVELEFT)));
-        values.add(new Action(ActionType.MOVERIGHT, getValue(ActionType.MOVERIGHT)));
-        values.add(new Action(ActionType.SLEEP, getValue(ActionType.SLEEP)));
-        values.sort(Comparator.comparing(Action::getValue).reversed());
-        values.get(0).turnAction(player);
+        if (player instanceof Kruus) {
+            List<Action> values = new ArrayList<>();
+            values.add(new Action(ActionType.PUNCH, getValue(ActionType.PUNCH)));
+            values.add(new Action(ActionType.KICK, getValue(ActionType.KICK)));
+            values.add(new Action(ActionType.MOVELEFT, getValue(ActionType.MOVELEFT)));
+            values.add(new Action(ActionType.MOVERIGHT, getValue(ActionType.MOVERIGHT)));
+            values.add(new Action(ActionType.SLEEP, getValue(ActionType.SLEEP)));
+            values.sort(Comparator.comparing(Action::getValue).reversed());
+            values.get(0).turnAction(player);
+        } else if (player instanceof Gert) {
+
+        }
     }
 }
