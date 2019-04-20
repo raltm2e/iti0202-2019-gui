@@ -186,15 +186,14 @@ public class World {
     public double distanceProjectile(Player player, Rectangle projectile) { return abs(getOtherPlayer(player).getX() - projectile.getX()); }
 
     public void turnOver(Player player) {
-        if (player instanceof Ago) {
+        if (getOtherPlayer(player).getStamina() == 0) {
+            getOtherPlayer(player).animateSleep();
+        } else if (player instanceof Ago) {
             player.setButtonVisible(false);
+            getOtherPlayer(player).gainStamina(10);
             enemyAi.turn();
         } else {
             getOtherPlayer(player).setButtonVisible(true);
-        }
-        if (getOtherPlayer(player).getStamina() == 0) {
-            getOtherPlayer(player).animateSleep();
-        } else {
             getOtherPlayer(player).gainStamina(10);
         }
     }

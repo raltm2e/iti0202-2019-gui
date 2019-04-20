@@ -34,7 +34,11 @@ public class Player {
         this.attack = attack;
         this.maxHp = maxHp;
         this.defence = 1;
-        this.stamina = 100;
+        if (this instanceof Ago) {
+            stamina = 50;
+        } else {
+            stamina = 100;
+        }
         this.hp = maxHp;
         this.logo = logo;
         this.world = world;
@@ -75,17 +79,17 @@ public class Player {
             this.world.moveOtherPlayer(this, (ammount / 4));
         }
         counter++;
-        if (counter == 62) {
+        if (counter >= 62) {
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             outOfBounds = false;
             punchPlayer = false;
             counter = 0;
             world.turnOver(this);
-            System.out.println(player.getX() + " Real");
         }
     }
 
     public void animateMove(int amount) {
+        System.out.println("move");
         String url;
         if (amount < 0) {
             url = getLeftUrl();
@@ -102,6 +106,7 @@ public class Player {
     }
 
     public void attack() {
+        System.out.println(counter);
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getPunchUrl())));
@@ -116,7 +121,7 @@ public class Player {
             }
         }
         counter++;
-        if (counter == 40) {
+        if (counter >= 40) {
             this.getRectangle().setWidth(130.00);
             loseStamina(14);
             if (world.getEnemy().equals(this)) {
@@ -135,6 +140,7 @@ public class Player {
     }
 
     public void animateAttack() {
+        System.out.println("punch");
         Timeline animation = new Timeline();
         animation.setCycleCount(40);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -159,7 +165,7 @@ public class Player {
             }
         }
         counter++;
-        if (counter == 45) {
+        if (counter >= 45) {
             this.getRectangle().setWidth(130.00);
             loseStamina(40);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
@@ -175,6 +181,7 @@ public class Player {
     }
 
     public void animateKick() {
+        System.out.println("kick");
         Timeline animation = new Timeline();
         animation.setCycleCount(45);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -197,7 +204,7 @@ public class Player {
         if (counter >= 15) {
             projectile();
         }
-        if (counter == 32) {
+        if (counter >= 32) {
             if (world.getPlayer().equals(this)) {
                 player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
             }
@@ -220,9 +227,9 @@ public class Player {
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
                 if (this instanceof Ago) {
-                    world.getOtherPlayer(this).gotKicked(true, 35);
+                    world.getOtherPlayer(this).gotKicked(true, 15);
                 } else {
-                    world.getOtherPlayer(this).gotKicked(false, 35);
+                    world.getOtherPlayer(this).gotKicked(false, 15);
                 }
                 counter = 0;
             }
@@ -230,25 +237,26 @@ public class Player {
             if (world.distanceProjectile(this, projectile) <= 4 && world.distanceProjectile(this, projectile) >= 0) {
                 projectile.setVisible(false);
                 if (this instanceof Ago) {
-                    world.getOtherPlayer(this).gotKicked(true, 35);
+                    world.getOtherPlayer(this).gotKicked(true, 15);
                 } else {
-                    world.getOtherPlayer(this).gotKicked(false, 35);
+                    world.getOtherPlayer(this).gotKicked(false, 15);
                 }
                 counter = 0;
-            } else if (world.distanceBetween() < 160) {
+            } else if (world.distanceBetween() < 200) {
                 if (counter == 16) {
                     projectile.setVisible(false);
                     if (this instanceof Ago) {
-                        world.getOtherPlayer(this).gotKicked(true, 35);
+                        world.getOtherPlayer(this).gotKicked(true, 15);
                     } else {
-                        world.getOtherPlayer(this).gotKicked(false, 35);
+                        world.getOtherPlayer(this).gotKicked(false, 15);
                     }
                 }
-                if (counter == 32) {
+                if (counter >= 32) {
                     counter = 0;
                     if (world.getPlayer().equals(this)) {
                         player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
                     }
+                    loseStamina(70);
                     this.getRectangle().setWidth(130.00);
                     this.getRectangle().setFill(new ImagePattern(this.getLogo()));
                 }
@@ -263,7 +271,7 @@ public class Player {
             setButtonVisible(false);
         }
         counter++;
-        if (counter == 72 ) {
+        if (counter >= 72 ) {
             counter = 0;
             gainStamina(25);
             gainHp(4);
@@ -272,6 +280,7 @@ public class Player {
     }
 
     public void animateSleep() {
+        System.out.println("sleep");
         Timeline animation = new Timeline();
         animation.setCycleCount(72);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -283,7 +292,8 @@ public class Player {
     }
 
     public void gotHit(boolean left, int enemyAttack) {
-        loseHp(enemyAttack * 10);
+        System.out.println("got hit");
+        loseHp(enemyAttack * 2);
         if (this.hp >= 0) {
             Timeline animation = new Timeline();
             animation.setCycleCount(29);
@@ -294,16 +304,19 @@ public class Player {
             animation.play();
         }
     }
-
+    private int useCounter(int counter) {
+        return counter + 1;
+    }
     public void gotKicked(boolean left, int enemyAttack) {
+        System.out.println("got kick");
         Timeline animation = new Timeline();
-        animation.setCycleCount(66);
+        animation.setCycleCount(70);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                 actionEvent1 -> {
                     animateKick(left);
                 }));
         animation.play();
-        loseHp(2 * enemyAttack);
+        loseHp(3 * enemyAttack);
     }
 
     private void loseHp(int amount) {
@@ -323,7 +336,6 @@ public class Player {
     }
 
     public void loseStamina(int amount) {
-        System.out.println(stamina - amount);
         if (stamina - amount < 0) {
             stamina = 0;
         } else {
@@ -364,6 +376,7 @@ public class Player {
     }
 
     private void animateHit(boolean left) {
+        System.out.println(counter);
         if (counter == 0) {
             if (left) {
                 this.getRectangle().setFill(new ImagePattern(new Image(leftHit)));
@@ -379,7 +392,7 @@ public class Player {
             }
         }
         counter++;
-        if (counter == 29) {
+        if (counter >= 29) {
             this.getRectangle().setFill(new ImagePattern(logo));
             counter = 0;
             world.turnOver(world.getOtherPlayer(this));
@@ -417,8 +430,10 @@ public class Player {
             }
             this.getRectangle().setWidth(130.00);
             this.getRectangle().setFill(new ImagePattern(logo));
-            world.turnOver(world.getOtherPlayer(this));
+        }
+        if (counter >= 70) {
             counter = 0;
+            world.turnOver(world.getOtherPlayer(this));
         }
     }
 

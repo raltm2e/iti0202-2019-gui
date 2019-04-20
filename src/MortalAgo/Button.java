@@ -62,7 +62,7 @@ public class Button {
             case "sleep":
                 return "Sleep";
             case "special":
-                if (player.getStamina() < 60) {
+                if (player.getStamina() < 70) {
                     return "No!";
                 }
                 return "Special";

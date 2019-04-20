@@ -22,7 +22,7 @@ public class Ai {
             case PUNCH:
                 if (world.getHitTextPercentage() > 50) {
                     return 100;
-                } else if (world.getHitTextPercentage() > 10) {
+                } else if (world.getHitTextPercentage() > 15) {
                     return 50;
                 } else {
                     return 0;
@@ -30,7 +30,7 @@ public class Ai {
             case KICK:
                 if (world.getKickTextPercentage() > 50) {
                     return 200;
-                } else if (world.getKickTextPercentage() > 10) {
+                } else if (world.getKickTextPercentage() > 15) {
                     return 100;
                 } else {
                     return 0;
@@ -42,7 +42,7 @@ public class Ai {
                     return 10;
                 }
             case MOVERIGHT:
-                if (player.getStamina() < 30) {
+                if (player.getStamina() < 30 && world.getHitTextPercentage() < 1) {
                     return 110;
                 } else {
                     return 5;
@@ -50,8 +50,8 @@ public class Ai {
             case SLEEP:
                 if (player.getHp() < (player.getHp() / 4)) {
                     return 210;
-                } else if (world.getHitTextPercentage() < 1 ) { // TODO add max hp
-
+                } else if (world.getHitTextPercentage() < 1 && player.getMaxHp() > player.getHp() && player.getStamina() < 75) {
+                    return 200;
                 }
                 if (player.getStamina() < 20) {
                     return 120;
@@ -59,7 +59,6 @@ public class Ai {
                     return 20;
                 }
             case SPECIAL:
-                System.out.println(player.getStamina());
                 if (player.getStamina() > 70) {
                     return 300;
                 } else {
@@ -95,8 +94,6 @@ public class Ai {
                 predictions.add(new Prediction(action, enemyAction));
             }
             predictions.sort(Comparator.comparing(Prediction::getPoints).reversed());
-            System.out.println(predictions);
-            System.out.println(predictions.get(0).getPoints());
             predictions.get(0).getFirst().turnAction(player);
         } else if (player instanceof Kruus) {
             getBests(player).get(0).turnAction(player);
