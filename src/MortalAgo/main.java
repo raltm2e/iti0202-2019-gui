@@ -175,6 +175,14 @@ public class main extends Application {
         volumeText.setFont(new Font("Comic Sans", 24));
         root.getChildren().add(volumeText);
 
+        MenuItem menuButton = new MenuItem("Main menu");
+        menuButton.setTranslateX(startButtonX);
+        menuButton.setTranslateY(startButtonY + 150);
+        root.getChildren().add(menuButton);
+        menuButton.setOnMouseClicked(mouseEvent -> {
+            restartGame(stage);
+        });
+
         Button volumeIncreaseButton = makeStatButton(startButtonX, startButtonY, "Increase");
         root.getChildren().add(volumeIncreaseButton);
         volumeIncreaseButton.setOnMouseClicked(mouseEvent -> {
@@ -183,7 +191,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier += 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + (this.volumeMultiplier * 100));
+                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
 
@@ -195,7 +203,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier -= 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + (this.volumeMultiplier * 100));
+                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
     }
