@@ -2,14 +2,11 @@ package MortalAgo.Characters;
 
 import MortalAgo.Button;
 import MortalAgo.Levels.World;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -25,7 +22,7 @@ public class Player {
     private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
     private Rectangle player, projectile;
     private Image logo;
-    private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack;
+    private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack, specialPic;
     private Button moveLeft, moveRight, punch, kick, special, sleeping;
     private int counter = 0;
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
@@ -128,7 +125,7 @@ public class Player {
         counter++;
         if (counter == 45) {
             this.getRectangle().setWidth(130.00);
-            loseStamina(20);
+            loseStamina(40);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
             if (!punchPlayer) {
@@ -165,6 +162,9 @@ public class Player {
 
     private void projectile() {
         if (counter == 15) {
+            if (this instanceof Ago) {
+                projectile.setFill(new ImagePattern(new Image(specialPic)));
+            }
             projectile.setX(player.getX() + 180);
             projectile.setVisible(true);
         }
@@ -286,7 +286,12 @@ public class Player {
     }
 
     public void loseStamina(int amount) {
-        this.stamina -= amount;
+        System.out.println(stamina - amount);
+        if (stamina - amount < 0) {
+            stamina = 0;
+        } else {
+            this.stamina -= amount;
+        }
         world.drawStaminaRectangle(this);
     }
 
@@ -376,7 +381,9 @@ public class Player {
         punch.getButton().setVisible(value);
         kick.getButton().setVisible(value);
         sleeping.getButton().setVisible(value);
-        special.getButton().setVisible(value);
+        if (this instanceof Ago) {
+            special.getButton().setVisible(value);
+        }
     }
 
     public void movePlayer(int ammount) {
@@ -386,7 +393,9 @@ public class Player {
         punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
         kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
         sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
-        special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
+        if (this instanceof Ago) {
+            special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
+        }
         buttonText.setX(buttonText.getX() + ammount);
     }
 
@@ -562,5 +571,13 @@ public class Player {
 
     public void setProjectile(Rectangle projectile) {
         this.projectile = projectile;
+    }
+
+    public String getSpecialPic() {
+        return specialPic;
+    }
+
+    public void setSpecialPic(String specialPic) {
+        this.specialPic = specialPic;
     }
 }

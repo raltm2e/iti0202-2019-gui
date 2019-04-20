@@ -17,6 +17,7 @@ public final class Ago extends Player {
         setRightRise("file:src\\MortalAgo\\Media\\Characters\\Ago\\rising-left.gif");
         setDie("file:src\\MortalAgo\\Media\\Characters\\Ago\\falling-left.gif");
         setSpecialAttack("file:src\\MortalAgo\\Media\\Characters\\Ago\\special.gif");
+        setSpecialPic("file:src\\MortalAgo\\Media\\Characters\\Ago\\Ago-special.PNG");
     }
 
 }

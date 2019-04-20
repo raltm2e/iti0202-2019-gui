@@ -59,6 +59,7 @@ public class World {
         Image punche = new Image("file:src\\MortalAgo\\Media\\punch.png");
         Image kicke = new Image("file:src\\MortalAgo\\Media\\kick.png");
         Image sleepe = new Image("file:src\\MortalAgo\\Media\\sleep.png");
+        Image specialPic = new Image("file:src\\MortalAgo\\Media\\Special.png");
         player.getRectangle().setFill(new ImagePattern(player.getLogo()));
         player.getRectangle().setX(x);
         player.getRectangle().setY(y);
@@ -67,7 +68,14 @@ public class World {
         Circle punch = new Circle(x + 5 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Circle leg = new Circle(x + 50 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle sleep = new Circle( x + 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 50, BUTTON_SIZE);
-        Circle specialAttack = new Circle( x + 130 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 75, BUTTON_SIZE);
+        if (player instanceof Ago) {
+            Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
+            Button special = new Button("special", specialAttack, player);
+            specialAttack.setFill(new ImagePattern(specialPic));
+            root.getChildren().add(specialAttack);
+            player.setSpecial(special);
+            special.attackButton();
+        }
         Rectangle projectile = new Rectangle(player.getX() + 180, player.getY() + 140, 70, 40);
         projectile.setVisible(false);
         Button rightMove = new Button("right", right, moveRight, player);
@@ -75,7 +83,6 @@ public class World {
         Button hit = new Button("hit", punch, player);
         Button kick = new Button("kick", leg, player);
         Button sleeping = new Button("sleep", sleep, player);
-        Button special = new Button("special", specialAttack, player);
         Text buttonText = new Text();
         buttonText.setX(x + BUTTON_X_CORRECTION - 40);
         buttonText.setY(y - 60);
@@ -95,7 +102,6 @@ public class World {
         root.getChildren().add(leg);
         root.getChildren().add(sleep);
         root.getChildren().add(buttonText);
-        root.getChildren().add(specialAttack);
         root.getChildren().add(projectile);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
@@ -103,14 +109,12 @@ public class World {
         player.setKick(kick);
         player.setSleeping(sleeping);
         player.setButtonText(buttonText);
-        player.setSpecial(special);
         player.setProjectile(projectile);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
         kick.kickButton();
         sleeping.sleepButton();
-        special.attackButton();
     }
 
     public void drawEnemy(Player enemy, double x, double y){
@@ -184,8 +188,13 @@ public class World {
     public void turnOver(Player player) {
         player.setButtonVisible(false);
         getOtherPlayer(player).setButtonVisible(true);
+        System.out.println("Ago stamina = " + this.player.getStamina());
+        System.out.println("Marguse stamine = " + enemy.getStamina());
         if (getOtherPlayer(player).getStamina() == 0) {
-            player.animateSleep();
+            System.out.println("robert haiseb");
+            getOtherPlayer(player).animateSleep();
+        } else {
+            getOtherPlayer(player).gainStamina(10);
         }
     }
 
