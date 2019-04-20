@@ -315,7 +315,7 @@ public class main extends Application {
         mediaPlayerLose = new MediaPlayer(sound);
         mediaPlayerLose.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerLose.play();
-        mediaPlayerLose.setVolume(volumeMultiplier);
+        mediaPlayerLose.setVolume(1.0);
 
         Text text = new Text("You died, git gud");
         text.setFont(new Font("Comic Sans MS", 36));
