@@ -82,6 +82,22 @@ public class Player {
         }
     }
 
+    public void animateMove(int amount) {
+        String url;
+        if (amount < 0) {
+            url = getLeftUrl();
+        } else {
+            url = getRightUrl();
+        }
+        Timeline animation = new Timeline();
+        animation.setCycleCount(62);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    move(amount, url);
+                }));
+        animation.play();
+    }
+
     public void attack() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
@@ -106,6 +122,16 @@ public class Player {
             world.turnOver(this);
 
         }
+    }
+
+    public void animateAttack() {
+        Timeline animation = new Timeline();
+        animation.setCycleCount(40);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    attack();
+                }));
+        animation.play();
     }
 
     public void kick() {
@@ -136,6 +162,16 @@ public class Player {
                 player.setX(player.getX() + 30);
             }
         }
+    }
+
+    public void animateKick() {
+        Timeline animation = new Timeline();
+        animation.setCycleCount(45);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    kick();
+                }));
+        animation.play();
     }
 
     public void special() {
@@ -376,27 +412,27 @@ public class Player {
     }
 
     public void setButtonVisible(Boolean value){ //TODO add attacking buttons too
-        moveLeft.getButton().setVisible(value);
-        moveRight.getButton().setVisible(value);
-        punch.getButton().setVisible(value);
-        kick.getButton().setVisible(value);
-        sleeping.getButton().setVisible(value);
         if (this instanceof Ago) {
+            moveLeft.getButton().setVisible(value);
+            moveRight.getButton().setVisible(value);
+            punch.getButton().setVisible(value);
+            kick.getButton().setVisible(value);
+            sleeping.getButton().setVisible(value);
             special.getButton().setVisible(value);
         }
     }
 
     public void movePlayer(int ammount) {
         player.setX(player.getX() + ammount);
-        moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
-        moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
-        punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
-        kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
-        sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
         if (this instanceof Ago) {
             special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
+            moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
+            moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
+            punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
+            kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
+            sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
+            buttonText.setX(buttonText.getX() + ammount);
         }
-        buttonText.setX(buttonText.getX() + ammount);
     }
 
     public void setMoveLeft(Button left){

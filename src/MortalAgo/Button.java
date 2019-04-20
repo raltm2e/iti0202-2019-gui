@@ -92,41 +92,17 @@ public class Button {
         }
     }
     private void animateButton(String name, int amount) {
-        String url;
-        if (amount < 0) {
-            url = player.getLeftUrl();
-        } else {
-            url = player.getRightUrl();
-        }
         switch (name) {
             case "left": case "right":
-                Timeline animation = new Timeline();
-                animation.setCycleCount(62);
-                animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.move(amount, url);
-                        }));
-                animation.play();
+                player.animateMove(amount);
                 moveButton(amount);
                 break;
             case "hit":
-                Timeline animation1 = new Timeline();
-                animation1.setCycleCount(40);
-                animation1.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.attack();
-                        }));
-                animation1.play();
+                player.animateAttack();
                 attackButton();
                 break;
             case "kick":
-                Timeline animation2 = new Timeline();
-                animation2.setCycleCount(45);
-                animation2.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                        actionEvent1 -> {
-                            player.kick();
-                        }));
-                animation2.play();
+                player.animateKick();
                 kickButton();
                 break;
             case "sleep":
