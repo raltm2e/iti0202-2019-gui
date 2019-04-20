@@ -6,8 +6,8 @@ import javafx.scene.shape.Rectangle;
 
 public final class Kruus extends Player {
 
-    public Kruus(Rectangle player, Image logo, World world) {
-        super(player, logo, world);
+    public Kruus(Rectangle player, Image logo, World world, int attack, int maxHp) {
+        super(player, logo, world, attack, maxHp);
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_jump-left-once.gif");
         setRightUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_jump-right-once.gif");
         setLefthitUrl("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_got-hit.gif");
