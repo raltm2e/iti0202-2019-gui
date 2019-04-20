@@ -12,8 +12,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -52,7 +50,6 @@ public class World {
      * @param x double
      * @param y double
      */
-
     private void drawPlayer(Player player, double x, double y){
         Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
         Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
@@ -166,7 +163,6 @@ public class World {
         return getPrecentage((int) distanceBetween(), 120);
     }
 
-
     public boolean isAttacked(Player attacker) {
         return getProbabilityBoolean(getHitPercentage(attacker));
     }
@@ -211,7 +207,7 @@ public class World {
             case HIT:
                 if (isAttacked(attacker)) {
                     if (attacker.equals(player)) {
-                        enemy.gotHit(true, enemy.getAttack());
+                        enemy.gotHit(true, player.getAttack());
                     } else {
                         player.gotHit( false, enemy.getAttack());
                     }
@@ -236,19 +232,20 @@ public class World {
     public void drawHpRectangle(Player player) {
         if (player.getHp() <= 0) {
             player.die();
+            player.setDead(true);
         }
         if (player instanceof Ago) {
-            Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
             this.playerHp = new Rectangle(35, 50, 2 * player.getHp(), 20);
             playerHp.setFill(Color.RED);
             root.getChildren().add(playerHp);
         } else {
-            Rectangle playerHpOutline = new Rectangle(560 - 5, 50 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(520 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.enemyHp = new Rectangle(560, 50, 2 * player.getHp(), 20);
+            this.enemyHp = new Rectangle(520, 50, 2 * player.getHp(), 20);
             enemyHp.setFill(Color.RED);
             root.getChildren().add(enemyHp);
         }
@@ -263,10 +260,10 @@ public class World {
             playerStamina.setFill(Color.GREEN);
             root.getChildren().add(playerStamina);
         } else {
-            Rectangle playerHpOutline = new Rectangle(560 - 5, 120 - 5 , 210, 30);
+            Rectangle playerHpOutline = new Rectangle(520 - 5, 120 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
             root.getChildren().add(playerHpOutline);
-            this.enemyStamina = new Rectangle(560, 120, 2 * player.getStamina(), 20);
+            this.enemyStamina = new Rectangle(520, 120, 2 * player.getStamina(), 20);
             enemyStamina.setFill(Color.GREEN);
             root.getChildren().add(enemyStamina);
         }
@@ -286,6 +283,10 @@ public class World {
 
     public Player getEnemy(){
         return this.enemy;
+    }
+
+    public void setEnemy(Player enemy) {
+        this.enemy = enemy;
     }
 
     public Player getPlayer(){

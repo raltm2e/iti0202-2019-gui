@@ -6,8 +6,8 @@ import javafx.scene.shape.Rectangle;
 
 public final class Ago extends Player {
 
-    public Ago(Rectangle player, Image logo, World world) {
-        super(player, logo, world);
+    public Ago(Rectangle player, Image logo, World world, int attack, int maxHp) {
+        super(player, logo, world, attack, maxHp);
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-left.gif");
         setRightUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\ago-right.gif");
         setPunchUrl("file:src\\MortalAgo\\Media\\Characters\\Ago\\punch.gif");
