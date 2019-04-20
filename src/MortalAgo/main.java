@@ -328,6 +328,7 @@ public class main extends Application {
         mainMenu.setTranslateY(150);
         root.getChildren().add(mainMenu);
         mainMenu.setOnMouseClicked(mouseEvent -> {
+            mediaPlayerLose.stop();
             restartGame(stage);
         });
 
