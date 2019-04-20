@@ -50,7 +50,7 @@ public class Ai {
             case SLEEP:
                 if (player.getHp() < (player.getHp() / 4)) {
                     return 210;
-                } else if (world.getHitTextPercentage() < 1 && player.getHp() == player.getMaxHp()) {
+                } else if (world.getHitTextPercentage() < 1 ) { // TODO add max hp
 
                 }
                 if (player.getStamina() < 20) {
