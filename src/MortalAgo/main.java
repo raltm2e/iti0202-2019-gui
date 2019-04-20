@@ -355,7 +355,6 @@ public class main extends Application {
             setOnMouseReleased(event -> {
                 bg.setFill(gradient);
             });
-
         }
     }
 
