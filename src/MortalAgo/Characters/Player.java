@@ -4,6 +4,7 @@ import MortalAgo.Button;
 import MortalAgo.Levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -89,7 +90,6 @@ public class Player {
     }
 
     public void animateMove(int amount) {
-        System.out.println("move");
         String url;
         if (amount < 0) {
             url = getLeftUrl();
@@ -106,7 +106,6 @@ public class Player {
     }
 
     public void attack() {
-        System.out.println(counter);
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getPunchUrl())));
@@ -129,9 +128,6 @@ public class Player {
             }
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!this.isDead) {
-                world.turnOver(this);
-            }
             if (!punchPlayer) {
                 world.turnOver(this);
             }
@@ -140,7 +136,6 @@ public class Player {
     }
 
     public void animateAttack() {
-        System.out.println("punch");
         Timeline animation = new Timeline();
         animation.setCycleCount(40);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -167,10 +162,10 @@ public class Player {
         counter++;
         if (counter >= 45) {
             this.getRectangle().setWidth(130.00);
-            loseStamina(40);
+            loseStamina(1);
             this.getRectangle().setFill(new ImagePattern(this.getLogo()));
             counter = 0;
-            if (!punchPlayer && !this.isDead) {
+            if (!punchPlayer) {
                 world.turnOver(this);
             }
             punchPlayer = false;
@@ -181,7 +176,6 @@ public class Player {
     }
 
     public void animateKick() {
-        System.out.println("kick");
         Timeline animation = new Timeline();
         animation.setCycleCount(45);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -191,6 +185,19 @@ public class Player {
         animation.play();
     }
 
+    public void animateSpecial() {
+        Timeline animation = new Timeline();
+        int count = 32;
+        if ((world.distanceBetween() - 120) / 4 > 32) {
+            count = (int) (world.distanceBetween() - 120) / 4;
+        }
+        animation.setCycleCount(count);
+        animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
+                actionEvent1 -> {
+                    special();
+                }));
+        animation.play();
+    }
     public void special() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
@@ -204,8 +211,8 @@ public class Player {
         if (counter >= 15) {
             projectile();
         }
-        if (counter >= 32) {
-            if (world.getPlayer().equals(this)) {
+        if (counter == 32) {
+            if (this instanceof Ago) {
                 player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
             }
             loseStamina(70);
@@ -216,13 +223,19 @@ public class Player {
 
     private void projectile() {
         if (counter == 15) {
+            projectile.setFill(new ImagePattern(new Image(specialPic)));
             if (this instanceof Ago) {
-                projectile.setFill(new ImagePattern(new Image(specialPic)));
+                projectile.setX(player.getX() + 180);
+            } else {
+                projectile.setX(player.getX() - 80);
             }
-            projectile.setX(player.getX() + 180);
             projectile.setVisible(true);
         }
-        projectile.setX(projectile.getX() + 4);
+        if (this instanceof Ago) {
+            projectile.setX(projectile.getX() + 4);
+        } else {
+            projectile.setX(projectile.getX() - 4);
+        }
         if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
@@ -233,15 +246,14 @@ public class Player {
                 }
                 counter = 0;
             }
-        } else {
-            if (world.distanceProjectile(this, projectile) <= 4 && world.distanceProjectile(this, projectile) >= 0) {
+        } else if (projectile.isVisible()) {
+            if (world.distanceProjectile(this, projectile) < 10 && world.distanceProjectile(this, projectile) > 6) {
                 projectile.setVisible(false);
                 if (this instanceof Ago) {
                     world.getOtherPlayer(this).gotKicked(true, 15);
                 } else {
                     world.getOtherPlayer(this).gotKicked(false, 15);
                 }
-                counter = 0;
             } else if (world.distanceBetween() < 200) {
                 if (counter == 16) {
                     projectile.setVisible(false);
@@ -251,7 +263,7 @@ public class Player {
                         world.getOtherPlayer(this).gotKicked(false, 15);
                     }
                 }
-                if (counter >= 32) {
+                if (counter == 32) {
                     counter = 0;
                     if (world.getPlayer().equals(this)) {
                         player.setX(player.getX() + 37); // teistpidi playeri paika liigutamine
@@ -280,7 +292,6 @@ public class Player {
     }
 
     public void animateSleep() {
-        System.out.println("sleep");
         Timeline animation = new Timeline();
         animation.setCycleCount(72);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -292,7 +303,6 @@ public class Player {
     }
 
     public void gotHit(boolean left, int enemyAttack) {
-        System.out.println("got hit");
         loseHp(enemyAttack * 2);
         if (this.hp >= 0) {
             Timeline animation = new Timeline();
@@ -304,11 +314,7 @@ public class Player {
             animation.play();
         }
     }
-    private int useCounter(int counter) {
-        return counter + 1;
-    }
     public void gotKicked(boolean left, int enemyAttack) {
-        System.out.println("got kick");
         Timeline animation = new Timeline();
         animation.setCycleCount(70);
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
@@ -341,8 +347,7 @@ public class Player {
         } else {
             this.stamina -= amount;
         }
-        if (this.isDead || world.getEnemy().isDead) {
-        } else {
+        if (!this.isDead && !world.getOtherPlayer(this).isDead) {
             world.drawStaminaRectangle(this);
         }
     }
@@ -353,8 +358,7 @@ public class Player {
         } else {
             this.stamina += amount;
         }
-        if (this.isDead || world.getEnemy().isDead) {
-        } else {
+        if (!this.isDead && !world.getOtherPlayer(this).isDead) {
             world.drawStaminaRectangle(this);
         }
     }
@@ -376,7 +380,6 @@ public class Player {
     }
 
     private void animateHit(boolean left) {
-        System.out.println(counter);
         if (counter == 0) {
             if (left) {
                 this.getRectangle().setFill(new ImagePattern(new Image(leftHit)));
@@ -455,15 +458,17 @@ public class Player {
     }
 
     public void movePlayer(int ammount) {
-        player.setX(player.getX() + ammount);
-        if (this instanceof Ago) {
-            special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
-            moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
-            moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
-            punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
-            kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
-            sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
-            buttonText.setX(buttonText.getX() + ammount);
+        if (this.getX() + ammount > -100 && this.getX() + ammount < world.getWith() - 130) {
+            player.setX(player.getX() + ammount);
+            if (this instanceof Ago) {
+                special.getButton().setCenterX(special.getButton().getCenterX() + ammount);
+                moveLeft.getButton().setCenterX(moveLeft.getButton().getCenterX() + ammount);
+                moveRight.getButton().setCenterX(moveRight.getButton().getCenterX() + ammount);//TODO add attacking buttons too
+                punch.getButton().setCenterX(punch.getButton().getCenterX() + ammount);
+                kick.getButton().setCenterX(kick.getButton().getCenterX() + ammount);
+                sleeping.getButton().setCenterX(sleeping.getButton().getCenterX() + ammount);
+                buttonText.setX(buttonText.getX() + ammount);
+            }
         }
     }
 
@@ -659,5 +664,8 @@ public class Player {
 
     public void setSpecialPic(String specialPic) {
         this.specialPic = specialPic;
+    }
+    public void setCounter(int counter) {
+        this.counter = counter;
     }
 }

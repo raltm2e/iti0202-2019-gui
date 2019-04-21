@@ -116,17 +116,7 @@ public class Button {
                 break;
             case "special":
                 if (player.getStamina() >= 70) {
-                    Timeline animation3 = new Timeline();
-                    int count = 32;
-                    if ((player.getWorld().distanceBetween() - 120) / 4 > 32) {
-                        count = (int) (player.getWorld().distanceBetween() - 120) / 4;
-                    }
-                    animation3.setCycleCount(count);
-                    animation3.getKeyFrames().add(new KeyFrame(Duration.millis(25),
-                            actionEvent1 -> {
-                                player.special();
-                            }));
-                    animation3.play();
+                    player.animateSpecial();
                     attackButton();
                 } else {
                     attackButton();

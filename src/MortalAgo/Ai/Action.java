@@ -36,6 +36,9 @@ public class Action {
             case SLEEP:
                 player.animateSleep();
                 break;
+            case SPECIAL:
+                player.animateSpecial();
+                break;
         }
     }
 }

@@ -21,7 +21,7 @@ public class World {
     public enum AttackChoice {HIT, KICK}
     public static final int BUTTON_SIZE = 21;
     public static final int BUTTON_Y_CORRECTION = 10;
-    public static final int BUTTON_X_CORRECTION = 65;
+    public static final int BUTTON_X_CORRECTION = 90;
     private Rectangle playerHp, enemyHp, playerStamina, enemyStamina;
     private String name;
     private Image background;
@@ -56,6 +56,10 @@ public class World {
         player.getRectangle().setFill(new ImagePattern(player.getLogo()));
         player.getRectangle().setX(x);
         player.getRectangle().setY(y);
+        Rectangle projectile = new Rectangle(player.getX() + 180, player.getY() + 140, 70, 40);
+        projectile.setVisible(false);
+        player.setProjectile(projectile);
+        root.getChildren().add(projectile);
         root.getChildren().add(player.getRectangle());
     }
 
@@ -77,8 +81,6 @@ public class World {
         root.getChildren().add(specialAttack);
         player.setSpecial(special);
         special.attackButton();
-        Rectangle projectile = new Rectangle(player.getX() + 180, player.getY() + 140, 70, 40);
-        projectile.setVisible(false);
         Button rightMove = new Button("right", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         Button hit = new Button("hit", punch, player);
@@ -102,14 +104,12 @@ public class World {
         root.getChildren().add(leg);
         root.getChildren().add(sleep);
         root.getChildren().add(buttonText);
-        root.getChildren().add(projectile);
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
         player.setKick(kick);
         player.setSleeping(sleeping);
         player.setButtonText(buttonText);
-        player.setProjectile(projectile);
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
@@ -145,14 +145,6 @@ public class World {
         return (((int) probability * 100) >= check);
     }
 
-    private double getHitPercentage(Player attacker) {
-        if (attacker instanceof Ago) {
-            return getPrecentage((int) distanceBetween(), 135);
-        } else {
-            return getPrecentage((int) distanceBetween() + 50, 135);
-        }
-    }
-
     public double getHitTextPercentage() {
         if (getPrecentage((int) distanceBetween(), 135) > 100) {
             return 100.00;
@@ -168,7 +160,11 @@ public class World {
     }
 
     public boolean isAttacked(Player attacker) {
-        return getProbabilityBoolean(getHitPercentage(attacker));
+        if (attacker instanceof Ago) {
+            return getProbabilityBoolean(getPrecentage((int) distanceBetween(), 135));
+        } else {
+            return getProbabilityBoolean(getPrecentage((int) distanceBetween() + 50, 135));
+        }
     }
 
     public boolean isKicked(Player attacker) {
@@ -186,15 +182,18 @@ public class World {
     public double distanceProjectile(Player player, Rectangle projectile) { return abs(getOtherPlayer(player).getX() - projectile.getX()); }
 
     public void turnOver(Player player) {
-        if (getOtherPlayer(player).getStamina() == 0) {
-            getOtherPlayer(player).animateSleep();
-        } else if (player instanceof Ago) {
-            player.setButtonVisible(false);
-            getOtherPlayer(player).gainStamina(10);
-            enemyAi.turn();
-        } else {
-            getOtherPlayer(player).setButtonVisible(true);
-            getOtherPlayer(player).gainStamina(10);
+        if (!player.isDead() && !getOtherPlayer(player).isDead()) {
+            player.setCounter(0);
+            if (getOtherPlayer(player).getStamina() == 0) {
+                getOtherPlayer(player).animateSleep();
+            } else if (player instanceof Ago) {
+                player.setButtonVisible(false);
+                getOtherPlayer(player).gainStamina(5);
+                enemyAi.turn();
+            } else {
+                getOtherPlayer(player).setButtonVisible(true);
+                getOtherPlayer(player).gainStamina(5);
+            }
         }
     }
 
