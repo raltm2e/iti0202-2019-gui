@@ -15,6 +15,7 @@ public class Gert extends Player {
         setLeftFall("file:src\\MortalAgo\\Media\\Characters\\Gert\\falling.gif");
         setLeftRise("file:src\\MortalAgo\\Media\\Characters\\Gert\\rising.gif");
         setDie("file:src\\MortalAgo\\Media\\Characters\\Gert\\falling.gif");
-        setSpecialAttack("file:src\\MortalAgo\\Media\\Characters\\Gert\\Gert_eliit.gif");
+        setSpecialAttack("file:src\\MortalAgo\\Media\\Characters\\Gert\\special.gif");
+        setSpecialPic("file:src\\MortalAgo\\Media\\Characters\\Gert\\Gert_eliit.gif");
     }
 }

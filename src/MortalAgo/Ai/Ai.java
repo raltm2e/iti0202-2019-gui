@@ -4,6 +4,9 @@ import MortalAgo.Characters.Gert;
 import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
 import MortalAgo.Levels.World;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,7 +25,7 @@ public class Ai {
             case PUNCH:
                 if (world.getHitTextPercentage() > 50) {
                     return 100;
-                } else if (world.getHitTextPercentage() > 15) {
+                } else if (world.getHitTextPercentage() > 25) {
                     return 50;
                 } else {
                     return 0;
@@ -30,7 +33,7 @@ public class Ai {
             case KICK:
                 if (world.getKickTextPercentage() > 50) {
                     return 200;
-                } else if (world.getKickTextPercentage() > 15) {
+                } else if (world.getKickTextPercentage() > 25) {
                     return 100;
                 } else {
                     return 0;
@@ -42,24 +45,24 @@ public class Ai {
                     return 10;
                 }
             case MOVERIGHT:
-                if (player.getStamina() < 30 && world.getHitTextPercentage() < 1) {
+                if (player.getStamina() < 70 && player.getHp() < player.getMaxHp() / 4) {
                     return 110;
                 } else {
                     return 5;
                 }
             case SLEEP:
-                if (player.getHp() < (player.getHp() / 4)) {
+                if (player.getHp() < (player.getMaxHp() / 4)) {
                     return 210;
-                } else if (world.getHitTextPercentage() < 1 && player.getMaxHp() > player.getHp() && player.getStamina() < 75) {
+                } else if (world.getHitTextPercentage() < 1 && player.getMaxHp() > player.getHp() && player.getStamina() < 25) {
                     return 200;
                 }
                 if (player.getStamina() < 20) {
-                    return 120;
+                    return 80;
                 } else {
                     return 20;
                 }
             case SPECIAL:
-                if (player.getStamina() > 70) {
+                if (player.getStamina() > 70 && !(player instanceof Kruus)) {
                     return 300;
                 } else {
                     return 0;
@@ -75,17 +78,26 @@ public class Ai {
         values.add(new Action(ActionType.MOVELEFT, getValue(ActionType.MOVELEFT, player)));
         values.add(new Action(ActionType.MOVERIGHT, getValue(ActionType.MOVERIGHT, player)));
         values.add(new Action(ActionType.SLEEP, getValue(ActionType.SLEEP, player)));
+        values.add(new Action(ActionType.SPECIAL, getValue(ActionType.SPECIAL, player)));
         values.sort(Comparator.comparing(Action::getValue).reversed());
         return values;
     }
 
     private List<Action> getEnemyBests() {
         List<Action> values = getBests(world.getOtherPlayer(player));
-        values.add(new Action(ActionType.SPECIAL, getValue(ActionType.SPECIAL, world.getOtherPlayer(player))));
         values.sort(Comparator.comparing(Action::getValue).reversed());
         return values;
     }
     public void turn() {
+        Timeline animations = new Timeline();
+        animations.setCycleCount(1);
+        animations.getKeyFrames().add(new KeyFrame(Duration.millis(300),
+                actionEvent -> {
+                    activateTurn();
+        }));
+        animations.play();
+    }
+    private void activateTurn() {
         if (player instanceof Gert) {
             List<Action> actions = getBests(player);
             Action enemyAction = getEnemyBests().get(0);

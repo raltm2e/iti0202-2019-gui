@@ -30,7 +30,7 @@ import java.util.List;
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 4;
-    private double volumeMultiplier = 1.0;
+    private double volumeMultiplier = 0.3;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
@@ -166,7 +166,7 @@ public class main extends Application {
         if (roundcounter == 0) {
             vastane = new Kruus(enemy, enemyLogo, test, 7, 100);
         } else {
-            vastane = new Gert(enemy2, enemy2Logo, test, 10, 105);
+            vastane = new Gert(enemy2, enemy2Logo, test, 15, 120);
         }
         test.drawEnemy(vastane, 400.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
