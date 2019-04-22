@@ -1,9 +1,6 @@
 package MortalAgo;
 
-import MortalAgo.Characters.Ago;
-import MortalAgo.Characters.Gert;
-import MortalAgo.Characters.Kruus;
-import MortalAgo.Characters.Player;
+import MortalAgo.Characters.*;
 import MortalAgo.Levels.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -157,16 +154,18 @@ public class main extends Application {
         root.getChildren().add(canvas);
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
-        Rectangle enemy2 = new Rectangle(50.0, 100.0, 130, 290);
         Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
-        Image enemyLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_breathing.gif");
-        Image enemy2Logo = new Image("file:src\\MortalAgo\\Media\\Characters\\Gert\\breathing.gif");
+        Image kruusLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_breathing.gif");
+        Image gertLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Gert\\breathing.gif");
+        Image aaviksooLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\aaviksoo\\aaviksoo_breathing.gif");
         Player ago = new Ago(player, playerLogo, test, agoAttack, agoMaxHp);
         Player vastane = null;
         if (roundcounter == 0) {
-            vastane = new Kruus(enemy, enemyLogo, test, 7, 100);
+            vastane = new Kruus(enemy, kruusLogo, test, 7, 100);
+        } else if (roundcounter == 1) {
+            vastane = new Gert(enemy, gertLogo, test, 15, 120);
         } else {
-            vastane = new Gert(enemy2, enemy2Logo, test, 15, 120);
+            vastane = new Aaviksoo(enemy, aaviksooLogo, test, 19, 135);
         }
         test.drawEnemy(vastane, 400.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);

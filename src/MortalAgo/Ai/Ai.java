@@ -1,5 +1,6 @@
 package MortalAgo.Ai;
 
+import MortalAgo.Characters.Aaviksoo;
 import MortalAgo.Characters.Gert;
 import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
@@ -98,7 +99,7 @@ public class Ai {
         animations.play();
     }
     private void activateTurn() {
-        if (player instanceof Gert) {
+        if (player instanceof Gert || player instanceof Aaviksoo) {
             List<Action> actions = getBests(player);
             Action enemyAction = getEnemyBests().get(0);
             List<Prediction> predictions = new ArrayList<>();
