@@ -4,7 +4,7 @@ import MortalAgo.Levels.World;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-public class Gert extends Player {
+public final class Gert extends Player {
     public Gert(Rectangle player, Image logo, World world, int attack, int maxHp) {
         super(player, logo, world, attack, maxHp);
         setLeftUrl("file:src\\MortalAgo\\Media\\Characters\\Gert\\jump-left.gif");

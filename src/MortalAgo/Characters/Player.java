@@ -636,9 +636,11 @@ public class Player {
     public Text getButtonText() {
         return buttonText;
     }
+
     public void setButtonText(Text text) {
         this.buttonText = text;
     }
+
     public void setText(String text) {
         if (text.length() > 5) {
             buttonText.setX(buttonText.getX() - ((text.length() - 5) * 6));
@@ -665,6 +667,7 @@ public class Player {
     public void setSpecialPic(String specialPic) {
         this.specialPic = specialPic;
     }
+
     public void setCounter(int counter) {
         this.counter = counter;
     }
