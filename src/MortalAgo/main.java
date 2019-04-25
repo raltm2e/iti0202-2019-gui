@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -66,7 +67,7 @@ public class main extends Application {
             mediaPlayerMenu.stop();
             root.getChildren().remove(img);
             root.getChildren().removeAll(menuItems);
-            doPlayAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
+            doTutorialAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
         });
 
         MenuItem settings = menuItems.get(1);
@@ -122,6 +123,30 @@ public class main extends Application {
         return menuItems;
     }
 
+    private void doTutorialAction(Group root, Scene scene, Stage stage, int roundcounter, int agoAttack, int agoMaxHp) {
+        Canvas canvas = new Canvas(600, 600);
+        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
+        World test = new World("test", background, root, scene);
+        root.getChildren().add(canvas);
+
+        Label tutorialLabel = new Label("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
+        tutorialLabel.setFont(new Font("Comic Sans MS", 34));
+        tutorialLabel.setTextFill(Color.BLACK);
+        tutorialLabel.setTranslateX(startButtonX - 260);
+        tutorialLabel.setTranslateY(startButtonY - 70);
+        root.getChildren().add(tutorialLabel);
+
+        MenuItem startGame = new MenuItem("Start");
+        startGame.setTranslateX(startButtonX - 280);
+        startGame.setTranslateY(startButtonY + 200);
+        root.getChildren().add(startGame);
+        startGame.setOnMouseClicked(mouseEvent -> {
+            root.getChildren().remove(startGame);
+            root.getChildren().remove(tutorialLabel);
+            doPlayAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
+        });
+    }
+
     private void doExtrasAction(Group root, Scene scene, Stage stage, ImageView img, int roundcounter, int agoAttack, int agoMaxHp) {
         Text title = new Text(startButtonX + 10, startButtonY - 20, "Credits");
         title.setFont(new Font("Comic Sans MS", 30));
@@ -150,7 +175,6 @@ public class main extends Application {
         Canvas canvas = new Canvas(600, 600);
         Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
-        System.out.println(test.getWith());
         root.getChildren().add(canvas);
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
@@ -165,9 +189,9 @@ public class main extends Application {
         } else if (roundcounter == 1) {
             vastane = new Gert(enemy, gertLogo, test, 15, 120);
         } else {
-            vastane = new Aaviksoo(enemy, aaviksooLogo, test, 19, 135);
+            vastane = new Aaviksoo(enemy, aaviksooLogo, test, 20, 135);
         }
-        test.drawEnemy(vastane, 400.0, 310.0);
+        test.drawEnemy(vastane, 600.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
         test.drawHpRectangle(ago);
         test.drawHpRectangle(vastane);
@@ -184,16 +208,54 @@ public class main extends Application {
             @Override
             public void handle(long currentNanoTime) {
                 if (test.getPlayer().isDead()) {
-                    makeLoseWindow(root, scene, stage, test);
+                    makeLoseWindow(root, stage, test);
                     mediaPlayerGame.stop();
                     this.stop();
                 } else if (test.getEnemy().isDead()) {
-                    makeStatsWindow(root, scene, stage, test, roundcounter);
-                    mediaPlayerGame.stop();
-                    this.stop();
+                    if (test.getEnemy() instanceof Aaviksoo) {
+                        mediaPlayerGame.stop();
+                        makeWinWindow(root, stage, test);
+                        this.stop();
+                    } else {
+                        makeStatsWindow(root, scene, stage, test, roundcounter);
+                        mediaPlayerGame.stop();
+                        this.stop();
+                    }
                 }
             }
         }.start();
+    }
+
+    private void makeWinWindow(Group root, Stage stage, World world) {
+        world.getRoot().getChildren().clear();
+
+        ImageView sanAndreas = new ImageView(new Image("file:src\\MortalAgo\\Media\\sanAndreas.png"));
+        sanAndreas.setLayoutX(50);
+        sanAndreas.setLayoutY(300);
+        root.getChildren().add(sanAndreas);
+
+        String musicFile = "src/MortalAgo/Media/san_andreas.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        mediaPlayerGame = new MediaPlayer(sound);
+        mediaPlayerGame.play();
+        mediaPlayerGame.setVolume(volumeMultiplier);
+        mediaPlayerGame.setCycleCount(0);
+
+        MenuItem mainMenu = new MenuItem("Play again");
+        mainMenu.setTranslateX(290);
+        mainMenu.setTranslateY(170);
+        root.getChildren().add(mainMenu);
+        mainMenu.setOnMouseClicked(mouseEvent -> {
+            restartGame(stage);
+        });
+
+        MenuItem quitGame = new MenuItem("Quit");
+        quitGame.setTranslateX(290);
+        quitGame.setTranslateY(250);
+        root.getChildren().add(quitGame);
+        quitGame.setOnMouseClicked(mouseEvent -> {
+            stage.close();
+        });
     }
 
     private void doSettingsAction(Group root, Scene scene, Stage stage, ImageView img, int roundcounter, int agoAttack, int agoMaxHp) {
@@ -306,7 +368,7 @@ public class main extends Application {
         doPlayAction(root, scene, stage, roundcounter + 1, agoAttack, agoMaxHp);
     }
 
-    private void makeLoseWindow(Group root, Scene scene, Stage stage, World world) {
+    private void makeLoseWindow(Group root, Stage stage, World world) {
         world.getRoot().getChildren().clear();
 
         String musicFile = "src/MortalAgo/Media/spanish_laugh.mp3";
