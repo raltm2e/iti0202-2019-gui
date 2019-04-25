@@ -3,6 +3,7 @@ package MortalAgo.Levels;
 import MortalAgo.Ai.Ai;
 import MortalAgo.Button;
 import MortalAgo.Characters.Ago;
+import MortalAgo.Characters.Kruus;
 import MortalAgo.Characters.Player;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -64,52 +65,61 @@ public class World {
     }
 
     private void drawButtons(Player player, double x, double y) {
+        if (!(enemy instanceof Kruus)) {
+            Image specialPic = new Image("file:src\\MortalAgo\\Media\\Special.png");
+            Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
+            Button special = new Button("special", specialAttack, player);
+            specialAttack.setFill(new ImagePattern(specialPic));
+            root.getChildren().add(specialAttack);
+            player.setSpecial(special);
+            special.attackButton();
+        }
         Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
         Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
         Image punche = new Image("file:src\\MortalAgo\\Media\\punch.png");
         Image kicke = new Image("file:src\\MortalAgo\\Media\\kick.png");
         Image sleepe = new Image("file:src\\MortalAgo\\Media\\sleep.png");
-        Image specialPic = new Image("file:src\\MortalAgo\\Media\\Special.png");
+
         Circle moveRight = new Circle(x - 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle moveLeft = new Circle(x - 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 55, BUTTON_SIZE);
         Circle punch = new Circle(x + 5 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION, BUTTON_SIZE);
         Circle leg = new Circle(x + 50 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle sleep = new Circle( x + 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 50, BUTTON_SIZE);
-        Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
-        Button special = new Button("special", specialAttack, player);
-        specialAttack.setFill(new ImagePattern(specialPic));
-        root.getChildren().add(specialAttack);
-        player.setSpecial(special);
-        special.attackButton();
+
         Button rightMove = new Button("right", right, moveRight, player);
         Button leftMove = new Button("left", left, moveLeft, player);
         Button hit = new Button("hit", punch, player);
         Button kick = new Button("kick", leg, player);
         Button sleeping = new Button("sleep", sleep, player);
         Text buttonText = new Text();
+
         buttonText.setX(x + BUTTON_X_CORRECTION - 40);
         buttonText.setY(y - 60);
         buttonText.setFont(new Font("Comic Sans MS", 30));
         buttonText.setFill(Color.WHITE);
         buttonText.setStrokeWidth(1);
         buttonText.setStroke(Color.BLACK);
+
         moveRight.setFill(new ImagePattern(right));
         moveLeft.setFill(new ImagePattern(left));
         punch.setFill(new ImagePattern(punche));
         leg.setFill(new ImagePattern(kicke));
         sleep.setFill(new ImagePattern(sleepe));
+
         root.getChildren().add(moveLeft);
         root.getChildren().add(moveRight);
         root.getChildren().add(punch);
         root.getChildren().add(leg);
         root.getChildren().add(sleep);
         root.getChildren().add(buttonText);
+
         player.setMoveRight(rightMove);
         player.setMoveLeft(leftMove);
         player.setPunch(hit);
         player.setKick(kick);
         player.setSleeping(sleeping);
         player.setButtonText(buttonText);
+
         rightMove.moveButton(4);
         leftMove.moveButton(-4);
         hit.attackButton();
@@ -188,20 +198,20 @@ public class World {
                 getOtherPlayer(player).animateSleep();
             } else if (player instanceof Ago) {
                 player.setButtonVisible(false);
-                getOtherPlayer(player).gainStamina(5);
+                getOtherPlayer(player).gainStamina(2);
                 enemyAi.turn();
             } else {
                 getOtherPlayer(player).setButtonVisible(true);
-                getOtherPlayer(player).gainStamina(5);
+                getOtherPlayer(player).gainStamina(2);
             }
         }
     }
 
     public void moveOtherPlayer(Player player, int ammount){
         if (this.player.equals(player)) {
-            enemy.movePlayer(ammount);
+            enemy.movePlayer(ammount,false);
         } else {
-            this.player.movePlayer(ammount);
+            this.player.movePlayer(ammount, false);
         }
     }
 
@@ -228,36 +238,46 @@ public class World {
         }
         return playerX;
     }
-    public boolean attack(Player attacker, AttackChoice choice) {
-        switch (choice) {
-            case HIT:
-                if (isAttacked(attacker)) {
-                    if (attacker.equals(player)) {
-                        enemy.gotHit(true, player.getAttack());
-                    } else {
-                        player.gotHit( false, enemy.getAttack());
+    public boolean attack(Player attacker, AttackChoice choice, int dmg) {
+        if (getOtherPlayer(attacker).getHp() - dmg > 0) {
+            switch (choice) {
+                case HIT:
+                    if (isAttacked(attacker)) {
+                        if (attacker.equals(player)) {
+                            enemy.gotHit(true);
+                        } else {
+                            player.gotHit(false);
+                        }
+                        return true;
                     }
-                    return true;
-                }
-                break;
-            case KICK:
-                if (isKicked(attacker)) {
-                    if (attacker.equals(player)) {
-                        enemy.gotKicked(true, player.getAttack());
-                    } else {
-                        player.gotKicked( false, enemy.getAttack());
+                    break;
+                case KICK:
+                    if (isKicked(attacker)) {
+                        if (attacker.equals(player)) {
+                            enemy.gotKicked(true);
+                        } else {
+                            player.gotKicked(false);
+                        }
+                        return true;
                     }
-                    return true;
-                }
-                break;
-            default: return false;
+                    break;
+                default:
+                    return false;
+            }
+            return false;
+        } else {
+            return true;
         }
-        return false;
+
     }
 
     public void drawHpRectangle(Player player) {
         if (player.getHp() <= 0) {
-            player.die();
+            if (player instanceof Ago) {
+                player.die(false);
+            } else {
+                player.die(true);
+            }
             player.setDead(true);
         }
         if (player instanceof Ago) {

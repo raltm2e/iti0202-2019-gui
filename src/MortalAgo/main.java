@@ -28,12 +28,12 @@ import java.util.List;
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 4;
-    private double volumeMultiplier = 0.3;
+    private double volumeMultiplier = 0.0;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
         int roundcounter = 0;
-        int agoAttack = 8;
+        int agoAttack = 10;
         int agoMaxHp = 100;
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600);
@@ -129,10 +129,9 @@ public class main extends Application {
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
 
-        Label tutorialLabel = new Label("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
-        tutorialLabel.setFont(new Font("Comic Sans MS", 34));
-        tutorialLabel.setTextFill(Color.BLACK);
-        tutorialLabel.setTranslateX(startButtonX - 260);
+        Text tutorialLabel = new Text("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
+        formatText(tutorialLabel,40);
+        tutorialLabel.setTranslateX(startButtonX - 340);
         tutorialLabel.setTranslateY(startButtonY - 70);
         root.getChildren().add(tutorialLabel);
 
@@ -185,13 +184,13 @@ public class main extends Application {
         Player ago = new Ago(player, playerLogo, test, agoAttack, agoMaxHp);
         Player vastane = null;
         if (roundcounter == 0) {
-            vastane = new Kruus(enemy, kruusLogo, test, 7, 100);
+            vastane = new Kruus(enemy, kruusLogo, test, 13, 105);
         } else if (roundcounter == 1) {
             vastane = new Gert(enemy, gertLogo, test, 15, 120);
         } else {
             vastane = new Aaviksoo(enemy, aaviksooLogo, test, 20, 135);
         }
-        test.drawEnemy(vastane, 600.0, 310.0);
+        test.drawEnemy(vastane, 580.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
         test.drawHpRectangle(ago);
         test.drawHpRectangle(vastane);
@@ -299,10 +298,16 @@ public class main extends Application {
             configMenuButtons(root, stage, scene, img, roundcounter, agoAttack, agoMaxHp);
         });
     }
+    private void formatText(Text text, int size) {
+        text.setFont(new Font("Comic Sans MS", size));
+        text.setFill(Color.WHITE);
+        text.setStrokeWidth(1);
+        text.setStroke(Color.BLACK);
+    }
 
     private void makeStatsWindow(Group root, Scene scene, Stage stage, World world, int roundcounter) {
         world.getRoot().getChildren().clear();
-        statpoints = 4;
+        statpoints = 6;
 
         String musicFile = "src/MortalAgo/Media/jan_uuspõld.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
@@ -311,19 +316,25 @@ public class main extends Application {
         mediaPlayerStats.play();
         mediaPlayerStats.setVolume(volumeMultiplier);
 
+        if (roundcounter == 0) {
+            Text text = new Text(240, 130, "You unlocked special");
+            formatText(text, 40);
+            root.getChildren().add(text);
+        }
+
         Text stats = new Text(280, 180, "Statpoints: " + statpoints);
-        stats.setFont(new Font("Comic Sans MS", 30));
+        formatText(stats, 30);
         root.getChildren().add(stats);
 
         Text Attack = new Text(280, 230, "Attack: " + world.getPlayer().getAttack());
-        Attack.setFont(new Font("Comic Sans MS", 24));
+        formatText(Attack, 27);
         root.getChildren().add(Attack);
 
         Text hitPoints = new Text(280, 280, "Hitpoints: " + world.getPlayer().getMaxHp());
-        hitPoints.setFont(new Font("Comic Sans MS", 24));
+        formatText(hitPoints,27);
         root.getChildren().add(hitPoints);
 
-        Button AttackButton = makeStatButton(450, 200, "+1 Attack");
+        Button AttackButton = makeStatButton(490, 200, "+1 Attack");
         root.getChildren().add(AttackButton);
         AttackButton.setOnMouseClicked(mouseEvent -> {
             if (statpoints <= 0) {
@@ -334,7 +345,7 @@ public class main extends Application {
             }
         });
 
-        Button hitPointsButton = makeStatButton(450, 250, "+5 Hitpoints");
+        Button hitPointsButton = makeStatButton(490, 250, "+5 Hitpoints");
         root.getChildren().add(hitPointsButton);
         hitPointsButton.setOnMouseClicked(mouseEvent -> {
             if (statpoints <= 0) {

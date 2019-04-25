@@ -40,22 +40,18 @@ public class Ai {
                     return 0;
                 }
             case MOVELEFT:
-                if (world.getHitTextPercentage() < 1) {
+                if (world.getHitTextPercentage() < 25) {
                     return 100;
                 } else {
                     return 10;
                 }
             case MOVERIGHT:
-                if (player.getStamina() < 70 && player.getHp() < player.getMaxHp() / 4) {
-                    return 110;
-                } else {
-                    return 5;
-                }
+                return 5;
             case SLEEP:
-                if (player.getHp() < (player.getMaxHp() / 4)) {
-                    return 210;
-                } else if (world.getHitTextPercentage() < 1 && player.getMaxHp() > player.getHp() && player.getStamina() < 25) {
-                    return 200;
+                if (!(player instanceof Kruus)) {
+                    if (world.getHitTextPercentage() < 1 && player.getMaxHp() > player.getHp() && player.getStamina() < 100 && world.getPlayer().getStamina() < player.getStamina()) {
+                        return 200;
+                    }
                 }
                 if (player.getStamina() < 20) {
                     return 80;
@@ -63,7 +59,7 @@ public class Ai {
                     return 20;
                 }
             case SPECIAL:
-                if (player.getStamina() > 70 && !(player instanceof Kruus)) {
+                if (player.getStamina() >= 95 && !(player instanceof Kruus)) {
                     return 300;
                 } else {
                     return 0;
