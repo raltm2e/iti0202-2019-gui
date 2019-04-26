@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class main extends Application {
@@ -198,7 +199,11 @@ public class main extends Application {
         test.drawStaminaRectangle(vastane);
 
         String musicFile = "src/MortalAgo/Media/mission_impossible.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile2 = "src/MortalAgo/Media/baby_im_yours.mp3";
+        String musicFile3 = "src/MortalAgo/Media/mortal_kombat.mp3";
+
+        List<String> musicList = new ArrayList<>(Arrays.asList(musicFile, musicFile2, musicFile3));
+        Media sound = new Media(new File(musicList.get(roundcounter)).toURI().toString());
         mediaPlayerGame = new MediaPlayer(sound);
         mediaPlayerGame.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerGame.play();
