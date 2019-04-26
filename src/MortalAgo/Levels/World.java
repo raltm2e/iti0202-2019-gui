@@ -280,6 +280,12 @@ public class World {
             }
             player.setDead(true);
         }
+        int hp = 0;
+        if (player.getHp() > 0) {
+            hp = player.getHp();
+        }
+        Text hpText = new Text(hp + " / " + player.getMaxHp());
+        formatText(hpText, 17);
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
@@ -287,6 +293,8 @@ public class World {
             this.playerHp = new Rectangle(35, 50, 2 * player.getHp(), 20);
             playerHp.setFill(Color.RED);
             root.getChildren().add(playerHp);
+            hpText.setLayoutX(100);
+            hpText.setLayoutY(68);
         } else {
             Rectangle playerHpOutline = new Rectangle(520 - 5, 50 - 5 , 2.1 * player.getMaxHp(), 30);
             playerHpOutline.setFill(Color.BLACK);
@@ -294,10 +302,22 @@ public class World {
             this.enemyHp = new Rectangle(520, 50, 2 * player.getHp(), 20);
             enemyHp.setFill(Color.RED);
             root.getChildren().add(enemyHp);
+            hpText.setLayoutX(585);
+            hpText.setLayoutY(68);
         }
+        root.getChildren().add(hpText);
+    }
+
+    private void formatText(Text text, int fontSize) {
+        text.setFont(new Font("Comic Sans MS", fontSize));
+        text.setFill(Color.WHITE);
+        text.setStrokeWidth(0.3);
+        text.setStroke(Color.BLACK);
     }
 
     public void drawStaminaRectangle(Player player) {
+        Text staminaText = new Text(player.getStamina() + " / 100");
+        formatText(staminaText, 17);
         if (player instanceof Ago) {
             Rectangle playerHpOutline = new Rectangle(35 - 5, 120 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
@@ -305,6 +325,8 @@ public class World {
             this.playerStamina = new Rectangle(35, 120, 2 * player.getStamina(), 20);
             playerStamina.setFill(Color.GREEN);
             root.getChildren().add(playerStamina);
+            staminaText.setLayoutX(100);
+            staminaText.setLayoutY(138);
         } else {
             Rectangle playerHpOutline = new Rectangle(520 - 5, 120 - 5 , 210, 30);
             playerHpOutline.setFill(Color.BLACK);
@@ -312,7 +334,10 @@ public class World {
             this.enemyStamina = new Rectangle(520, 120, 2 * player.getStamina(), 20);
             enemyStamina.setFill(Color.GREEN);
             root.getChildren().add(enemyStamina);
+            staminaText.setLayoutX(585);
+            staminaText.setLayoutY(138);
         }
+        root.getChildren().add(staminaText);
     }
 
     public Group getRoot(){

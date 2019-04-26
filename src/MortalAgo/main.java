@@ -29,7 +29,7 @@ import java.util.List;
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 4;
-    private double volumeMultiplier = 0.0;
+    private double volumeMultiplier = 0.3;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
@@ -303,6 +303,7 @@ public class main extends Application {
             configMenuButtons(root, stage, scene, img, roundcounter, agoAttack, agoMaxHp);
         });
     }
+
     private void formatText(Text text, int size) {
         text.setFont(new Font("Comic Sans MS", size));
         text.setFill(Color.WHITE);
