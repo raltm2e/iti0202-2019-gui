@@ -1,9 +1,6 @@
 package MortalAgo.Ai;
 
-import MortalAgo.Characters.Aaviksoo;
-import MortalAgo.Characters.Gert;
-import MortalAgo.Characters.Kruus;
-import MortalAgo.Characters.Player;
+import MortalAgo.Characters.*;
 import MortalAgo.Levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,12 +37,15 @@ public class Ai {
                     return 0;
                 }
             case MOVELEFT:
-                if (world.getHitTextPercentage() < 25) {
+                if (world.getHitTextPercentage() < 25 && !(player instanceof Ago)) {
                     return 100;
                 } else {
                     return 10;
                 }
             case MOVERIGHT:
+                if (player instanceof Ago && world.getHitTextPercentage() < 25) {
+                    return 10;
+                }
                 return 5;
             case SLEEP:
                 if (!(player instanceof Kruus)) {

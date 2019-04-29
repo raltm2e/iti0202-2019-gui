@@ -139,7 +139,7 @@ public class World {
         this.player = ago;
     }
 
-    private double getPrecentage(int distance, int required) {
+    public double getPrecentage(int distance, int required) {
         if (distance > required) {
             return 0;
         } else if (distance < 11) {

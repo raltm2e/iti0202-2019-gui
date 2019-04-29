@@ -21,6 +21,11 @@ public class Player {
     private int hp, attack, defence, stamina, maxHp;
     private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
     private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
+    private Media hitSound = new Media(new File("src/MortalAgo/Media/hit.mp3").toURI().toString());
+    private Media kickSound = new Media(new File("src/MortalAgo/Media/kick.mp3").toURI().toString());
+    private Media jumpSound = new Media(new File("src/MortalAgo/Media/hüppamine.mp3").toURI().toString());
+    private Media specialSound = new Media(new File("src/MortalAgo/Media/special.mp3").toURI().toString());
+    private Media dyingSound = new Media(new File("src/MortalAgo/Media/dying.mp3").toURI().toString());
     private Rectangle player, projectile;
     private Image logo;
     private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack, specialPic;
@@ -50,6 +55,8 @@ public class Player {
         System.out.println("Sain surma!");
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
+        MediaPlayer sound = new MediaPlayer(dyingSound);
+        sound.play();
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                 actionEvent1 -> {
                     animateDeath(left);
@@ -64,6 +71,8 @@ public class Player {
         if (counter == 0) {
             this.getRectangle().setFill(new ImagePattern(new Image(url)));
             setButtonVisible(false);
+            MediaPlayer sound = new MediaPlayer(jumpSound);
+            sound.play();
         }
         if (counter < 50 && counter > 15 && !outOfBounds && !punchPlayer) {
             if (world.getWith() <= (player.getX() + 130) || 30 >= player.getX()) {
@@ -113,6 +122,8 @@ public class Player {
                 player.setX(player.getX() - 50);
             }
             setButtonVisible(false);
+            MediaPlayer hitting = new MediaPlayer(hitSound);
+            hitting.play();
         }
         if(counter == 21) {
             if (world.attack(this, World.AttackChoice.HIT, 2 * attack)) {
@@ -154,6 +165,8 @@ public class Player {
                 player.setX(player.getX() - 30); // teistpidi playeri paika liigutamine
             }
             setButtonVisible(false);
+            MediaPlayer sound = new MediaPlayer(kickSound);
+            sound.play();
         }
         if (counter == 21) {
             if (world.attack(this, World.AttackChoice.KICK, 3 * attack)) {
@@ -208,6 +221,8 @@ public class Player {
                 player.setX(player.getX() - 37); // teistpidi playeri paika liigutamine
             }
             setButtonVisible(false);
+            MediaPlayer sound = new MediaPlayer(specialSound);
+            sound.play();
         }
         counter++;
         if (counter >= 15) {
