@@ -64,7 +64,7 @@ public class Player {
         animation.play();
         this.setButtonVisible(false);
         System.out.println((!(this instanceof Ago)));     // Return true if Ago won
-
+        sound.stop();
     }
 
     public void move(int ammount, String url) {
@@ -266,7 +266,7 @@ public class Player {
                 world.getOtherPlayer(this).loseHp(4 * attack);
             }
         } else if (projectile.isVisible()) {
-            if (world.distanceProjectile(this, projectile) < 10 && world.distanceProjectile(this, projectile) > 6) {
+            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 6) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
                     if (this instanceof Ago) {
@@ -413,7 +413,7 @@ public class Player {
     public void setDead(boolean dead) {
         Timeline animations = new Timeline();
         animations.setCycleCount(1);
-        animations.getKeyFrames().add(new KeyFrame(Duration.millis(2000),
+        animations.getKeyFrames().add(new KeyFrame(Duration.millis(3000),
                 actionEvent -> {
                     isDead = dead;
                 }));

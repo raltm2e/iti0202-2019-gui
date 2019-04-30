@@ -29,7 +29,7 @@ import java.util.List;
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 4;
-    private double volumeMultiplier = 0.3;
+    private double volumeMultiplier = 0.2;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
@@ -189,7 +189,7 @@ public class main extends Application {
         } else if (roundcounter == 1) {
             vastane = new Gert(enemy, gertLogo, test, 15, 120);
         } else {
-            vastane = new Aaviksoo(enemy, aaviksooLogo, test, 20, 135);
+            vastane = new Aaviksoo(enemy, aaviksooLogo, test, 18, 130);
         }
         test.drawEnemy(vastane, 580.0, 310.0);
         test.drawAgo(ago, 100.0,310.0);
@@ -216,7 +216,7 @@ public class main extends Application {
                     mediaPlayerGame.stop();
                     this.stop();
                 } else if (test.getEnemy().isDead()) {
-                    if (test.getEnemy() instanceof Aaviksoo) {
+                    if (test.getEnemy() instanceof Aaviksoo || test.getEnemy() instanceof Kruus) {
                         mediaPlayerGame.stop();
                         makeWinWindow(root, stage, test);
                         this.stop();
@@ -242,8 +242,7 @@ public class main extends Application {
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerGame = new MediaPlayer(sound);
         mediaPlayerGame.play();
-        mediaPlayerGame.setVolume(volumeMultiplier);
-        mediaPlayerGame.setCycleCount(0);
+        mediaPlayerGame.setVolume(1);
 
         MenuItem mainMenu = new MenuItem("Play again");
         mainMenu.setTranslateX(290);
