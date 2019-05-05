@@ -17,6 +17,6 @@ public final class Aaviksoo extends Player {
         setLeftRise("file:src\\MortalAgo\\media\\characters\\aaviksoo\\aaviksoo_rising.gif");
         setDie("file:src\\MortalAgo\\media\\characters\\aaviksoo\\aaviksoo_falling.gif");
         setSpecialAttack("file:src\\MortalAgo\\media\\characters\\aaviksoo\\special.gif");
-        setSpecialPic("file:src\\MortalAgo\\media\\characters\\aaviksoo\\500_euro.png");
+        setSpecialPic("file:src\\MortalAgo\\media\\characters\\aaviksoo\\500_euro.jpg");
     }
 }
