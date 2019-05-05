@@ -1,7 +1,6 @@
 package MortalAgo;
 
-import MortalAgo.Characters.Player;
-import javafx.animation.Animation;
+import MortalAgo.characters.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.effect.Glow;
