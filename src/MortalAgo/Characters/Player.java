@@ -73,6 +73,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(jumpSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         if (counter < 50 && counter > 15 && !outOfBounds && !punchPlayer) {
             if (world.getWith() <= (player.getX() + 130) || 30 >= player.getX()) {
@@ -124,6 +125,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer hitting = new MediaPlayer(hitSound);
             hitting.play();
+            hitting.setCycleCount(0);
         }
         if(counter == 21) {
             if (world.attack(this, World.AttackChoice.HIT, 2 * attack)) {
@@ -167,6 +169,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(kickSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         if (counter == 21) {
             if (world.attack(this, World.AttackChoice.KICK, 3 * attack)) {
@@ -223,6 +226,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(specialSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         counter++;
         if (counter >= 15) {
@@ -305,6 +309,7 @@ public class Player {
         if (counter == 0) {
             MediaPlayer sleeping = new MediaPlayer(sleep);
             sleeping.play();
+            sleeping.setCycleCount(0);
             setButtonVisible(false);
         }
         counter++;
@@ -351,6 +356,7 @@ public class Player {
     private void loseHp(int amount) {
         MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
         damageMediaPlayer.play();
+        damageMediaPlayer.setCycleCount(0);
         this.hp -= amount;
         world.drawHpRectangle(this);
     }

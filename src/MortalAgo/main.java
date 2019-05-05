@@ -28,8 +28,8 @@ import java.util.List;
 
 public class main extends Application {
     private int startButtonY = 200, startButtonX = 530;
-    private int statpoints = 4;
-    private double volumeMultiplier = 0.2;
+    private int statpoints = 6;
+    private double volumeMultiplier = 0.3;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
@@ -49,7 +49,7 @@ public class main extends Application {
         stage.show();
         stage.setResizable(false);
 
-        String musicFile = "src/MortalAgo/Media/K2h.mp3";
+        String musicFile = "src\\MortalAgo\\Media\\K2h.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerMenu = new MediaPlayer(sound);
         mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE);
@@ -130,11 +130,19 @@ public class main extends Application {
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
 
-        Text tutorialLabel = new Text("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
-        formatText(tutorialLabel,40);
-        tutorialLabel.setTranslateX(startButtonX - 340);
-        tutorialLabel.setTranslateY(startButtonY - 70);
-        root.getChildren().add(tutorialLabel);
+        Text tutorialText = new Text("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
+        formatText(tutorialText,40);
+        tutorialText.setTranslateX(startButtonX - 340);
+        tutorialText.setTranslateY(startButtonY - 70);
+        root.getChildren().add(tutorialText);
+
+        String musicFile = "src\\MortalAgo\\Media\\here_we_go_again.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayerTutorial = new MediaPlayer(sound);
+        mediaPlayerTutorial.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayerTutorial.setVolume(volumeMultiplier);
+        mediaPlayerTutorial.play();
+        mediaPlayerTutorial.setCycleCount(0);
 
         MenuItem startGame = new MenuItem("Start");
         startGame.setTranslateX(startButtonX - 280);
@@ -142,7 +150,8 @@ public class main extends Application {
         root.getChildren().add(startGame);
         startGame.setOnMouseClicked(mouseEvent -> {
             root.getChildren().remove(startGame);
-            root.getChildren().remove(tutorialLabel);
+            root.getChildren().remove(tutorialText);
+            mediaPlayerTutorial.stop();
             doPlayAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
         });
     }
@@ -216,7 +225,7 @@ public class main extends Application {
                     mediaPlayerGame.stop();
                     this.stop();
                 } else if (test.getEnemy().isDead()) {
-                    if (test.getEnemy() instanceof Aaviksoo || test.getEnemy() instanceof Kruus) {
+                    if (test.getEnemy() instanceof Aaviksoo) {
                         mediaPlayerGame.stop();
                         makeWinWindow(root, stage, test);
                         this.stop();
@@ -262,7 +271,7 @@ public class main extends Application {
     }
 
     private void doSettingsAction(Group root, Scene scene, Stage stage, ImageView img, int roundcounter, int agoAttack, int agoMaxHp) {
-        Text volumeText = new Text(startButtonX, startButtonY - 20, "Volume: " + Math.round(this.volumeMultiplier * 100));
+        Text volumeText = new Text(startButtonX, startButtonY - 20, "Music volume: " + Math.round(this.volumeMultiplier * 100));
         volumeText.setFont(new Font("Comic Sans MS", 24));
         root.getChildren().add(volumeText);
 
@@ -274,7 +283,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier += 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
+                volumeText.setText("Music volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
 
@@ -286,7 +295,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier -= 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
+                volumeText.setText("Music volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
 
@@ -312,9 +321,8 @@ public class main extends Application {
 
     private void makeStatsWindow(Group root, Scene scene, Stage stage, World world, int roundcounter) {
         world.getRoot().getChildren().clear();
-        statpoints = 6;
 
-        String musicFile = "src/MortalAgo/Media/jan_uuspõld.mp3";
+        String musicFile = "src/MortalAgo/Media/noice.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerStats = new MediaPlayer(sound);
         mediaPlayerStats.setCycleCount(MediaPlayer.INDEFINITE);
