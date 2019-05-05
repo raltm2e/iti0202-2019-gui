@@ -257,8 +257,10 @@ public class Main extends Application {
         mainMenu.setTranslateY(170);
         root.getChildren().add(mainMenu);
         mainMenu.setOnMouseClicked(mouseEvent -> {
+            mediaPlayerGame.stop();
             restartGame(stage);
         });
+
         makeQuitButton(290, 250, root, stage);
     }
 
