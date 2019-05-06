@@ -5,6 +5,7 @@ import MortalAgo.levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
@@ -18,13 +19,13 @@ import java.io.File;
 public class Player {
 
     private int hp, attack, defence, stamina, maxHp;
-    private Media damageSound = new Media(new File("src/MortalAgo/media/characters/kruus/K2h_damage.mp3").toURI().toString());
-    private Media sleep = new Media(new File("src/MortalAgo/media/test1.mp3").toURI().toString());
-    private Media hitSound = new Media(new File("src/MortalAgo/media/hit.mp3").toURI().toString());
-    private Media kickSound = new Media(new File("src/MortalAgo/media/kick.mp3").toURI().toString());
-    private Media jumpSound = new Media(new File("src/MortalAgo/media/hüppamine.mp3").toURI().toString());
-    private Media specialSound = new Media(new File("src/MortalAgo/media/special.mp3").toURI().toString());
-    private Media dyingSound = new Media(new File("src/MortalAgo/media/dying.mp3").toURI().toString());
+    private AudioClip damageSound = new AudioClip(new File("src/MortalAgo/media/characters/kruus/K2h_damage.mp3").toURI().toString());
+    private AudioClip sleep = new AudioClip(new File("src/MortalAgo/media/test1.mp3").toURI().toString());
+    private AudioClip hitSound = new AudioClip(new File("src/MortalAgo/media/hit.mp3").toURI().toString());
+    private AudioClip kickSound = new AudioClip(new File("src/MortalAgo/media/kick.mp3").toURI().toString());
+    private AudioClip jumpSound = new AudioClip(new File("src/MortalAgo/media/hüppamine.mp3").toURI().toString());
+    private AudioClip specialSound = new AudioClip(new File("src/MortalAgo/media/special.mp3").toURI().toString());
+    private AudioClip dyingSound = new AudioClip(new File("src/MortalAgo/media/dying.mp3").toURI().toString());
     private Rectangle player, projectile;
     private Image logo;
     private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack, specialPic;
@@ -54,24 +55,20 @@ public class Player {
         System.out.println("Sain surma!");
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
-        MediaPlayer sound = new MediaPlayer(dyingSound);
-        sound.play();
+        dyingSound.play();
         animation.getKeyFrames().add(new KeyFrame(Duration.millis(25),
                 actionEvent1 -> {
                     animateDeath(left);
                 }));
         animation.play();
         this.setButtonVisible(false);
-        sound.stop();
     }
 
     private void move(int ammount, String url) {
         if (counter == 0) {
             this.getRectangle().setFill(new ImagePattern(new Image(url)));
             setButtonVisible(false);
-            MediaPlayer sound = new MediaPlayer(jumpSound);
-            sound.play();
-            sound.setCycleCount(0);
+            jumpSound.play();
         }
         if (counter < 50 && counter > 15 && !outOfBounds && !punchPlayer) {
             if (world.getWith() <= (player.getX() + 130) || 30 >= player.getX()) {
@@ -121,9 +118,7 @@ public class Player {
                 player.setX(player.getX() - 50);
             }
             setButtonVisible(false);
-            MediaPlayer hitting = new MediaPlayer(hitSound);
-            hitting.play();
-            hitting.setCycleCount(0);
+            hitSound.play();
         }
         if(counter == 21) {
             if (world.attack(this, World.AttackChoice.HIT, 2 * attack)) {
@@ -165,9 +160,7 @@ public class Player {
                 player.setX(player.getX() - 30); // teistpidi playeri paika liigutamine
             }
             setButtonVisible(false);
-            MediaPlayer sound = new MediaPlayer(kickSound);
-            sound.play();
-            sound.setCycleCount(0);
+            kickSound.play();
         }
         if (counter == 21) {
             if (world.attack(this, World.AttackChoice.KICK, 3 * attack)) {
@@ -214,6 +207,7 @@ public class Player {
                 }));
         animation.play();
     }
+
     public void special() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
@@ -222,9 +216,7 @@ public class Player {
                 player.setX(player.getX() - 37); // teistpidi playeri paika liigutamine
             }
             setButtonVisible(false);
-            MediaPlayer sound = new MediaPlayer(specialSound);
-            sound.play();
-            sound.setCycleCount(0);
+            specialSound.play();
         }
         counter++;
         if (counter >= 15) {
@@ -268,7 +260,7 @@ public class Player {
                 world.getOtherPlayer(this).loseHp(4 * attack);
             }
         } else if (projectile.isVisible()) {
-            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 6) {
+            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 2) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
                     if (this instanceof Ago) {
@@ -305,9 +297,7 @@ public class Player {
 
     private void sleep() {
         if (counter == 0) {
-            MediaPlayer sleeping = new MediaPlayer(sleep);
-            sleeping.play();
-            sleeping.setCycleCount(0);
+            sleep.play();
             setButtonVisible(false);
         }
         counter++;
@@ -341,6 +331,7 @@ public class Player {
             animation.play();
         }
     }
+
     public void gotKicked(boolean left) {
         Timeline animation = new Timeline();
         animation.setCycleCount(70);
@@ -352,9 +343,7 @@ public class Player {
     }
 
     private void loseHp(int amount) {
-        MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
-        damageMediaPlayer.play();
-        damageMediaPlayer.setCycleCount(0);
+        damageSound.play();
         this.hp -= amount;
         world.drawHpRectangle(this);
     }
