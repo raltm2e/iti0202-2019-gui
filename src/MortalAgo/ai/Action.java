@@ -1,6 +1,6 @@
-package MortalAgo.Ai;
+package MortalAgo.ai;
 
-import MortalAgo.Characters.Player;
+import MortalAgo.characters.Player;
 
 public class Action {
     private Ai.ActionType type;

@@ -1,10 +1,9 @@
-package MortalAgo.Characters;
+package MortalAgo.characters;
 
 import MortalAgo.Button;
-import MortalAgo.Levels.World;
+import MortalAgo.levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -19,13 +18,13 @@ import java.io.File;
 public class Player {
 
     private int hp, attack, defence, stamina, maxHp;
-    private Media damageSound = new Media(new File("src/MortalAgo/Media/Characters/Kruus/K2h_damage.mp3").toURI().toString());
-    private Media sleep = new Media(new File("src/MortalAgo/Media/test1.mp3").toURI().toString());
-    private Media hitSound = new Media(new File("src/MortalAgo/Media/hit.mp3").toURI().toString());
-    private Media kickSound = new Media(new File("src/MortalAgo/Media/kick.mp3").toURI().toString());
-    private Media jumpSound = new Media(new File("src/MortalAgo/Media/hüppamine.mp3").toURI().toString());
-    private Media specialSound = new Media(new File("src/MortalAgo/Media/special.mp3").toURI().toString());
-    private Media dyingSound = new Media(new File("src/MortalAgo/Media/dying.mp3").toURI().toString());
+    private Media damageSound = new Media(new File("src/MortalAgo/media/characters/kruus/K2h_damage.mp3").toURI().toString());
+    private Media sleep = new Media(new File("src/MortalAgo/media/test1.mp3").toURI().toString());
+    private Media hitSound = new Media(new File("src/MortalAgo/media/hit.mp3").toURI().toString());
+    private Media kickSound = new Media(new File("src/MortalAgo/media/kick.mp3").toURI().toString());
+    private Media jumpSound = new Media(new File("src/MortalAgo/media/hüppamine.mp3").toURI().toString());
+    private Media specialSound = new Media(new File("src/MortalAgo/media/special.mp3").toURI().toString());
+    private Media dyingSound = new Media(new File("src/MortalAgo/media/dying.mp3").toURI().toString());
     private Rectangle player, projectile;
     private Image logo;
     private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack, specialPic;
@@ -63,16 +62,16 @@ public class Player {
                 }));
         animation.play();
         this.setButtonVisible(false);
-        System.out.println((!(this instanceof Ago)));     // Return true if Ago won
         sound.stop();
     }
 
-    public void move(int ammount, String url) {
+    private void move(int ammount, String url) {
         if (counter == 0) {
             this.getRectangle().setFill(new ImagePattern(new Image(url)));
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(jumpSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         if (counter < 50 && counter > 15 && !outOfBounds && !punchPlayer) {
             if (world.getWith() <= (player.getX() + 130) || 30 >= player.getX()) {
@@ -114,7 +113,7 @@ public class Player {
         animation.play();
     }
 
-    public void attack() {
+    private void attack() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getPunchUrl())));
@@ -124,6 +123,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer hitting = new MediaPlayer(hitSound);
             hitting.play();
+            hitting.setCycleCount(0);
         }
         if(counter == 21) {
             if (world.attack(this, World.AttackChoice.HIT, 2 * attack)) {
@@ -157,7 +157,7 @@ public class Player {
         animation.play();
     }
 
-    public void kick() {
+    private void kick() {
         if (counter == 0) {
             this.getRectangle().setWidth(160.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getLegUrl())));
@@ -167,6 +167,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(kickSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         if (counter == 21) {
             if (world.attack(this, World.AttackChoice.KICK, 3 * attack)) {
@@ -223,6 +224,7 @@ public class Player {
             setButtonVisible(false);
             MediaPlayer sound = new MediaPlayer(specialSound);
             sound.play();
+            sound.setCycleCount(0);
         }
         counter++;
         if (counter >= 15) {
@@ -301,10 +303,11 @@ public class Player {
         }
     }
 
-    public void sleep() {
+    private void sleep() {
         if (counter == 0) {
             MediaPlayer sleeping = new MediaPlayer(sleep);
             sleeping.play();
+            sleeping.setCycleCount(0);
             setButtonVisible(false);
         }
         counter++;
@@ -351,6 +354,7 @@ public class Player {
     private void loseHp(int amount) {
         MediaPlayer damageMediaPlayer = new MediaPlayer(damageSound);
         damageMediaPlayer.play();
+        damageMediaPlayer.setCycleCount(0);
         this.hp -= amount;
         world.drawHpRectangle(this);
     }
@@ -364,7 +368,7 @@ public class Player {
         world.drawHpRectangle(this);
     }
 
-    public void loseStamina(int amount) {
+    private void loseStamina(int amount) {
         if (stamina - amount < 0) {
             stamina = 0;
         } else {

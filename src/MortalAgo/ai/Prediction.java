@@ -1,4 +1,4 @@
-package MortalAgo.Ai;
+package MortalAgo.ai;
 
 public class Prediction {
     private Action first;

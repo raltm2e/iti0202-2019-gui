@@ -1,7 +1,7 @@
 package MortalAgo;
 
-import MortalAgo.Characters.*;
-import MortalAgo.Levels.World;
+import MortalAgo.characters.*;
+import MortalAgo.levels.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -26,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class main extends Application {
+public class Main extends Application {
     private int startButtonY = 200, startButtonX = 530;
-    private int statpoints = 4;
-    private double volumeMultiplier = 0.2;
+    private int statpoints = 6;
+    private double volumeMultiplier = 0.3;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
@@ -39,17 +38,17 @@ public class main extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600);
 
-        ImageView img = new ImageView(new Image("file:src\\MortalAgo\\Media\\agoMenuBackground.gif"));
+        ImageView img = new ImageView(new Image("file:src\\MortalAgo\\media\\agoMenuBackground.gif"));
         img.setFitWidth(800);
         img.setFitHeight(600);
         root.getChildren().add(img);
 
-        stage.setTitle("Mortal Ago");
+        stage.setTitle("Mortal ago");
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
 
-        String musicFile = "src/MortalAgo/Media/K2h.mp3";
+        String musicFile = "src\\MortalAgo\\media\\K2h.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerMenu = new MediaPlayer(sound);
         mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE);
@@ -126,15 +125,23 @@ public class main extends Application {
 
     private void doTutorialAction(Group root, Scene scene, Stage stage, int roundcounter, int agoAttack, int agoMaxHp) {
         Canvas canvas = new Canvas(600, 600);
-        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
+        Image background = new Image( "file:src\\MortalAgo\\media\\background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
 
-        Text tutorialLabel = new Text("Aaviksoo saw \nAgo's 'Social media in \ntourism' and laughed. \nAgo is mad. \nGet revenge on them!");
-        formatText(tutorialLabel,40);
-        tutorialLabel.setTranslateX(startButtonX - 340);
-        tutorialLabel.setTranslateY(startButtonY - 70);
-        root.getChildren().add(tutorialLabel);
+        Text tutorialText = new Text("Aaviksoo saw \nAgo's \"Social media in \ntourism\" and laughed. \nAgo is mad. \nGet revenge on them!");
+        formatText(tutorialText,40);
+        tutorialText.setTranslateX(startButtonX - 340);
+        tutorialText.setTranslateY(startButtonY - 70);
+        root.getChildren().add(tutorialText);
+
+        String musicFile = "src\\MortalAgo\\media\\here_we_go_again.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayerTutorial = new MediaPlayer(sound);
+        mediaPlayerTutorial.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayerTutorial.setVolume(volumeMultiplier);
+        mediaPlayerTutorial.play();
+        mediaPlayerTutorial.setCycleCount(0);
 
         MenuItem startGame = new MenuItem("Start");
         startGame.setTranslateX(startButtonX - 280);
@@ -142,7 +149,8 @@ public class main extends Application {
         root.getChildren().add(startGame);
         startGame.setOnMouseClicked(mouseEvent -> {
             root.getChildren().remove(startGame);
-            root.getChildren().remove(tutorialLabel);
+            root.getChildren().remove(tutorialText);
+            mediaPlayerTutorial.stop();
             doPlayAction(root, scene, stage, roundcounter, agoAttack, agoMaxHp);
         });
     }
@@ -173,15 +181,15 @@ public class main extends Application {
 
     private void doPlayAction(Group root, Scene scene, Stage stage, int roundcounter, int agoAttack, int agoMaxHp) {
         Canvas canvas = new Canvas(600, 600);
-        Image background = new Image( "file:src\\MortalAgo\\Media\\Background\\IT_Kolledž.jpg" );
+        Image background = new Image( "file:src\\MortalAgo\\media\\background\\IT_Kolledž.jpg" );
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
-        Image playerLogo = new Image( "file:src\\MortalAgo\\Media\\Characters\\Ago\\ago_breathing.gif" );
-        Image kruusLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Kruus\\kruus_breathing.gif");
-        Image gertLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\Gert\\breathing.gif");
-        Image aaviksooLogo = new Image("file:src\\MortalAgo\\Media\\Characters\\aaviksoo\\aaviksoo_breathing.gif");
+        Image playerLogo = new Image( "file:src\\MortalAgo\\media\\characters\\ago\\ago_breathing.gif" );
+        Image kruusLogo = new Image("file:src\\MortalAgo\\media\\characters\\kruus\\kruus_breathing.gif");
+        Image gertLogo = new Image("file:src\\MortalAgo\\media\\characters\\gert\\breathing.gif");
+        Image aaviksooLogo = new Image("file:src\\MortalAgo\\media\\characters\\aaviksoo\\aaviksoo_breathing.gif");
         Player ago = new Ago(player, playerLogo, test, agoAttack, agoMaxHp);
         Player vastane = null;
         if (roundcounter == 0) {
@@ -198,9 +206,9 @@ public class main extends Application {
         test.drawStaminaRectangle(ago);
         test.drawStaminaRectangle(vastane);
 
-        String musicFile = "src/MortalAgo/Media/mission_impossible.mp3";
-        String musicFile2 = "src/MortalAgo/Media/baby_im_yours.mp3";
-        String musicFile3 = "src/MortalAgo/Media/mortal_kombat.mp3";
+        String musicFile = "src/MortalAgo/media/mission_impossible.mp3";
+        String musicFile2 = "src/MortalAgo/media/baby_im_yours.mp3";
+        String musicFile3 = "src/MortalAgo/media/mortal_kombat.mp3";
 
         List<String> musicList = new ArrayList<>(Arrays.asList(musicFile, musicFile2, musicFile3));
         Media sound = new Media(new File(musicList.get(roundcounter)).toURI().toString());
@@ -216,7 +224,7 @@ public class main extends Application {
                     mediaPlayerGame.stop();
                     this.stop();
                 } else if (test.getEnemy().isDead()) {
-                    if (test.getEnemy() instanceof Aaviksoo || test.getEnemy() instanceof Kruus) {
+                    if (test.getEnemy() instanceof Aaviksoo) {
                         mediaPlayerGame.stop();
                         makeWinWindow(root, stage, test);
                         this.stop();
@@ -233,12 +241,12 @@ public class main extends Application {
     private void makeWinWindow(Group root, Stage stage, World world) {
         world.getRoot().getChildren().clear();
 
-        ImageView sanAndreas = new ImageView(new Image("file:src\\MortalAgo\\Media\\sanAndreas.png"));
+        ImageView sanAndreas = new ImageView(new Image("file:src\\MortalAgo\\media\\sanAndreas.png"));
         sanAndreas.setLayoutX(50);
         sanAndreas.setLayoutY(300);
         root.getChildren().add(sanAndreas);
 
-        String musicFile = "src/MortalAgo/Media/san_andreas.mp3";
+        String musicFile = "src/MortalAgo/media/san_andreas.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerGame = new MediaPlayer(sound);
         mediaPlayerGame.play();
@@ -249,20 +257,26 @@ public class main extends Application {
         mainMenu.setTranslateY(170);
         root.getChildren().add(mainMenu);
         mainMenu.setOnMouseClicked(mouseEvent -> {
+            mediaPlayerGame.stop();
             restartGame(stage);
         });
 
+        makeQuitButton(290, 250, root, stage);
+    }
+
+    private void makeQuitButton(int x, int y, Group root, Stage stage) {
         MenuItem quitGame = new MenuItem("Quit");
-        quitGame.setTranslateX(290);
-        quitGame.setTranslateY(250);
+        quitGame.setTranslateX(x);
+        quitGame.setTranslateY(y);
         root.getChildren().add(quitGame);
         quitGame.setOnMouseClicked(mouseEvent -> {
+            getHostServices().showDocument("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             stage.close();
         });
     }
 
     private void doSettingsAction(Group root, Scene scene, Stage stage, ImageView img, int roundcounter, int agoAttack, int agoMaxHp) {
-        Text volumeText = new Text(startButtonX, startButtonY - 20, "Volume: " + Math.round(this.volumeMultiplier * 100));
+        Text volumeText = new Text(startButtonX, startButtonY - 20, "Music volume: " + Math.round(this.volumeMultiplier * 100));
         volumeText.setFont(new Font("Comic Sans MS", 24));
         root.getChildren().add(volumeText);
 
@@ -274,7 +288,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier += 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
+                volumeText.setText("Music volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
 
@@ -286,7 +300,7 @@ public class main extends Application {
             } else {
                 this.volumeMultiplier -= 0.1;
                 mediaPlayerMenu.setVolume(this.volumeMultiplier);
-                volumeText.setText("Volume: " + Math.round((this.volumeMultiplier * 100)));
+                volumeText.setText("Music volume: " + Math.round((this.volumeMultiplier * 100)));
             }
         });
 
@@ -314,7 +328,7 @@ public class main extends Application {
         world.getRoot().getChildren().clear();
         statpoints = 6;
 
-        String musicFile = "src/MortalAgo/Media/jan_uuspõld.mp3";
+        String musicFile = "src/MortalAgo/media/noice.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerStats = new MediaPlayer(sound);
         mediaPlayerStats.setCycleCount(MediaPlayer.INDEFINITE);
@@ -370,13 +384,7 @@ public class main extends Application {
             makeNewWorld(root, scene, stage, world, roundcounter, world.getPlayer().getAttack(), world.getPlayer().getMaxHp());
         });
 
-        MenuItem quitGame = new MenuItem("Quit");
-        quitGame.setTranslateX(250);
-        quitGame.setTranslateY(450);
-        root.getChildren().add(quitGame);
-        quitGame.setOnMouseClicked(mouseEvent -> {
-            stage.close();
-        });
+        makeQuitButton(250, 450, root, stage);
     }
 
     private void makeNewWorld(Group root, Scene scene, Stage stage, World world, int roundcounter, int agoAttack, int agoMaxHp) {
@@ -387,7 +395,7 @@ public class main extends Application {
     private void makeLoseWindow(Group root, Stage stage, World world) {
         world.getRoot().getChildren().clear();
 
-        String musicFile = "src/MortalAgo/Media/spanish_laugh.mp3";
+        String musicFile = "src/MortalAgo/media/spanish_laugh.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayerLose = new MediaPlayer(sound);
         mediaPlayerLose.setCycleCount(MediaPlayer.INDEFINITE);
@@ -396,7 +404,7 @@ public class main extends Application {
 
         Text text = new Text("You died, git gud");
         text.setFont(new Font("Comic Sans MS", 36));
-        text.setX(260);
+        text.setX(270);
         text.setY(100);
         root.getChildren().add(text);
 
@@ -409,13 +417,7 @@ public class main extends Application {
             restartGame(stage);
         });
 
-        MenuItem quitGame = new MenuItem("Quit");
-        quitGame.setTranslateX(290);
-        quitGame.setTranslateY(250);
-        root.getChildren().add(quitGame);
-        quitGame.setOnMouseClicked(mouseEvent -> {
-            stage.close();
-        });
+        makeQuitButton(290, 250, root, stage);
     }
 
     private void reduceStatpoints(Text stats, Text Attack, Text hitPoints, World world) {

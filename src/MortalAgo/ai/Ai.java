@@ -1,7 +1,7 @@
-package MortalAgo.Ai;
+package MortalAgo.ai;
 
-import MortalAgo.Characters.*;
-import MortalAgo.Levels.World;
+import MortalAgo.characters.*;
+import MortalAgo.levels.World;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;

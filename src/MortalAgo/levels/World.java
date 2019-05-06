@@ -1,10 +1,10 @@
-package MortalAgo.Levels;
+package MortalAgo.levels;
 
-import MortalAgo.Ai.Ai;
+import MortalAgo.ai.Ai;
 import MortalAgo.Button;
-import MortalAgo.Characters.Ago;
-import MortalAgo.Characters.Kruus;
-import MortalAgo.Characters.Player;
+import MortalAgo.characters.Ago;
+import MortalAgo.characters.Kruus;
+import MortalAgo.characters.Player;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,9 +20,9 @@ import static java.lang.Math.abs;
 
 public class World {
     public enum AttackChoice {HIT, KICK}
-    public static final int BUTTON_SIZE = 21;
-    public static final int BUTTON_Y_CORRECTION = 10;
-    public static final int BUTTON_X_CORRECTION = 90;
+    private static final int BUTTON_SIZE = 21;
+    private static final int BUTTON_Y_CORRECTION = 10;
+    private static final int BUTTON_X_CORRECTION = 90;
     private Rectangle playerHp, enemyHp, playerStamina, enemyStamina;
     private String name;
     private Image background;
@@ -66,7 +66,7 @@ public class World {
 
     private void drawButtons(Player player, double x, double y) {
         if (!(enemy instanceof Kruus)) {
-            Image specialPic = new Image("file:src\\MortalAgo\\Media\\Special.png");
+            Image specialPic = new Image("file:src\\MortalAgo\\media\\Special.png");
             Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
             Button special = new Button("special", specialAttack, player);
             specialAttack.setFill(new ImagePattern(specialPic));
@@ -74,11 +74,11 @@ public class World {
             player.setSpecial(special);
             special.attackButton();
         }
-        Image right = new Image("file:src\\MortalAgo\\Media\\right.png");
-        Image left = new Image("file:src\\MortalAgo\\Media\\left.png");
-        Image punche = new Image("file:src\\MortalAgo\\Media\\punch.png");
-        Image kicke = new Image("file:src\\MortalAgo\\Media\\kick.png");
-        Image sleepe = new Image("file:src\\MortalAgo\\Media\\sleep.png");
+        Image right = new Image("file:src\\MortalAgo\\media\\right.png");
+        Image left = new Image("file:src\\MortalAgo\\media\\left.png");
+        Image punche = new Image("file:src\\MortalAgo\\media\\punch.png");
+        Image kicke = new Image("file:src\\MortalAgo\\media\\kick.png");
+        Image sleepe = new Image("file:src\\MortalAgo\\media\\sleep.png");
 
         Circle moveRight = new Circle(x - 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle moveLeft = new Circle(x - 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 55, BUTTON_SIZE);
@@ -169,7 +169,7 @@ public class World {
         return getPrecentage((int) distanceBetween(), 120);
     }
 
-    public boolean isAttacked(Player attacker) {
+    private boolean isAttacked(Player attacker) {
         if (attacker instanceof Ago) {
             return getProbabilityBoolean(getPrecentage((int) distanceBetween(), 135));
         } else {
@@ -177,7 +177,7 @@ public class World {
         }
     }
 
-    public boolean isKicked(Player attacker) {
+    private boolean isKicked(Player attacker) {
         if (attacker.equals(this.player)) {
             return getProbabilityBoolean(getPrecentage((int) distanceBetween(), 120));
         } else {
