@@ -260,7 +260,7 @@ public class Player {
                 world.getOtherPlayer(this).loseHp(4 * attack);
             }
         } else if (projectile.isVisible()) {
-            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 2) {
+            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 6) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
                     if (this instanceof Ago) {
