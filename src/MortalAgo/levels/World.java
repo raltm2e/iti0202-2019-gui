@@ -189,7 +189,14 @@ public class World {
         return abs(player.getX()- enemy.getX());
     }
 
-    public double distanceProjectile(Player player, Rectangle projectile) { return abs(getOtherPlayer(player).getX() - projectile.getX()); }
+    public double distanceProjectile(Player player, Rectangle projectile) {
+        if (player.equals(this.player)) {
+            return abs(getOtherPlayer(player).getX() - projectile.getX());
+        } else {
+            return abs(getOtherPlayer(player).getX() - projectile.getX()) - 60;
+        }
+
+    }
 
     public void turnOver(Player player) {
         if (!player.isDead() && !getOtherPlayer(player).isDead()) {

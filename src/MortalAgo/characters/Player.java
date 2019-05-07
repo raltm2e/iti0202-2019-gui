@@ -6,8 +6,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -195,6 +193,7 @@ public class Player {
     }
 
     public void animateSpecial() {
+        System.out.println(world.distanceBetween());
         Timeline animation = new Timeline();
         int count = 32;
         if ((int)(world.distanceBetween() - 83) / 4 > 32) {
@@ -248,6 +247,7 @@ public class Player {
             projectile.setX(projectile.getX() - 4);
         }
         if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
+            System.out.println(1);
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
@@ -260,7 +260,9 @@ public class Player {
                 world.getOtherPlayer(this).loseHp(4 * attack);
             }
         } else if (projectile.isVisible()) {
-            if (world.distanceProjectile(this, projectile) < 11 && world.distanceProjectile(this, projectile) > 6) {
+            System.out.println("2");
+            System.out.println(world.distanceProjectile(this, projectile));
+            if (world.distanceProjectile(this, projectile) < 11 ) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
                     if (this instanceof Ago) {
