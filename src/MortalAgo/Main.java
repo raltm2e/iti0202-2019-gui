@@ -28,7 +28,7 @@ import java.util.List;
 public class Main extends Application {
     private int startButtonY = 200, startButtonX = 530;
     private int statpoints = 6;
-    private double volumeMultiplier = 0.3;
+    private double volumeMultiplier = 0.5;
     private MediaPlayer mediaPlayerMenu, mediaPlayerGame, mediaPlayerLose, mediaPlayerStats;
 
     private void startGame(Stage stage) {
