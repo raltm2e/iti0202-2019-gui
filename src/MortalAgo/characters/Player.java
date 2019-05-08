@@ -32,7 +32,6 @@ public class Player {
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
     private World world;
     private Text buttonText;
-    // TODO special image gert
 
     public Player(Rectangle player, Image logo, World world, int attack, int maxHp) {
         this.player = player;
