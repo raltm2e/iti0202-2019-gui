@@ -21,6 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Main extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600);
 
-        ImageView img = new ImageView(new Image("file:src\\MortalAgo\\media\\agoMenuBackground.gif"));
+        ImageView img = new ImageView(new Image(getClass().getResource("/agoMenuBackground.gif").toString()));
         img.setFitWidth(800);
         img.setFitHeight(600);
         root.getChildren().add(img);
@@ -48,8 +49,8 @@ public class Main extends Application {
         stage.show();
         stage.setResizable(false);
 
-        String musicFile = "src\\MortalAgo\\media\\K2h.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile = "/K2h.mp3";
+        Media sound = new Media(getClass().getResource(musicFile).toString());
         mediaPlayerMenu = new MediaPlayer(sound);
         mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerMenu.setVolume(volumeMultiplier);
@@ -125,7 +126,7 @@ public class Main extends Application {
 
     private void doTutorialAction(Group root, Scene scene, Stage stage, int roundcounter, int agoAttack, int agoMaxHp) {
         Canvas canvas = new Canvas(600, 600);
-        Image background = new Image( "file:src\\MortalAgo\\media\\background\\IT_Kolledž.jpg" );
+        Image background = new Image(getClass().getResource("/background/IT_Kolledž.jpg").toString());
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
 
@@ -135,8 +136,8 @@ public class Main extends Application {
         tutorialText.setTranslateY(startButtonY - 70);
         root.getChildren().add(tutorialText);
 
-        String musicFile = "src\\MortalAgo\\media\\here_we_go_again.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile = "/here_we_go_again.mp3";
+        Media sound = new Media(getClass().getResource(musicFile).toString());
         MediaPlayer mediaPlayerTutorial = new MediaPlayer(sound);
         mediaPlayerTutorial.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerTutorial.setVolume(volumeMultiplier);
@@ -181,15 +182,15 @@ public class Main extends Application {
 
     private void doPlayAction(Group root, Scene scene, Stage stage, int roundcounter, int agoAttack, int agoMaxHp) {
         Canvas canvas = new Canvas(600, 600);
-        Image background = new Image( "file:src\\MortalAgo\\media\\background\\IT_Kolledž.jpg" );
+        Image background = new Image(getClass().getResource("/background/IT_Kolledž.jpg").toString());
         World test = new World("test", background, root, scene);
         root.getChildren().add(canvas);
         Rectangle player = new Rectangle(50.0, 100.0, 130, 290);
         Rectangle enemy = new Rectangle(50.0, 100.0, 130, 290);
-        Image playerLogo = new Image( "file:src\\MortalAgo\\media\\characters\\ago\\ago_breathing.gif" );
-        Image kruusLogo = new Image("file:src\\MortalAgo\\media\\characters\\kruus\\kruus_breathing.gif");
-        Image gertLogo = new Image("file:src\\MortalAgo\\media\\characters\\gert\\breathing.gif");
-        Image aaviksooLogo = new Image("file:src\\MortalAgo\\media\\characters\\aaviksoo\\aaviksoo_breathing.gif");
+        Image playerLogo = new Image(getClass().getResource("/characters/ago/ago_breathing.gif").toString());
+        Image kruusLogo = new Image(getClass().getResource("/characters/kruus/kruus_breathing.gif").toString());
+        Image gertLogo = new Image(getClass().getResource("/characters/gert/breathing.gif").toString());
+        Image aaviksooLogo = new Image(getClass().getResource("/characters/aaviksoo/aaviksoo_breathing.gif").toString());
         Player ago = new Ago(player, playerLogo, test, agoAttack, agoMaxHp);
         Player vastane = null;
         if (roundcounter == 0) {
@@ -206,12 +207,12 @@ public class Main extends Application {
         test.drawStaminaRectangle(ago);
         test.drawStaminaRectangle(vastane);
 
-        String musicFile = "src/MortalAgo/media/mission_impossible.mp3";
-        String musicFile2 = "src/MortalAgo/media/baby_im_yours.mp3";
-        String musicFile3 = "src/MortalAgo/media/mortal_kombat.mp3";
+        String musicFile = "/mission_impossible.mp3";
+        String musicFile2 = "/baby_im_yours.mp3";
+        String musicFile3 = "/mortal_kombat.mp3";
 
         List<String> musicList = new ArrayList<>(Arrays.asList(musicFile, musicFile2, musicFile3));
-        Media sound = new Media(new File(musicList.get(roundcounter)).toURI().toString());
+        Media sound = new Media(getClass().getResource(musicList.get(roundcounter)).toString());
         mediaPlayerGame = new MediaPlayer(sound);
         mediaPlayerGame.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerGame.play();
@@ -241,13 +242,13 @@ public class Main extends Application {
     private void makeWinWindow(Group root, Stage stage, World world) {
         world.getRoot().getChildren().clear();
 
-        ImageView sanAndreas = new ImageView(new Image("file:src\\MortalAgo\\media\\sanAndreas.png"));
+        ImageView sanAndreas = new ImageView(new Image(getClass().getResource("/sanAndreas.png").toString()));
         sanAndreas.setLayoutX(50);
         sanAndreas.setLayoutY(300);
         root.getChildren().add(sanAndreas);
 
-        String musicFile = "src/MortalAgo/media/san_andreas.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile = "/san_andreas.mp3";
+        Media sound = new Media(getClass().getResource(musicFile).toString());
         mediaPlayerGame = new MediaPlayer(sound);
         mediaPlayerGame.play();
         mediaPlayerGame.setVolume(1);
@@ -328,8 +329,8 @@ public class Main extends Application {
         world.getRoot().getChildren().clear();
         statpoints = 6;
 
-        String musicFile = "src/MortalAgo/media/noice.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile = "/noice.mp3";
+        Media sound = new Media(getClass().getResource(musicFile).toString());
         mediaPlayerStats = new MediaPlayer(sound);
         mediaPlayerStats.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerStats.play();
@@ -395,8 +396,8 @@ public class Main extends Application {
     private void makeLoseWindow(Group root, Stage stage, World world) {
         world.getRoot().getChildren().clear();
 
-        String musicFile = "src/MortalAgo/media/spanish_laugh.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        String musicFile = "/spanish_laugh.mp3";
+        Media sound = new Media(getClass().getResource(musicFile).toString());
         mediaPlayerLose = new MediaPlayer(sound);
         mediaPlayerLose.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayerLose.play();

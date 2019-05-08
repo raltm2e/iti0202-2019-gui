@@ -7,7 +7,7 @@ plugins {
 compileJava.options.encoding = 'UTF-8'
 
 group 'MortalAgo'
-version '1.0-SNAPSHOT'
+version '1.0.1'
 
 sourceCompatibility = 11
 
@@ -29,6 +29,9 @@ sourceSets {
     main {
         java {
             srcDir("src")
+        }
+        resources {
+            srcDir("media")
         }
     }
 }

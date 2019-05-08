@@ -17,13 +17,13 @@ import java.io.File;
 public class Player {
 
     private int hp, attack, defence, stamina, maxHp;
-    private AudioClip damageSound = new AudioClip(new File("src/MortalAgo/media/characters/kruus/K2h_damage.mp3").toURI().toString());
-    private AudioClip sleep = new AudioClip(new File("src/MortalAgo/media/test1.mp3").toURI().toString());
-    private AudioClip hitSound = new AudioClip(new File("src/MortalAgo/media/hit.mp3").toURI().toString());
-    private AudioClip kickSound = new AudioClip(new File("src/MortalAgo/media/kick.mp3").toURI().toString());
-    private AudioClip jumpSound = new AudioClip(new File("src/MortalAgo/media/hüppamine.mp3").toURI().toString());
-    private AudioClip specialSound = new AudioClip(new File("src/MortalAgo/media/special.mp3").toURI().toString());
-    private AudioClip dyingSound = new AudioClip(new File("src/MortalAgo/media/dying.mp3").toURI().toString());
+    private AudioClip damageSound = new AudioClip(getClass().getResource("/characters/kruus/K2h_damage.mp3").toString());
+    private AudioClip sleep = new AudioClip(getClass().getResource("/test1.mp3").toString());
+    private AudioClip hitSound = new AudioClip(getClass().getResource("/hit.mp3").toString());
+    private AudioClip kickSound = new AudioClip(getClass().getResource("/kick.mp3").toString());
+    private AudioClip jumpSound = new AudioClip(getClass().getResource("/hüppamine.mp3").toString());
+    private AudioClip specialSound = new AudioClip(getClass().getResource("/special.mp3").toString());
+    private AudioClip dyingSound = new AudioClip(getClass().getResource("/dying.mp3").toString());
     private Rectangle player, projectile;
     private Image logo;
     private String left, right, hit, leftHit, rightHit, damageSoundurl, leg, leftFall, rightFall, leftRise, rightRise, die, specialAttack, specialPic;
@@ -32,6 +32,7 @@ public class Player {
     private boolean outOfBounds = false, punchPlayer = false, isDead = false;
     private World world;
     private Text buttonText;
+    // TODO special image gert
 
     public Player(Rectangle player, Image logo, World world, int attack, int maxHp) {
         this.player = player;
@@ -50,7 +51,6 @@ public class Player {
     }
 
     public void die(boolean left) {
-        System.out.println("Sain surma!");
         Timeline animation = new Timeline();
         animation.setCycleCount(29);
         dyingSound.play();
@@ -64,7 +64,7 @@ public class Player {
 
     private void move(int ammount, String url) {
         if (counter == 0) {
-            this.getRectangle().setFill(new ImagePattern(new Image(url)));
+            this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(url).toString())));
             setButtonVisible(false);
             jumpSound.play();
         }
@@ -193,7 +193,6 @@ public class Player {
     }
 
     public void animateSpecial() {
-        System.out.println(world.distanceBetween());
         Timeline animation = new Timeline();
         int count = 32;
         if ((int)(world.distanceBetween() - 83) / 4 > 32) {
@@ -210,7 +209,7 @@ public class Player {
     public void special() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
-            this.getRectangle().setFill(new ImagePattern(new Image(specialAttack)));
+            this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(specialAttack).toString())));
             if (world.getPlayer().equals(this)) {
                 player.setX(player.getX() - 37); // teistpidi playeri paika liigutamine
             }
@@ -233,7 +232,7 @@ public class Player {
 
     private void projectile() {
         if (counter == 15) {
-            projectile.setFill(new ImagePattern(new Image(specialPic)));
+            projectile.setFill(new ImagePattern(new Image(getClass().getResource(specialPic).toString())));
             if (this instanceof Ago) {
                 projectile.setX(player.getX() + 180);
             } else {
@@ -247,7 +246,6 @@ public class Player {
             projectile.setX(projectile.getX() - 4);
         }
         if ((int)(world.distanceBetween() - 120)/ 4 > 32) {
-            System.out.println(1);
             if (counter == (int)(world.distanceBetween() - 120)/ 4) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
@@ -260,8 +258,6 @@ public class Player {
                 world.getOtherPlayer(this).loseHp(4 * attack);
             }
         } else if (projectile.isVisible()) {
-            System.out.println("2");
-            System.out.println(world.distanceProjectile(this, projectile));
             if (world.distanceProjectile(this, projectile) < 11 ) {
                 projectile.setVisible(false);
                 if (world.getOtherPlayer(this).getHp() - 4 * attack > 0) {
@@ -385,10 +381,10 @@ public class Player {
         if (counter == 0) {
             this.getRectangle().setWidth(260.00);
             if (left) {
-                this.getRectangle().setFill(new ImagePattern(new Image(leftFall)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(leftFall).toString())));
             } else {
                 player.setX(player.getX() - 130);
-                this.getRectangle().setFill(new ImagePattern(new Image(rightFall)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(rightFall).toString())));
             }
         }
         if (counter > 13 && counter < 24) {
@@ -422,9 +418,9 @@ public class Player {
     private void animateHit(boolean left) {
         if (counter == 0) {
             if (left) {
-                this.getRectangle().setFill(new ImagePattern(new Image(leftHit)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(leftHit).toString())));
             } else {
-                this.getRectangle().setFill(new ImagePattern(new Image(rightHit)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(rightHit).toString())));
             }
         }
         if (counter > 13 && counter < 22) {
@@ -446,10 +442,10 @@ public class Player {
         if (counter == 0) {
             this.getRectangle().setWidth(260.00);
             if (left) {
-                this.getRectangle().setFill(new ImagePattern(new Image(leftFall)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(leftFall).toString())));
             } else {
                 player.setX(player.getX() - 130);
-                this.getRectangle().setFill(new ImagePattern(new Image(rightFall)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(rightFall).toString())));
             }
         }
         if (counter > 13 && counter < 24) {
@@ -461,9 +457,9 @@ public class Player {
         }
         if (counter == 40){
             if (left) {
-                this.getRectangle().setFill(new ImagePattern(new Image(leftRise)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(leftRise).toString())));
             } else {
-                this.getRectangle().setFill(new ImagePattern(new Image(rightRise)));
+                this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(rightRise).toString())));
             }
         }
         counter++;

@@ -66,7 +66,7 @@ public class World {
 
     private void drawButtons(Player player, double x, double y) {
         if (!(enemy instanceof Kruus)) {
-            Image specialPic = new Image("file:src\\MortalAgo\\media\\Special.png");
+            Image specialPic = new Image(getClass().getResource("/Special.png").toString());
             Circle specialAttack = new Circle(x - 100 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 105, BUTTON_SIZE);
             Button special = new Button("special", specialAttack, player);
             specialAttack.setFill(new ImagePattern(specialPic));
@@ -74,11 +74,11 @@ public class World {
             player.setSpecial(special);
             special.attackButton();
         }
-        Image right = new Image("file:src\\MortalAgo\\media\\right.png");
-        Image left = new Image("file:src\\MortalAgo\\media\\left.png");
-        Image punche = new Image("file:src\\MortalAgo\\media\\punch.png");
-        Image kicke = new Image("file:src\\MortalAgo\\media\\kick.png");
-        Image sleepe = new Image("file:src\\MortalAgo\\media\\sleep.png");
+        Image right = new Image(getClass().getResource("/Right.png").toString());
+        Image left = new Image(getClass().getResource("/Left.png").toString());
+        Image punche = new Image(getClass().getResource("/punch.png").toString());
+        Image kicke = new Image(getClass().getResource("/kick.png").toString());
+        Image sleepe = new Image(getClass().getResource("/sleep.png").toString());
 
         Circle moveRight = new Circle(x - 40 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 20, BUTTON_SIZE);
         Circle moveLeft = new Circle(x - 80 + BUTTON_X_CORRECTION, y + BUTTON_Y_CORRECTION + 55, BUTTON_SIZE);
