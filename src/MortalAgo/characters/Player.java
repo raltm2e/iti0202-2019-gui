@@ -11,9 +11,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.io.File;
-
-
 public class Player {
 
     private int hp, attack, defence, stamina, maxHp;
@@ -205,7 +202,7 @@ public class Player {
         animation.play();
     }
 
-    public void special() {
+    private void special() {
         if (counter == 0) {
             this.getRectangle().setWidth(180.00);
             this.getRectangle().setFill(new ImagePattern(new Image(getClass().getResource(specialAttack).toString())));
@@ -481,7 +478,7 @@ public class Player {
         }
     }
 
-    public void setButtonVisible(Boolean value){ //TODO add attacking buttons too
+    public void setButtonVisible(Boolean value) {
         if (this instanceof Ago) {
             moveLeft.getButton().setVisible(value);
             moveRight.getButton().setVisible(value);
@@ -581,25 +578,25 @@ public class Player {
         return this.logo;
     }
 
-    public String getLeftUrl() { return this.left; }
+    private String getLeftUrl() { return this.left; }
 
-    public String getRightUrl() { return this.right; }
+    private String getRightUrl() { return this.right; }
 
-    public String getPunchUrl() { return this.hit; }
+    private String getPunchUrl() { return this.hit; }
 
-    public void setLeftUrl(String url) { this.left = url; }
+    void setLeftUrl(String url) { this.left = url; }
 
-    public void setRightUrl(String url) { this.right = url; }
+    void setRightUrl(String url) { this.right = url; }
 
-    public void setPunchUrl(String url) { this.hit = url; }
+    void setPunchUrl(String url) { this.hit = url; }
 
-    public void setRighthitUrl(String url) { this.rightHit = url; }
+    void setRighthitUrl(String url) { this.rightHit = url; }
 
-    public void setLefthitUrl(String url) { this.leftHit = url; }
+    void setLefthitUrl(String url) { this.leftHit = url; }
 
-    public void setLegUrl(String url) { this.leg = url;}
+    void setLegUrl(String url) { this.leg = url;}
 
-    public String getLegUrl() { return leg; }
+    private String getLegUrl() { return leg; }
 
     public void setDamageSound(String url) {
         this.damageSoundurl = url;
@@ -641,7 +638,7 @@ public class Player {
         return leftFall;
     }
 
-    public void setLeftFall(String leftFall) {
+    void setLeftFall(String leftFall) {
         this.leftFall = leftFall;
     }
 
@@ -649,7 +646,7 @@ public class Player {
         return rightFall;
     }
 
-    public void setRightFall(String rightFall) {
+    void setRightFall(String rightFall) {
         this.rightFall = rightFall;
     }
 
@@ -657,7 +654,7 @@ public class Player {
         return leftRise;
     }
 
-    public void setLeftRise(String leftRise) {
+    void setLeftRise(String leftRise) {
         this.leftRise = leftRise;
     }
 
@@ -665,7 +662,7 @@ public class Player {
         return rightRise;
     }
 
-    public void setRightRise(String rightRise) {
+    void setRightRise(String rightRise) {
         this.rightRise = rightRise;
     }
 
@@ -681,7 +678,7 @@ public class Player {
         this.sleeping = sleeping;
     }
 
-    public void setDie(String die) {
+    void setDie(String die) {
         this.die = die;
     }
 
@@ -700,7 +697,7 @@ public class Player {
         buttonText.setText(text);
     }
 
-    public void setSpecialAttack(String specialAttack) {
+    void setSpecialAttack(String specialAttack) {
         this.specialAttack = specialAttack;
     }
 
@@ -716,7 +713,7 @@ public class Player {
         return specialPic;
     }
 
-    public void setSpecialPic(String specialPic) {
+    void setSpecialPic(String specialPic) {
         this.specialPic = specialPic;
     }
 

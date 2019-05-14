@@ -6,20 +6,20 @@ public class Action {
     private Ai.ActionType type;
     private int value;
 
-    public Action(Ai.ActionType type, int value) {
+    Action(Ai.ActionType type, int value) {
         this.type = type;
         this.value = value;
     }
 
-    public Ai.ActionType getType() {
+    Ai.ActionType getType() {
         return type;
     }
 
-    public int getValue() {
+    int getValue() {
         return value;
     }
 
-    public void turnAction(Player player) {
+    void turnAction(Player player) {
         switch (type) {
             case PUNCH:
                 player.animateAttack();

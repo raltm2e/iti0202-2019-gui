@@ -14,10 +14,12 @@ public class Ai {
     private Player player;
     private World world;
     public enum ActionType { MOVELEFT, MOVERIGHT, SLEEP, PUNCH, KICK, SPECIAL }
+
     public Ai(Player player, World world) {
         this.player = player;
         this.world = world;
     }
+
     private int getValue(ActionType action, Player player) {
         switch (action) {
             case PUNCH:

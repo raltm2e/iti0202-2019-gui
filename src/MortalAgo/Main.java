@@ -470,7 +470,7 @@ public class Main extends Application {
     }
 
     private static class MenuItem extends StackPane {
-        public MenuItem(String name) {
+        MenuItem(String name) {
             LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[] {
                     new Stop(0, Color.DARKBLUE),
                     new Stop(0.1, Color.BLACK),

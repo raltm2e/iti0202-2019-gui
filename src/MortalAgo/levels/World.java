@@ -139,7 +139,7 @@ public class World {
         this.player = ago;
     }
 
-    public double getPrecentage(int distance, int required) {
+    private double getPrecentage(int distance, int required) {
         if (distance > required) {
             return 0;
         } else if (distance < 11) {
@@ -149,7 +149,7 @@ public class World {
         return Math.round(percentage * 100.0) / 100.0;
     }
 
-    public boolean getProbabilityBoolean(double probability) {
+    private boolean getProbabilityBoolean(double probability) {
         Random random = new Random();
         int check = random.nextInt(10000);
         return (((int) probability * 100) >= check);
@@ -195,7 +195,6 @@ public class World {
         } else {
             return abs(getOtherPlayer(player).getX() - projectile.getX()) - 60;
         }
-
     }
 
     public void turnOver(Player player) {
@@ -245,6 +244,7 @@ public class World {
         }
         return playerX;
     }
+
     public boolean attack(Player attacker, AttackChoice choice, int dmg) {
         if (getOtherPlayer(attacker).getHp() - dmg > 0) {
             switch (choice) {

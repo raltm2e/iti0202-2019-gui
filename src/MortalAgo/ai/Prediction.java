@@ -5,7 +5,7 @@ public class Prediction {
     private Action enemyFirst;
     private Action second;
 
-    public Prediction(Action first, Action enemyFirst) {
+    Prediction(Action first, Action enemyFirst) {
 
         this.first = first;
         this.enemyFirst = enemyFirst;
@@ -18,7 +18,7 @@ public class Prediction {
         this.second = second;
     }
 
-    public Action getFirst() {
+    Action getFirst() {
         return first;
     }
 
@@ -26,11 +26,12 @@ public class Prediction {
         return enemyFirst;
     }
 
-    public int getPoints() {
+    int getPoints() {
         return first.getValue() - enemyFirst.getValue();
     }
 
     public int getDeeperPoints() { return first.getValue() - enemyFirst.getValue() + second.getValue(); }
+
     @Override
     public String toString() {
         return " "+first.getType() + " " + getPoints() ;
