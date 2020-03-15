@@ -4,6 +4,8 @@ Fightimismäng, turn-based. Player vs AI.
 
 Inspiratsioon: http://swordandsandals.top/swords-and-sandals-2-full-version/
 
+Mäng (töötab JDK11-ga): https://drive.google.com/file/d/1lkehLbOzJ75t7DWkk7YX_RhmmZg-TIoB/view
+
 ## Liikmed
 
 - Robert Altmäe (roaltm)
