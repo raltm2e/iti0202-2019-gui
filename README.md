@@ -91,4 +91,4 @@ Story
 
 https://www.youtube.com/watch?v=ZCpi493P1L0
 
-Ago interviu peale naerab aaviksoo, ja ago vihastab ning otsustab kõigile kätte maksta
+Ago intervjuu peale Aaviksoo naerab, Ago vihastab ning otsustab kõigile kätte maksta...
